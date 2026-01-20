@@ -1,4 +1,4 @@
-import footerLogo from "../assets/images/footer_logo.svg"
+import footerLogo from "../assets/images/common/footer_logo.svg"
 import { twMerge } from "tailwind-merge";
 import { Link } from "react-router";
 import { FaBloggerB, FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";

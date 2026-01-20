@@ -5,6 +5,7 @@ import Login from "../pages/Login.tsx";
 import Register from "../pages/Register.tsx";
 import CategoryDetailPage from "../category/CategoryDetailPage.tsx";
 import Mypage from "../mypage/MyPage.tsx";
+import EventDetailPage from "../event/EventDetailPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -16,6 +17,7 @@ export const router = createBrowserRouter([
             {path:"/mypage", element:<Mypage/>},
             {path:"/register", element:<Register/>},
             {path:"/category/:id", element:<CategoryDetailPage/>},
+            {path:"/event",element:<EventDetailPage/>},
         ]
     }
 ]);

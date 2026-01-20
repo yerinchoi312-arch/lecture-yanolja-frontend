@@ -1,4 +1,4 @@
-import Logo from "../assets/images/logo.svg";
+import Logo from "../assets/images/common/logo.svg";
 import { twMerge } from "tailwind-merge";
 import { Link } from "react-router";
 import {
