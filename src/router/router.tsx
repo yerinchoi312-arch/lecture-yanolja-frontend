@@ -3,6 +3,8 @@ import Layout from "../layouts/Layout.tsx";
 import Home from "../pages/Home.tsx";
 import Login from "../pages/Login.tsx";
 import Register from "../pages/Register.tsx";
+import CategoryDetailPage from "../category/CategoryDetailPage.tsx";
+import Mypage from "../mypage/MyPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -11,7 +13,9 @@ export const router = createBrowserRouter([
         children:[
             {index:true, element:<Home/>},
             {path:"/login", element:<Login/>},
+            {path:"/mypage", element:<Mypage/>},
             {path:"/register", element:<Register/>},
+            {path:"/category/:id", element:<CategoryDetailPage/>},
         ]
     }
 ]);

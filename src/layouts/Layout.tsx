@@ -5,7 +5,7 @@ import { twMerge } from "tailwind-merge";
 
 function Layout() {
     return (
-        <div className={twMerge(["flex","flex-col"],["min-h-screen","max-w-[1200px]","mx-auto"])}>
+        <div className={twMerge(["flex","flex-col"],["min-h-screen"])}>
             <Header />
             <Outlet />
             <Footer />

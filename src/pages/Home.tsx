@@ -1,12 +1,13 @@
 import category1 from "../assets/images/icon/category_hotel.png";
 import category2 from "../assets/images/icon/category_pension.png";
 import category3 from "../assets/images/icon/category_motel.png";
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
 import { twMerge } from "tailwind-merge";
 import { IoReorderFourOutline } from "react-icons/io5";
 function Home() {
+    const {id} = useParams();
     return (
-        <div className={twMerge(["flex","flex-col","gap-10","py-10"])}>
+        <div className={twMerge(["flex","flex-col","gap-10","py-10"],["max-w-[1200px]", "mx-auto",])}>
             <div
                 className={twMerge(
                     ["flex", "justify-center", "items-center"],
@@ -21,7 +22,7 @@ function Home() {
                     <IoReorderFourOutline className={"w-10 h-10"} />
                 </button>
                 <Link
-                    to={"/"}
+                    to={`/category/${id}`}
                     className={twMerge(
                         ["flex", "justify-center", "items-end"],
                         ["flex-1", "w-full"],
@@ -31,7 +32,7 @@ function Home() {
                     호텔/리조트
                 </Link>
                 <Link
-                    to={"/"}
+                    to={`/category/${id}`}
                     className={twMerge(
                         ["flex", "justify-center", "items-end"],
                         ["flex-1", "w-full"],
@@ -41,7 +42,7 @@ function Home() {
                     펜션/풀빌라
                 </Link>
                 <Link
-                    to={"/"}
+                    to={`/category/${id}`}
                     className={twMerge(
                         ["flex", "justify-center", "items-end"],
                         ["flex-1", "w-full"],
