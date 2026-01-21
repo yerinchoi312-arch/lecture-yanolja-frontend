@@ -10,12 +10,12 @@ function Home() {
                 ["max-w-[1200px]", "mx-auto"],
             )}>
             <CategoryTab />
-            <EventSlide/>
-            <div>
-                <h2 className={twMerge(["text-xl","font-bold"])}>
+            <EventSlide id={"main"}/>
+            <div >
+                <h2 className={twMerge(["text-xl","font-bold","mb-2"])}>
                     이런 상품은 어떠세요?
                 </h2>
-                <Slide/>
+                <Slide id={"subSlide"}/>
             </div>
             <div>리조트 특가 배너</div>
             <div>호캉스 슬라이드</div>

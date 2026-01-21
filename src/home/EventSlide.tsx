@@ -20,7 +20,11 @@ const SLIDES = [
     { id: 4, image: slideImage4 },
 ];
 
-function EventSlide() {
+interface SlideProps {
+    id:string;
+}
+
+function EventSlide({ id }:SlideProps) {
     return (
         <div className={twMerge(["h-[250px]", "overflow-hidden", "w-full", "relative", "group"])}>
             <Swiper
@@ -31,8 +35,8 @@ function EventSlide() {
                 autoplay={{ delay: 5000, disableOnInteraction: false }}
                 pagination={{ clickable: true }}
                 navigation={{
-                    prevEl: ".prev-button",
-                    nextEl: ".next-button",
+                    prevEl: `.prev-${id}`,
+                    nextEl: `.next-${id}`,
                 }}
                 modules={[Autoplay, Pagination, Navigation]}
                 className={twMerge(["w-full", "h-full"])}>
@@ -48,21 +52,21 @@ function EventSlide() {
             </Swiper>
             <button
                 className={twMerge(
-                    ["prev-button"],
+                    [`prev-${id}`],
                     ["cursor-pointer"],
-                    ["bg-white", "w-10", "h-10","rounded-xl","shadow-lg"],
-                    ["flex","justify-center","items-center"],
-                    ["absolute", "left-0", "top-[calc(50%-20px)]", "z-10"],
+                    ["bg-white", "w-10", "h-10", "rounded-xl", "shadow-lg"],
+                    ["flex", "justify-center", "items-center"],
+                    ["absolute", "left-0", "top-1/2", "-translate-y-1/2", "z-5"],
                 )}>
-                <GrFormPrevious className={"w-8 h-8"}/>
+                <GrFormPrevious className={"w-8 h-8"} />
             </button>
             <button
                 className={twMerge(
-                    ["next-button"],
+                    [`next-${id}`],
                     ["cursor-pointer"],
-                    ["bg-white", "w-10", "h-10","rounded-xl","shadow-lg"],
-                    ["flex","justify-center","items-center"],
-                    ["absolute", "right-0", "top-[calc(50%-20px)]", "z-10"],
+                    ["bg-white", "w-10", "h-10", "rounded-xl", "shadow-lg"],
+                    ["flex", "justify-center", "items-center"],
+                    ["absolute", "right-0", "top-1/2", "-translate-y-1/2", "z-5"],
                 )}>
                 <GrFormNext className={"w-8 h-8"} />
             </button>
