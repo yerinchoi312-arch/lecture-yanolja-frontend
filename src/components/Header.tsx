@@ -22,7 +22,7 @@ function Header() {
             <div
                 className={twMerge(
                     ["flex", "justify-between", "items-center", "gap-10"],
-                    ["max-w-[1200px]", "mx-auto", "w-full", "h-full"],
+                    ["max-w-[1280px]", "mx-auto", "w-full", "h-full"],
                 )}>
                 <Link to={"/"}>
                     <img src={Logo} alt={"logo"} />{" "}

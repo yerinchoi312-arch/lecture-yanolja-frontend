@@ -7,7 +7,7 @@ function Home() {
         <div
             className={twMerge(
                 ["flex", "flex-col", "gap-10", "py-10"],
-                ["max-w-[1200px]", "mx-auto"],
+                ["max-w-[1280px]", "mx-auto"],
             )}>
             <CategoryTab />
             <EventSlide id={"main"}/>
