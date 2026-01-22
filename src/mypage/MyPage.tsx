@@ -15,7 +15,7 @@ function MyPage() {
                 className={twMerge(["p-8", "bg-white", "rounded-xl", "border", "border-gray-200"])}>
                 <p className={"text-gray-500 font-medium mb-2"}>신규회원 혜택 &#10024;</p>
                 <h2 className={twMerge("font-bold","text-gray-800","text-xl")}>로그인 후 다양한<br/> 회원 혜택을 만나보세요 !</h2>
-                <Button fullWidth={true} className={"mt-8"} onClick={()=>navigate("/register")}>로그인 또는 회원가입</Button>
+                <Button fullWidth={true} className={"mt-8"} onClick={()=>navigate("/login")}>로그인 또는 회원가입</Button>
             </div>
             {/*로그인 했을때 보이게 작업*/}
             <div className={twMerge("flex", "justify-between")}>

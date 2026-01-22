@@ -8,18 +8,28 @@ export interface RegisterFromType{
     birthdate: string;
     gender:"MALE"|"FEMALE"
 }
-export interface User{
+
+export interface UserResponse{
+    id: number;
     username: string;
     name: string;
     email: string;
-    password: string;
-    password_confirm: string;
     phone: string;
     birthdate: string;
-    gender:"MALE"|"FEMALE"
+    gender:"MALE"|"FEMALE";
+    role:"USER"|"ADMIN";
+    createdAt: string;
+    updatedAt: string;
 }
+
 
 export interface LoginFromType{
     username: string;
     password: string;
+}
+
+export interface LoginResponse{
+    message: string;
+    token: string;
+    user: UserResponse;
 }
