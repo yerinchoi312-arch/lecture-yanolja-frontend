@@ -1,7 +1,7 @@
 import category1 from "../assets/images/icon/category_hotel.png";
 import category2 from "../assets/images/icon/category_pension.png";
 import category3 from "../assets/images/icon/category_motel.png";
-import { IoReorderFourOutline } from "react-icons/io5";
+//import { IoReorderFourOutline } from "react-icons/io5";
 import { twMerge } from "tailwind-merge";
 import { Link, useParams } from "react-router";
 function CategoryTab() {
@@ -12,14 +12,14 @@ function CategoryTab() {
                 ["flex", "justify-center", "items-center"],
                 ["w-[1080px]", "mx-auto"],
             )}>
-            <button
-                className={twMerge(
-                    ["cursor-pointer", "p-2", "hover:border-gray-500"],
-                    ["border", "border-gray-100", "rounded-xl"],
-                    ["transition-all", "duration-100"],
-                )}>
-                <IoReorderFourOutline className={"w-10 h-10"} />
-            </button>
+            {/*<button*/}
+            {/*    className={twMerge(*/}
+            {/*        ["cursor-pointer", "p-2", "hover:border-gray-500"],*/}
+            {/*        ["border", "border-gray-100", "rounded-xl"],*/}
+            {/*        ["transition-all", "duration-100"],*/}
+            {/*    )}>*/}
+            {/*    <IoReorderFourOutline className={"w-10 h-10"} />*/}
+            {/*</button>*/}
             <Link
                 to={`/category/${id}`}
                 className={twMerge(

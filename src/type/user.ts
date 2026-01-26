@@ -30,6 +30,8 @@ export interface LoginFromType{
 
 export interface LoginResponse{
     message: string;
-    token: string;
-    user: UserResponse;
+    data: {
+        token: string;
+        user: UserResponse;
+    }
 }

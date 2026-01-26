@@ -90,6 +90,14 @@ function Register() {
                     error={errors.email}
                 />
                 <Input
+                    label={"이름"}
+                    placeholder={"이름을 입력해주세요."}
+                    registration={register("name", {
+                        required: "이름은 필수값입니다."
+                    })}
+                    error={errors.name}
+                />
+                <Input
                     label={"전화번호"}
                     placeholder={"휴대폰 번호 (-없이 입력)"}
                     registration={register("phone", {
@@ -121,6 +129,7 @@ function Register() {
                     <div className={"w-1/3"}>
                         <Select
                             label={"성별"}
+                            registration={register("gender")}
                             options={[
                                 { value: "MALE", label: "MALE" },
                                 { value: "FEMALE", label: "FEMALE" },
