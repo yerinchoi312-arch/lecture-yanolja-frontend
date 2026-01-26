@@ -78,6 +78,9 @@ function MyPage() {
                 <Link to={"/"}>
                     <span>자주 묻는 질문</span>
                 </Link>
+                {isLoggedIn && (
+                    <Link to={"/admin"}>관리자 페이지</Link>
+                )}
             </div>
         </div>
     );

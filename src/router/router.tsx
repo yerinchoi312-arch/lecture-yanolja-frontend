@@ -8,6 +8,7 @@ import Mypage from "../mypage/MyPage.tsx";
 import EventDetailPage from "../event/EventDetailPage.tsx";
 import { useAuthStore } from "../store/useAuthStore.ts";
 import AccountEdit from "../mypage/AccountEdit.tsx";
+import AdminLayout from "../layouts/AdminLayout.tsx";
 
 export const guestOnlyLoader = () => {
     const isLoggedIn = useAuthStore.getState().isLoggedIn;
@@ -30,5 +31,9 @@ export const router = createBrowserRouter([
             {path:"/category/:id", element:<CategoryDetailPage/>},
             {path:"/event",element:<EventDetailPage/>},
         ]
+    },
+    {
+        path:"/admin",
+        element: <AdminLayout/>,
     }
 ]);
