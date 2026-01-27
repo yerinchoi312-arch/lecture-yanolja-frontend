@@ -20,16 +20,16 @@ import { Link } from "react-router";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 
 const SLIDES = [
-    { id: 1, image: slide1 , title:"호텔 탑스텐 정동진", sale:"8%", price:"92,000원 ~"},
-    { id: 2, image: slide2 , title:"강릉 세인트존스호텔", sale:"45%", price:"110,000원 ~" },
-    { id: 3, image: slide3 , title:"스카이베이 호텔 경포", sale:"", price:"108,900원 ~" },
-    { id: 4, image: slide4 , title:"SL호텔 강릉", sale:"72%", price:"54,600원 ~" },
-    { id: 5, image: slide5 , title:"정동진 썬크루즈 호텔", sale:"20%", price:"176,000원 ~" },
-    { id: 6, image: slide6 , title:"호텔 탑스텐 정동진", sale:"8%", price:"92,000원 ~"},
-    { id: 7, image: slide7 , title:"강릉 세인트존스호텔", sale:"45%", price:"110,000원 ~" },
-    { id: 8, image: slide8 , title:"스카이베이 호텔 경포", sale:"", price:"108,900원 ~" },
-    { id: 9, image: slide9 , title:"SL호텔 강릉", sale:"72%", price:"54,600원 ~" },
-    { id: 10, image: slide10 , title:"정동진 썬크루즈 호텔", sale:"20%", price:"176,000원 ~" },
+    { id: 1, image: slide1 , title:"호텔 탑스텐 정동진", sale:"8%", price:"92,000원 ~", path: "/category/1"},
+    { id: 2, image: slide2 , title:"강릉 세인트존스호텔", sale:"45%", price:"110,000원 ~" , path: "/category/1"},
+    { id: 3, image: slide3 , title:"스카이베이 호텔 경포", sale:"", price:"108,900원 ~" , path: "/category/1"},
+    { id: 4, image: slide4 , title:"SL호텔 강릉", sale:"72%", price:"54,600원 ~" , path: "/category/1"},
+    { id: 5, image: slide5 , title:"정동진 썬크루즈 호텔", sale:"20%", price:"176,000원 ~" , path: "/category/1"},
+    { id: 6, image: slide6 , title:"호텔 탑스텐 정동진", sale:"8%", price:"92,000원 ~", path: "/category/1"},
+    { id: 7, image: slide7 , title:"강릉 세인트존스호텔", sale:"45%", price:"110,000원 ~" , path: "/category/1"},
+    { id: 8, image: slide8 , title:"스카이베이 호텔 경포", sale:"", price:"108,900원 ~" , path: "/category/1"},
+    { id: 9, image: slide9 , title:"SL호텔 강릉", sale:"72%", price:"54,600원 ~" , path: "/category/1"},
+    { id: 10, image: slide10 , title:"정동진 썬크루즈 호텔", sale:"20%", price:"176,000원 ~" , path: "/category/1"},
 ];
 
 interface SlideProps {
@@ -59,7 +59,7 @@ function Slide({id}:SlideProps) {
                                 "relative",
                                 "overflow-hidden",
                             ])}>
-                            <Link to={"/event"} className={twMerge(["space-y-2"])}>
+                            <Link to={slide.path} className={twMerge(["space-y-2"])}>
                                 <div className={"aspect-square rounded-xl overflow-hidden"}>
                                     <img
                                         src={slide.image}
