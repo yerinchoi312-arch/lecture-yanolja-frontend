@@ -34,10 +34,21 @@ const BANNER = [
 
 function Banner() {
     return (
-        <div className={twMerge(["flex"],["rounded-4xl","border","border-gray-400"],[ "overflow-hidden"])}>
+        <div
+            className={twMerge(
+                ["flex"],
+                ["rounded-4xl", "border", "border-gray-400"],
+                ["overflow-hidden"],
+            )}>
             <div className={"relative h-full aspect-square"}>
                 <img src={bannerMain} alt={bannerMain} className={"object-cover brightness-80"} />
-                <h3 className={twMerge(["absolute", "top-8","left-8"],["text-white","text-2xl","font-bold"])}>이번주 호텔 / 리조트 특가</h3>
+                <h3
+                    className={twMerge(
+                        ["absolute", "top-8", "left-8"],
+                        ["text-white", "text-2xl", "font-bold"],
+                    )}>
+                    이번주 호텔 / 리조트 특가
+                </h3>
             </div>
             <div className={twMerge(["flex", "gap-4", "p-8"])}>
                 {BANNER.map(banner => (

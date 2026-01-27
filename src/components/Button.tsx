@@ -26,7 +26,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
     const variants = {
         primary: twMerge(["bg-blue-500", "hover:bg-blue-700", "text-white", "border-transparent"]),
-        secondary: twMerge(["bg-white", "hover:bg-gray-100", "text-gray-700", "border-gray-200"]),
+        secondary: twMerge(["bg-white", "hover:bg-gray-100", "text-gray-700", "border-gray-400"]),
         error: twMerge(["bg-red-500", "hover:bg-red-700", "text-white", "border-transparent"]),
     };
 

@@ -4,11 +4,12 @@ import Home from "../pages/Home.tsx";
 import Login from "../pages/Login.tsx";
 import Register from "../pages/Register.tsx";
 import CategoryDetailPage from "../category/CategoryDetailPage.tsx";
-import Mypage from "../mypage/MyPage.tsx";
+import MyPage from "../mypage/MyPage.tsx";
 import EventDetailPage from "../event/EventDetailPage.tsx";
 import { useAuthStore } from "../store/useAuthStore.ts";
 import AccountEdit from "../mypage/AccountEdit.tsx";
 import AdminLayout from "../layouts/AdminLayout.tsx";
+import PromotionPage from "../promotion/PromotionPage.tsx";
 
 export const guestOnlyLoader = () => {
     const isLoggedIn = useAuthStore.getState().isLoggedIn;
@@ -26,10 +27,11 @@ export const router = createBrowserRouter([
             {index:true, element:<Home/>},
             {path:"/login", element:<Login/>,loader:guestOnlyLoader},
             {path:"/register", element:<Register/> ,loader:guestOnlyLoader},
-            {path:"/mypage", element:<Mypage/>},
+            {path:"/mypage", element:<MyPage/>},
             {path:"/mypage/edit",element:<AccountEdit/>},
             {path:"/category/:id", element:<CategoryDetailPage/>},
             {path:"/event",element:<EventDetailPage/>},
+            {path:"/promotion",element:<PromotionPage/>},
         ]
     },
     {

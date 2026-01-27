@@ -46,9 +46,9 @@ function Register() {
                     placeholder={"아이디를 입력해주세요."}
                     registration={register("username", {
                         required: "아이디는 필수값입니다.",
-                        minLength:{
-                            value:2,
-                            message:"2글자 이상 입력해주세요."
+                        minLength: {
+                            value: 2,
+                            message: "2글자 이상 입력해주세요.",
                         },
                     })}
                     error={errors.username}
@@ -72,8 +72,8 @@ function Register() {
                     type={"password"}
                     registration={register("password_confirm", {
                         required: "비밀번호 확인을 입력해주세요.",
-                        validate:value =>
-                            value === watch("password") ||"비밀번호가 일치하지 않습니다."
+                        validate: value =>
+                            value === watch("password") || "비밀번호가 일치하지 않습니다.",
                     })}
                     error={errors.password_confirm}
                 />
@@ -93,7 +93,7 @@ function Register() {
                     label={"이름"}
                     placeholder={"이름을 입력해주세요."}
                     registration={register("name", {
-                        required: "이름은 필수값입니다."
+                        required: "이름은 필수값입니다.",
                     })}
                     error={errors.name}
                 />
@@ -103,8 +103,8 @@ function Register() {
                     registration={register("phone", {
                         required: "전화번호는 필수값입니다.",
                         pattern: {
-                            value: /^01([0|1|6|7|8|9])?([0-9]{3,4})?([0-9]{4})$/,
-                            message: "올바른 휴대폰 번호 형식이 아닙니다.(-제외)",
+                            value: /^\d{3}-\d{3,4}-\d{4}$/,
+                            message: "올바른 휴대폰 번호 형식이 아닙니다.(-포함)",
                         },
                     })}
                     error={errors.phone}
@@ -113,14 +113,12 @@ function Register() {
                     <div className={"w-2/3"}>
                         <Input
                             label={"생년월일"}
-                            placeholder={"생년월일 (YYYTMMDD)"}
+                            placeholder={"생년월일 (YYYT-MM-DD)"}
                             registration={register("birthdate", {
                                 required: "생년월일은 필수값입니다.",
-                                minLength: { value: 8, message: "8자리로 입력해주세요" },
-                                maxLength: { value: 8, message: "8자리로 입력해주세요" },
                                 pattern: {
-                                    value: /^[0-9]+$/,
-                                    message: "숫자만 입력해주세요.",
+                                    value: /^\d{4}-\d{2}-\d{2}$/,
+                                    message: '"올바른 생년월일 형식이 아닙니다.(-포함).',
                                 },
                             })}
                             error={errors.birthdate}
@@ -138,8 +136,16 @@ function Register() {
                         />
                     </div>
                 </div>
-                {errors.root&&(<p className={"text-red-500 text-sm text-center"}>{errors.root.message}</p>)}
-                <Button fullWidth={true} type={"submit"} isLoading={isSubmitting} className={"mt-5"} >회원가입</Button>
+                {errors.root && (
+                    <p className={"text-red-500 text-sm text-center"}>{errors.root.message}</p>
+                )}
+                <Button
+                    fullWidth={true}
+                    type={"submit"}
+                    isLoading={isSubmitting}
+                    className={"mt-5"}>
+                    회원가입
+                </Button>
             </form>
         </div>
     );

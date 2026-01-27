@@ -7,13 +7,14 @@ import { FaAngleRight } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "../store/useAuthStore.ts";
 import Banner from "../home/Banner.tsx";
+import Promotion from "../home/Promotion.tsx";
 function Home() {
     const navigate = useNavigate();
     const { isLoggedIn } = useAuthStore();
     return (
         <div
             className={twMerge(
-                ["flex", "flex-col", "gap-10", "py-10"],
+                ["flex", "flex-col", "gap-20", "py-10"],
                 ["max-w-[1280px]", "mx-auto"],
             )}>
             {!isLoggedIn && (
@@ -36,17 +37,32 @@ function Home() {
             <CategoryTab />
             <EventSlide id={"main"} />
             <div>
-                <h2 className={twMerge(["text-xl", "font-bold", "mb-2"])}>이런 상품은 어떠세요?</h2>
+                <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>이런 상품은 어떠세요?</h2>
                 <Slide id={"subSlide"} />
             </div>
             <div>
                 <Banner />
             </div>
+            <div
+                className={twMerge(
+                    ["flex", "justify-center", "items-center","text-center"],
+                    ["bg-yellow-50", "py-4", "rounded-2xl"],
+                )}>
+                <div>
+                    <h3 className={"font-semibold text-md text-gray-900"}>
+                        놀수록 놀라운 이벤트 혜택
+                    </h3>
+                    <p className={"text-lg font-extrabold text-blue-800"}>NOL !&#10024; </p>
+                </div>
+            </div>
             <div>
-                <h2 className={twMerge(["text-xl", "font-bold", "mb-2"])}>이런 상품은 어떠세요?</h2>
+                <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>지금 떠나는 도심 호캉스!</h2>
                 <Slide id={"subSlide2"} />
             </div>
-            <div>기획전 모음</div>
+            <div>
+                <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>기획전 모음</h2>
+                <Promotion/>
+            </div>
         </div>
     );
 }
