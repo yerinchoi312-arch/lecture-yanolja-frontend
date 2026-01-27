@@ -52,7 +52,7 @@ function Banner() {
             </div>
             <div className={twMerge(["flex", "gap-4", "p-8"])}>
                 {BANNER.map(banner => (
-                    <Link to={banner.path} className={twMerge(["space-y-2"])}>
+                    <Link to={banner.path} className={twMerge(["space-y-2"])} key={banner.id}>
                         <div className={"aspect-4/5 rounded-xl overflow-hidden"}>
                             <img
                                 src={banner.image}

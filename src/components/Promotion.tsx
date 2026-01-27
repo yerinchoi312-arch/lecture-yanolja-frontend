@@ -6,7 +6,7 @@ import promotion5 from "../assets/images/slide/promotion5.png";
 import promotion6 from "../assets/images/slide/promotion6.png";
 import { twMerge } from "tailwind-merge";
 import { Link, useNavigate } from "react-router";
-import Button from "../components/Button.tsx";
+import Button from "./Button.tsx";
 
 const PROMOTION = [
     {

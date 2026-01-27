@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.tsx";
 import Home from "../pages/Home.tsx";
 import Login from "../pages/Login.tsx";
 import Register from "../pages/Register.tsx";
-import CategoryDetailPage from "../category/CategoryDetailPage.tsx";
+import CategoryListPage from "../category/CategoryListPage.tsx";
 import MyPage from "../mypage/MyPage.tsx";
 import EventDetailPage from "../event/EventDetailPage.tsx";
 import { useAuthStore } from "../store/useAuthStore.ts";
@@ -50,7 +50,7 @@ export const router = createBrowserRouter([
             {path:"/register", element:<Register/> ,loader:guestOnlyLoader},
             {path:"/mypage", element:<MyPage/>},
             {path:"/mypage/edit",element:<AccountEdit/>},
-            {path:"/category/:id", element:<CategoryDetailPage/>},
+            {path:"/categories/:path", element:<CategoryListPage/>},
             {path:"/event",element:<EventDetailPage/>},
             {path:"/promotion",element:<PromotionPage/>},
         ]

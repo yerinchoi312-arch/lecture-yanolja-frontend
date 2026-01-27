@@ -46,9 +46,9 @@ function Register() {
                     placeholder={"아이디를 입력해주세요."}
                     registration={register("username", {
                         required: "아이디는 필수값입니다.",
-                        minLength:{
-                            value:2,
-                            message: "2글자 이상 입력해주세요."
+                        minLength: {
+                            value: 2,
+                            message: "2글자 이상 입력해주세요.",
                         },
                     })}
                     error={errors.username}
