@@ -46,9 +46,9 @@ function Register() {
                     placeholder={"아이디를 입력해주세요."}
                     registration={register("username", {
                         required: "아이디는 필수값입니다.",
-                        minLength: {
-                            value: 2,
-                            message: "2글자 이상 입력해주세요.",
+                        minLength:{
+                            value:2,
+                            message: "2글자 이상 입력해주세요."
                         },
                     })}
                     error={errors.username}
@@ -99,7 +99,7 @@ function Register() {
                 />
                 <Input
                     label={"전화번호"}
-                    placeholder={"휴대폰 번호 (-없이 입력)"}
+                    placeholder={"휴대폰 번호 (XXX-XXXX-XXXX)"}
                     registration={register("phone", {
                         required: "전화번호는 필수값입니다.",
                         pattern: {
@@ -113,12 +113,12 @@ function Register() {
                     <div className={"w-2/3"}>
                         <Input
                             label={"생년월일"}
-                            placeholder={"생년월일 (YYYT-MM-DD)"}
+                            placeholder={"생년월일 (YYYY-MM-DD)"}
                             registration={register("birthdate", {
                                 required: "생년월일은 필수값입니다.",
                                 pattern: {
                                     value: /^\d{4}-\d{2}-\d{2}$/,
-                                    message: '"올바른 생년월일 형식이 아닙니다.(-포함).',
+                                    message: "올바른 생년월일 형식이 아닙니다.",
                                 },
                             })}
                             error={errors.birthdate}
