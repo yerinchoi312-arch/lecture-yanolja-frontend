@@ -1,4 +1,7 @@
-export interface RegisterFromType{
+export type Gender = "MALE" | "FEMALE";
+export type Role = "USER" | "ADMIN";
+
+export interface RegisterFromType {
     username: string;
     name: string;
     email: string;
@@ -6,32 +9,31 @@ export interface RegisterFromType{
     password_confirm: string;
     phone: string;
     birthdate: string;
-    gender:"MALE"|"FEMALE"
+    gender: "MALE" | "FEMALE";
 }
 
-export interface UserResponse{
+export interface UserResponse {
     id: number;
     username: string;
     name: string;
     email: string;
     phone: string;
     birthdate: string;
-    gender:"MALE"|"FEMALE";
-    role:"USER"|"ADMIN";
+    gender: "MALE" | "FEMALE";
+    role: "USER" | "ADMIN";
     createdAt: string;
     updatedAt: string;
 }
 
-
-export interface LoginFromType{
+export interface LoginFromType {
     username: string;
     password: string;
 }
 
-export interface LoginResponse{
+export interface LoginResponse {
     message: string;
     data: {
         token: string;
         user: UserResponse;
-    }
+    };
 }
