@@ -1,21 +1,24 @@
 import { createBrowserRouter, redirect } from "react-router";
-import Layout from "../layouts/Layout.tsx";
+import Layout from "../pages/layouts/Layout.tsx";
 import Home from "../pages/Home.tsx";
 import Login from "../pages/Login.tsx";
 import Register from "../pages/Register.tsx";
-import CategoryListPage from "../category/CategoryListPage.tsx";
-import MyPage from "../mypage/MyPage.tsx";
-import EventDetailPage from "../event/EventDetailPage.tsx";
+import CategoryListPage from "../pages/category/CategoryListPage.tsx";
+import MyPage from "../pages/mypage/MyPage.tsx";
+import EventDetailPage from "../pages/event/EventDetailPage.tsx";
 import { useAuthStore } from "../store/useAuthStore.ts";
-import AccountEdit from "../mypage/AccountEdit.tsx";
-import AdminLayout from "../layouts/AdminLayout.tsx";
-import PromotionPage from "../promotion/PromotionPage.tsx";
+import AccountEdit from "../pages/mypage/AccountEdit.tsx";
+import AdminLayout from "../pages/layouts/AdminLayout.tsx";
+import PromotionPage from "../pages/promotion/PromotionPage.tsx";
 import AdminDashboard from "../pages/(admin)/AdminDashboard.tsx";
 import AdminCategoryList from "../pages/(admin)/categories/AdminCategoryList.tsx";
 import AdminCategoryCreate from "../pages/(admin)/categories/AdminCategoryCreate.tsx";
 import AdminSubCategoryCreate from "../pages/(admin)/categories/AdminSubCategoryCreate.tsx";
 import AdminUserList from "../pages/(admin)/users/AdminUserList.tsx";
 import AdminUserEdit from "../pages/(admin)/users/AdminUserEdit.tsx";
+import ReservationPage from "../pages/ReservationPage.tsx";
+import NoticePage from "../pages/mypage/NoticePage.tsx";
+import FAQPage from "../pages/mypage/FAQPage.tsx";
 
 export const guestOnlyLoader = () => {
     const isLoggedIn = useAuthStore.getState().isLoggedIn;
@@ -50,9 +53,12 @@ export const router = createBrowserRouter([
             {path:"/register", element:<Register/> ,loader:guestOnlyLoader},
             {path:"/mypage", element:<MyPage/>},
             {path:"/mypage/edit",element:<AccountEdit/>},
+            {path:"/notice",element:<NoticePage/>},
+            {path:"/faq",element:<FAQPage/>},
             {path:"/categories/:path", element:<CategoryListPage/>},
             {path:"/event",element:<EventDetailPage/>},
             {path:"/promotion",element:<PromotionPage/>},
+            {path: "/reservation", element: <ReservationPage/>},
         ]
     },
     {

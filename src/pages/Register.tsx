@@ -1,9 +1,9 @@
 import { twMerge } from "tailwind-merge";
-import Input from "../components/Input.tsx";
+import Input from "./components/Input.tsx";
 import { useForm } from "react-hook-form";
 import type { RegisterFromType } from "../type/user.ts";
-import Select from "../components/Select.tsx";
-import Button from "../components/Button.tsx";
+import Select from "./components/Select.tsx";
+import Button from "./components/Button.tsx";
 import { useNavigate } from "react-router";
 import { registerUser } from "../api/auth.api.ts";
 import { AxiosError } from "axios";

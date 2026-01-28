@@ -1,8 +1,8 @@
 import { twMerge } from "tailwind-merge";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import type { CategoryData } from "../type/category.ts";
-import { getCategories } from "../api/category.api.ts";
+import type { CategoryData } from "../../type/category.ts";
+import { getCategories } from "../../api/category.api.ts";
 import EventSlide from "../components/EventSlide.tsx";
 import Promotion from "../components/Promotion.tsx";
 import Slide from "../components/Slide.tsx";

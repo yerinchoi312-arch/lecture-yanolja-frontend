@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
-import Input from "../components/Input.tsx";
-import Button from "../components/Button.tsx";
+import Input from "./components/Input.tsx";
+import Button from "./components/Button.tsx";
 import { useForm } from "react-hook-form";
 import type { LoginFromType } from "../type/user.ts";
 import { Link, useNavigate } from "react-router";

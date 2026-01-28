@@ -1,13 +1,13 @@
 import { twMerge } from "tailwind-merge";
-import CategoryTab from "../home/CategoryTab.tsx";
-import EventSlide from "../components/EventSlide.tsx";
-import Slide from "../components/Slide.tsx";
-import Button from "../components/Button.tsx";
+import CategoryTab from "./home/CategoryTab.tsx";
+import EventSlide from "./components/EventSlide.tsx";
+import Slide from "./components/Slide.tsx";
+import Button from "./components/Button.tsx";
 import { FaAngleRight } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "../store/useAuthStore.ts";
-import Banner from "../home/Banner.tsx";
-import Promotion from "../components/Promotion.tsx";
+import Banner from "./home/Banner.tsx";
+import Promotion from "./components/Promotion.tsx";
 import { useEffect, useState } from "react";
 import type { CategoryData } from "../type/category.ts";
 import { getCategories } from "../api/category.api.ts";
@@ -43,15 +43,6 @@ function Home() {
             )}
             <CategoryTab categories={categories} />
             <EventSlide id={"main"} />
-            <div>
-                <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>
-                    이런 상품은 어떠세요?
-                </h2>
-                <Slide id={"subSlide"} />
-            </div>
-            <div>
-                <Banner />
-            </div>
             <div
                 className={twMerge(
                     ["flex", "justify-center", "items-center", "text-center"],
@@ -63,6 +54,15 @@ function Home() {
                     </h3>
                     <p className={"text-lg font-extrabold text-blue-800"}>NOL !&#10024; </p>
                 </div>
+            </div>
+            <div>
+                <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>
+                    이런 상품은 어떠세요?
+                </h2>
+                <Slide id={"subSlide"} />
+            </div>
+            <div>
+                <Banner />
             </div>
             <div>
                 <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>

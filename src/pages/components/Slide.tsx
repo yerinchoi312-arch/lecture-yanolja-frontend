@@ -1,13 +1,13 @@
-import slide1 from "../assets/images/slide/slide1.jpg";
-import slide2 from "../assets/images/slide/slide2.jpg";
-import slide3 from "../assets/images/slide/slide3.jpg";
-import slide4 from "../assets/images/slide/slide4.png";
-import slide5 from "../assets/images/slide/slide5.jpg";
-import slide6 from "../assets/images/slide/slide6.jpg";
-import slide7 from "../assets/images/slide/slide7.jpg";
-import slide8 from "../assets/images/slide/slide8.jpg";
-import slide9 from "../assets/images/slide/slide9.jpg";
-import slide10 from "../assets/images/slide/slide10.jpg";
+import slide1 from "../../assets/images/slide/slide1.jpg";
+import slide2 from "../../assets/images/slide/slide2.jpg";
+import slide3 from "../../assets/images/slide/slide3.jpg";
+import slide4 from "../../assets/images/slide/slide4.png";
+import slide5 from "../../assets/images/slide/slide5.jpg";
+import slide6 from "../../assets/images/slide/slide6.jpg";
+import slide7 from "../../assets/images/slide/slide7.jpg";
+import slide8 from "../../assets/images/slide/slide8.jpg";
+import slide9 from "../../assets/images/slide/slide9.jpg";
+import slide10 from "../../assets/images/slide/slide10.jpg";
 
 import "swiper/css";
 import "swiper/css/pagination";

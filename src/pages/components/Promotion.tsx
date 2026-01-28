@@ -1,9 +1,9 @@
-import promotion1 from "../assets/images/slide/promotion1.png";
-import promotion2 from "../assets/images/slide/promotion2.png";
-import promotion3 from "../assets/images/slide/promotion3.png";
-import promotion4 from "../assets/images/slide/promotion4.png";
-import promotion5 from "../assets/images/slide/promotion5.png";
-import promotion6 from "../assets/images/slide/promotion6.png";
+import promotion1 from "../../assets/images/slide/promotion1.png";
+import promotion2 from "../../assets/images/slide/promotion2.png";
+import promotion3 from "../../assets/images/slide/promotion3.png";
+import promotion4 from "../../assets/images/slide/promotion4.png";
+import promotion5 from "../../assets/images/slide/promotion5.png";
+import promotion6 from "../../assets/images/slide/promotion6.png";
 import { twMerge } from "tailwind-merge";
 import { Link, useNavigate } from "react-router";
 import Button from "./Button.tsx";

@@ -1,7 +1,7 @@
-import bannerMain from "../assets/images/slide/banner_main.png";
-import banner1 from "../assets/images/slide/banner1.jpg";
-import banner2 from "../assets/images/slide/banner2.jpg";
-import banner3 from "../assets/images/slide/banner3.jpg";
+import bannerMain from "../../assets/images/slide/banner_main.png";
+import banner1 from "../../assets/images/slide/banner1.jpg";
+import banner2 from "../../assets/images/slide/banner2.jpg";
+import banner3 from "../../assets/images/slide/banner3.jpg";
 import { twMerge } from "tailwind-merge";
 import { Link } from "react-router";
 

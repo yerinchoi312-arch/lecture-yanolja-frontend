@@ -1,7 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import Button from "../components/Button.tsx";
 import { Link, useNavigate } from "react-router";
-import { useAuthStore } from "../store/useAuthStore.ts";
+import { useAuthStore } from "../../store/useAuthStore.ts";
 
 function MyPage() {
     const { isLoggedIn, logout, user } = useAuthStore();
@@ -66,16 +66,16 @@ function MyPage() {
                     ["flex", "flex-col"],
                     ["[&>*]:py-4"],
                 )}>
-                <Link to={"/"}>
+                <Link to={"/reservation"}>
                     <span>예약 내역</span>
                 </Link>
-                <Link to={"/"}>
+                <Link to={"/promotion"}>
                     <span>기획전</span>
                 </Link>
-                <Link to={"/"}>
+                <Link to={"/notice"}>
                     <span>공지사항</span>
                 </Link>
-                <Link to={"/"}>
+                <Link to={"/faq"}>
                     <span>자주 묻는 질문</span>
                 </Link>
             </div>

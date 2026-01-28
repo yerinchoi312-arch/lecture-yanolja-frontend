@@ -1,7 +1,7 @@
-import slideImage1 from "../assets/images/slide/event_slide1.png";
-import slideImage2 from "../assets/images/slide/event_slide2.png";
-import slideImage3 from "../assets/images/slide/event_slide3.png";
-import slideImage4 from "../assets/images/slide/event_slide4.png";
+import slideImage1 from "../../assets/images/slide/event_slide1.png";
+import slideImage2 from "../../assets/images/slide/event_slide2.png";
+import slideImage3 from "../../assets/images/slide/event_slide3.png";
+import slideImage4 from "../../assets/images/slide/event_slide4.png";
 
 import "swiper/css";
 import "swiper/css/pagination";

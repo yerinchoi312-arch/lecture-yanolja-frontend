@@ -1,5 +1,5 @@
 import { Link, Outlet, useNavigate } from "react-router";
-import { useAuthStore } from "../store/useAuthStore";
+import { useAuthStore } from "../../store/useAuthStore.ts";
 
 const AdminLayout = () => {
     const logout = useAuthStore(state => state.logout);

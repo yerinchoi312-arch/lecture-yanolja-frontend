@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import { Link } from "react-router";
-import type { CategoryData } from "../type/category.ts";
+import type { CategoryData } from "../../type/category.ts";
 interface CategoryTabProps {
     categories : CategoryData[]
 }
