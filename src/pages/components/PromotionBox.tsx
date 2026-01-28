@@ -8,7 +8,7 @@ import { twMerge } from "tailwind-merge";
 import { Link, useNavigate } from "react-router";
 import Button from "./Button.tsx";
 
-const PROMOTION = [
+const PromotionBox = [
     {
         id: 1,
         image: promotion1,
@@ -57,7 +57,7 @@ function Promotion() {
     return (
         <div className={"space-y-20"}>
             <div className={twMerge(["grid", "grid-cols-3", "gap-3"])}>
-                {PROMOTION.map(promotionBox => (
+                {PromotionBox.map(promotionBox => (
                     <Link
                         to={promotionBox.path}
                         key={promotionBox.id}

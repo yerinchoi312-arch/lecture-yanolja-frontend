@@ -7,7 +7,7 @@ import { FaAngleRight } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "../store/useAuthStore.ts";
 import Banner from "./home/Banner.tsx";
-import Promotion from "./components/Promotion.tsx";
+import Promotion from "./components/PromotionBox.tsx";
 import { useEffect, useState } from "react";
 import type { CategoryData } from "../type/category.ts";
 import { getCategories } from "../api/category.api.ts";

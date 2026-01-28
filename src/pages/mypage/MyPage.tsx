@@ -62,9 +62,10 @@ function MyPage() {
             <div
                 className={twMerge(
                     ["bg-white", "rounded-xl", "border", "border-gray-200"],
-                    ["px-8","py-2", "divide-y", "divide-gray-200"],
+                    ["p-4"],
                     ["flex", "flex-col"],
-                    ["[&>*]:py-4"],
+                    ["[&>*]:py-4", "[&>*]:px-4"],
+                    ["[&>*]:hover:bg-blue-50", "[&>*]:hover:rounded-xl", "[&>*]:hover:font-bold"],
                 )}>
                 <Link to={"/reservation"}>
                     <span>예약 내역</span>

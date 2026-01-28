@@ -8,6 +8,7 @@ interface AuthState{
     user:UserResponse | null;
     login:(token:string,user:UserResponse) => void;
     logout:() => void;
+    updateUser:(user:Partial<UserResponse>)=>void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -17,7 +18,9 @@ export const useAuthStore = create<AuthState>()(
             token:null,
             user:null,
             login:(token,user)=>set({isLoggedIn:true,token,user}),
-            logout:()=>set({isLoggedIn:false,token:null,user:null})
+            logout:()=>set({isLoggedIn:false,token:null,user:null}),
+            updateUser:updatedData=>
+                set(state => ({user: state.user ? {...state.user, ...updatedData}:null}))
         }),{name:"auth-storage"}
     )
 )

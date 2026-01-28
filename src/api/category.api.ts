@@ -6,6 +6,7 @@ export const getCategories = async () => {
     return response.data;
 }
 
+
 export const getSubCategories = async (path:string,id:number) => {
     const response = await httpClient.get<SubCategoryResponse>(`/categories/${path}/${id}`);
     return response.data;

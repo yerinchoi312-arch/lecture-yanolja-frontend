@@ -9,14 +9,14 @@ import EventDetailPage from "../pages/event/EventDetailPage.tsx";
 import { useAuthStore } from "../store/useAuthStore.ts";
 import AccountEdit from "../pages/mypage/AccountEdit.tsx";
 import AdminLayout from "../pages/layouts/AdminLayout.tsx";
-import PromotionPage from "../pages/promotion/PromotionPage.tsx";
+import PromotionListPage from "../pages/promotion/PromotionListPage.tsx";
 import AdminDashboard from "../pages/(admin)/AdminDashboard.tsx";
 import AdminCategoryList from "../pages/(admin)/categories/AdminCategoryList.tsx";
 import AdminCategoryCreate from "../pages/(admin)/categories/AdminCategoryCreate.tsx";
 import AdminSubCategoryCreate from "../pages/(admin)/categories/AdminSubCategoryCreate.tsx";
 import AdminUserList from "../pages/(admin)/users/AdminUserList.tsx";
 import AdminUserEdit from "../pages/(admin)/users/AdminUserEdit.tsx";
-import ReservationPage from "../pages/ReservationPage.tsx";
+import ReservationPage from "../pages/reservation/ReservationPage.tsx";
 import NoticePage from "../pages/mypage/NoticePage.tsx";
 import FAQPage from "../pages/mypage/FAQPage.tsx";
 
@@ -57,7 +57,7 @@ export const router = createBrowserRouter([
             {path:"/faq",element:<FAQPage/>},
             {path:"/categories/:path", element:<CategoryListPage/>},
             {path:"/event",element:<EventDetailPage/>},
-            {path:"/promotion",element:<PromotionPage/>},
+            {path:"/promotion",element:<PromotionListPage/>},
             {path: "/reservation", element: <ReservationPage/>},
         ]
     },

@@ -9,7 +9,7 @@ export interface RegisterFromType {
     password_confirm: string;
     phone: string;
     birthdate: string;
-    gender: "MALE" | "FEMALE";
+    gender: Gender;
 }
 
 export interface UserResponse {
@@ -19,8 +19,8 @@ export interface UserResponse {
     email: string;
     phone: string;
     birthdate: string;
-    gender: "MALE" | "FEMALE";
-    role: "USER" | "ADMIN";
+    gender: Gender;
+    role: Role;
     createdAt: string;
     updatedAt: string;
 }
