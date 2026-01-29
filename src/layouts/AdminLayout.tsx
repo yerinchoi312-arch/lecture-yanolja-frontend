@@ -1,5 +1,5 @@
 import { Link, Outlet, useNavigate } from "react-router";
-import { useAuthStore } from "../../store/useAuthStore.ts";
+import { useAuthStore } from "../store/useAuthStore.ts";
 
 const AdminLayout = () => {
     const logout = useAuthStore(state => state.logout);
@@ -28,7 +28,11 @@ const AdminLayout = () => {
                         회원 관리
                     </Link>
                 </nav>
-                <div className="p-4 border-t border-slate-700">
+                <div className="p-4 border-t border-slate-700 space-y-4">
+                    <button
+                        onClick={() => navigate("/")}
+                        className={"w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-sm"}
+                    >홈화면</button>
                     <button
                         onClick={handleLogout}
                         className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-sm">

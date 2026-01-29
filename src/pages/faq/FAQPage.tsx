@@ -10,7 +10,7 @@ function FAQPage() {
                 ["max-w-[800px]", "mx-auto", "w-full"],
             )}>
             <div className={"space-y-20 relative"}>
-                <BackButton className={"absolute top-2"} />
+                <BackButton className={"absolute top-2 md:hidden"} />
                 <h2 className={twMerge(["text-2xl", "font-bold", "text-center"])}>FAQ</h2>
                 <div>
                     <p className={twMerge(["text-lg", "font-semibold", "mb-4"])}>

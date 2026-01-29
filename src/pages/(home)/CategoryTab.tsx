@@ -20,7 +20,9 @@ function CategoryTab({categories}: CategoryTabProps){
                         ["flex", "flex-col", "justify-center", "items-center", "gap-2"],
                         ["flex-1", "w-full", "font-semibold", "text-lg"],
                         [ "py-4", "rounded-2xl"],
-                        ["first:bg-violet-50","nth-[2]:bg-green-50","nth-[3]:bg-yellow-50"],
+                        ["first:bg-violet-100","hover:first:bg-violet-200",],
+                        ["nth-[2]:bg-green-100","hover:nth-[2]:bg-green-200",],
+                        ["nth-[3]:bg-yellow-100","hover:nth-[3]:bg-yellow-200"],
                         ["hover:-translate-y-3", "transition-all", "duration-500"],
                     )}>
                     <img src={category.image} alt={category.name} className={"w-24 h-24 -mb-2"} />

@@ -25,6 +25,11 @@ export interface UserResponse {
     updatedAt: string;
 }
 
+export interface UserInfoResponse {
+    message: string;
+    data: UserResponse;
+}
+
 export interface LoginFromType {
     username: string;
     password: string;

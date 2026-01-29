@@ -1,5 +1,5 @@
 import { createBrowserRouter, redirect } from "react-router";
-import Layout from "../pages/layouts/Layout.tsx";
+import Layout from "../layouts/Layout.tsx";
 import Home from "../pages/Home.tsx";
 import Login from "../pages/Login.tsx";
 import Register from "../pages/Register.tsx";
@@ -8,7 +8,7 @@ import MyPage from "../pages/mypage/MyPage.tsx";
 import EventDetailPage from "../pages/event/EventDetailPage.tsx";
 import { useAuthStore } from "../store/useAuthStore.ts";
 import AccountEdit from "../pages/mypage/AccountEdit.tsx";
-import AdminLayout from "../pages/layouts/AdminLayout.tsx";
+import AdminLayout from "../layouts/AdminLayout.tsx";
 import PromotionListPage from "../pages/promotion/PromotionListPage.tsx";
 import AdminDashboard from "../pages/(admin)/AdminDashboard.tsx";
 import AdminCategoryList from "../pages/(admin)/categories/AdminCategoryList.tsx";
@@ -17,8 +17,11 @@ import AdminSubCategoryCreate from "../pages/(admin)/categories/AdminSubCategory
 import AdminUserList from "../pages/(admin)/users/AdminUserList.tsx";
 import AdminUserEdit from "../pages/(admin)/users/AdminUserEdit.tsx";
 import ReservationPage from "../pages/reservation/ReservationPage.tsx";
-import NoticePage from "../pages/mypage/NoticePage.tsx";
-import FAQPage from "../pages/mypage/FAQPage.tsx";
+import NoticePage from "../pages/notice/NoticePage.tsx";
+import FAQPage from "../pages/faq/FAQPage.tsx";
+import RecentView from "../pages/recent/RecentView.tsx";
+import Cart from "../pages/cart/Cart.tsx";
+import Wishlist from "../pages/wishlist/Wishlist.tsx";
 
 export const guestOnlyLoader = () => {
     const isLoggedIn = useAuthStore.getState().isLoggedIn;
@@ -45,21 +48,24 @@ export const adminOnlyLoader = () => {
 
 export const router = createBrowserRouter([
     {
-        path:"",
-        element:<Layout/>,
-        children:[
-            {index:true, element:<Home/>},
-            {path:"/login", element:<Login/>,loader:guestOnlyLoader},
-            {path:"/register", element:<Register/> ,loader:guestOnlyLoader},
-            {path:"/mypage", element:<MyPage/>},
-            {path:"/mypage/edit",element:<AccountEdit/>},
-            {path:"/notice",element:<NoticePage/>},
-            {path:"/faq",element:<FAQPage/>},
-            {path:"/categories/:path", element:<CategoryListPage/>},
-            {path:"/event",element:<EventDetailPage/>},
-            {path:"/promotion",element:<PromotionListPage/>},
-            {path: "/reservation", element: <ReservationPage/>},
-        ]
+        path: "",
+        element: <Layout />,
+        children: [
+            { index: true, element: <Home /> },
+            { path: "/login", element: <Login />, loader: guestOnlyLoader },
+            { path: "/register", element: <Register />, loader: guestOnlyLoader },
+            { path: "/mypage", element: <MyPage /> },
+            { path: "/mypage/edit", element: <AccountEdit /> },
+            { path: "/notice", element: <NoticePage /> },
+            { path: "/faq", element: <FAQPage /> },
+            { path: "/categories/:path", element: <CategoryListPage /> },
+            { path: "/event", element: <EventDetailPage /> },
+            { path: "/promotion", element: <PromotionListPage /> },
+            { path: "/reservation", element: <ReservationPage /> },
+            { path: "/recent", element: <RecentView /> },
+            { path: "/cart", element: <Cart /> },
+            { path: "/wishlist", element: <Wishlist /> },
+        ],
     },
     {
         path: "/admin",

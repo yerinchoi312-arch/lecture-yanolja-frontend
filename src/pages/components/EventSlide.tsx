@@ -26,7 +26,7 @@ interface SlideProps {
 
 function EventSlide({ id }:SlideProps) {
     return (
-        <div className={twMerge(["h-[250px]", "overflow-hidden", "w-full", "relative", "group"])}>
+        <div className={twMerge(["h-[250px]", "w-full", "relative", "group"])}>
             <Swiper
                 loop={true}
                 slidesPerView={2}
@@ -54,9 +54,9 @@ function EventSlide({ id }:SlideProps) {
                 className={twMerge(
                     [`prev-${id}`],
                     ["cursor-pointer"],
-                    ["bg-white", "w-10", "h-10", "rounded-xl", "shadow-lg"],
-                    ["flex", "justify-center", "items-center"],
-                    ["absolute", "left-0", "top-1/2", "-translate-y-1/2", "z-5"],
+                    ["bg-white", "rounded-xl", "shadow-lg","border","border-gray-200"],
+                    ["flex", "justify-center", "items-center", "w-10", "h-10",],
+                    ["absolute", "-left-5", "top-1/2", "-translate-y-1/2", "z-5"],
                 )}>
                 <GrFormPrevious className={"w-8 h-8"} />
             </button>
@@ -64,9 +64,9 @@ function EventSlide({ id }:SlideProps) {
                 className={twMerge(
                     [`next-${id}`],
                     ["cursor-pointer"],
-                    ["bg-white", "w-10", "h-10", "rounded-xl", "shadow-lg"],
-                    ["flex", "justify-center", "items-center"],
-                    ["absolute", "right-0", "top-1/2", "-translate-y-1/2", "z-5"],
+                    ["bg-white", "rounded-xl", "shadow-lg","border","border-gray-200"],
+                    ["flex", "justify-center", "items-center", "w-10", "h-10",],
+                    ["absolute", "-right-5", "top-1/2", "-translate-y-1/2", "z-5"],
                 )}>
                 <GrFormNext className={"w-8 h-8"} />
             </button>

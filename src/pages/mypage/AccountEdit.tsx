@@ -5,7 +5,7 @@ import Button from "../components/Button.tsx";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "../../store/useAuthStore.ts";
-import type { UserResponse } from "../../type/user.ts";
+import type { UserInfoResponse, UserResponse } from "../../type/user.ts";
 import { httpClient } from "../../api/axios.ts";
 import type { AxiosError } from "axios";
 
@@ -27,34 +27,34 @@ function AccountEdit() {
         },
     });
 
-    const onSubmit = async (data:UserResponse) => {
-        try{
-            const formData = new FormData();
-            formData.append("username",data.username);
-            formData.append("name",data.name);
-            formData.append("email",data.email);
-            formData.append("phone",data.phone);
-            formData.append("birthdate",data.birthdate);
-            formData.append("gender",data.gender);
-            formData.append("phone",data.phone);
 
-            const response = await httpClient.patch("/users", formData,{
-                headers:{
-                    "Content-Type":"multipart/form-data"
-                }
-            });
+    if(!user) return null;
+    const onSubmit = async (data:UserResponse) => {
+
+        try{
+            const updatedData={
+                username:data.username,
+                name:data.name,
+                email:data.email,
+                phone:data.phone,
+                birthdate:data.birthdate,
+                gender:data.gender,
+
+            };
+            const response = await httpClient.put<UserInfoResponse>("/users/me",updatedData);
             if(user){
                 updateUser({
                     ...user,
-                    ...response.data.user
+                    ...response.data.data
                 })
             }
             alert("프로필이 수정되었습니다.")
             navigate("/");
         }catch (e) {
             const axiosError = e as AxiosError<{ message: string }>;
-            const msg = axiosError.response?.data.message || "프로필 수정 실패";
+            const msg = axiosError.response?.data?.message || "프로필 수정 실패";
             alert(msg)
+            console.error("상세 에러:", axiosError.response?.data);
         }
     };
     return (
@@ -76,6 +76,30 @@ function AccountEdit() {
                         },
                     })}
                     error={errors.username}
+                />
+                <Input
+                    label={"비밀번호"}
+                    placeholder={"비밀번호를 입력해주세요. (8자 이상)"}
+                    type={"password"}
+                    registration={register("password", {
+                        required: "비밀번호는 필수값입니다.",
+                        minLength: {
+                            value: 8,
+                            message: "비밀번호는 최소 8자입니다.",
+                        },
+                    })}
+                    error={errors.password}
+                />
+                <Input
+                    label={"비밀번호 확인"}
+                    placeholder={"비밀번호를 다시 입력해주세요."}
+                    type={"password"}
+                    registration={register("password_confirm", {
+                        required: "비밀번호 확인을 입력해주세요.",
+                        validate: value =>
+                            value === watch("password") || "비밀번호가 일치하지 않습니다.",
+                    })}
+                    error={errors.password_confirm}
                 />
                 <Input
                     label={"이메일"}

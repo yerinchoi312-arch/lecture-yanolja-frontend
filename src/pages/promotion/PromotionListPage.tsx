@@ -26,13 +26,13 @@ function PromotionListPage() {
                 ["max-w-[1280px]", "mx-auto", "w-full"],
             )}>
             <div className={"space-y-20 relative"}>
-                <BackButton className={"absolute top-2"} />
+                <BackButton className={"absolute top-2 md:hidden"} />
                 <h2 className={twMerge(["text-2xl", "font-bold", "text-center"])}>기획전 전체</h2>
             </div>
             <div className={"space-x-4"}>
                 <button
                     className={twMerge(
-                        ["px-3", "py-1", "rounded-2xl"],
+                        ["px-4", "py-2", "rounded-2xl"],
                         ["bg-gray-100", "font-medium"],
                     )}>
                     전체

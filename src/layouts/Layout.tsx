@@ -1,6 +1,6 @@
 import { Outlet } from "react-router";
-import Header from "../components/Header.tsx";
-import Footer from "../components/Footer.tsx";
+import Header from "../pages/layout/Header.tsx";
+import Footer from "../pages/layout/Footer.tsx";
 import { twMerge } from "tailwind-merge";
 
 function Layout() {
