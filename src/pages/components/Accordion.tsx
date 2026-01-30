@@ -15,7 +15,7 @@ function Accordion({ title, children, defaultOpen = false, className }: Accordio
             <div
                 className={twMerge(["w-full"], ["flex", "justify-between", "items-center"],
                     ["hover:bg-blue-50"],
-                    isOpen && ["font-medium"]
+                    isOpen && ["font-medium","bg-blue-50"]
                 )}
                 onClick={() => setIsOpen(!isOpen)}>
                 <p className={"p-4"}>{title}</p>
@@ -26,7 +26,7 @@ function Accordion({ title, children, defaultOpen = false, className }: Accordio
             <div
                 className={twMerge(
                     ["w-full", "overflow-hidden", "transition-all", "duration-300","text-sm"],
-                    isOpen ? ["max-h-100","bg-gray-50","p-4","font-medium","text-gray-700"] : ["max-h-0"],
+                    isOpen ? ["max-h-100","p-4","font-medium","text-gray-700"] : ["max-h-0"],
                 )}>
                 {children}
             </div>

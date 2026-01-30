@@ -59,9 +59,11 @@ function CategoryListPage() {
                         ))}
                     </div>
                 </div>
-                <div></div>
+                <div>
+                    숙소 목록 여기에 뜨게
+                </div>
             </div>
-            <EventSlide id={"subEvent"} />
+            <EventSlide slideId={"subEvent"} />
             <Slide id={"subSlide"} />
             <Promotion />
         </div>

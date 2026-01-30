@@ -31,6 +31,7 @@ function PromotionListPage() {
             </div>
             <div className={"space-x-4"}>
                 <button
+                    type={"button"}
                     className={twMerge(
                         ["px-4", "py-2", "rounded-2xl"],
                         ["bg-gray-100", "font-medium"],

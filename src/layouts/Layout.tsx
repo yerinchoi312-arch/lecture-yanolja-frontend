@@ -7,7 +7,7 @@ function Layout() {
     return (
         <div className={twMerge(["flex","flex-col"],["min-h-screen"])}>
             <Header />
-            <Outlet />
+                <Outlet />
             <Footer />
         </div>
     );

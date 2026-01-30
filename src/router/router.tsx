@@ -17,11 +17,13 @@ import AdminSubCategoryCreate from "../pages/(admin)/categories/AdminSubCategory
 import AdminUserList from "../pages/(admin)/users/AdminUserList.tsx";
 import AdminUserEdit from "../pages/(admin)/users/AdminUserEdit.tsx";
 import ReservationPage from "../pages/reservation/ReservationPage.tsx";
-import NoticePage from "../pages/notice/NoticePage.tsx";
+import NoticeList from "../pages/notice/NoticeList.tsx";
 import FAQPage from "../pages/faq/FAQPage.tsx";
 import RecentView from "../pages/recent/RecentView.tsx";
 import Cart from "../pages/cart/Cart.tsx";
 import Wishlist from "../pages/wishlist/Wishlist.tsx";
+import NoticeWrite from "../pages/notice/NoticeWrite.tsx";
+import EventListPage from "../pages/event/EventListPage.tsx";
 
 export const guestOnlyLoader = () => {
     const isLoggedIn = useAuthStore.getState().isLoggedIn;
@@ -52,19 +54,36 @@ export const router = createBrowserRouter([
         element: <Layout />,
         children: [
             { index: true, element: <Home /> },
-            { path: "/login", element: <Login />, loader: guestOnlyLoader },
-            { path: "/register", element: <Register />, loader: guestOnlyLoader },
-            { path: "/mypage", element: <MyPage /> },
-            { path: "/mypage/edit", element: <AccountEdit /> },
-            { path: "/notice", element: <NoticePage /> },
-            { path: "/faq", element: <FAQPage /> },
-            { path: "/categories/:path", element: <CategoryListPage /> },
-            { path: "/event", element: <EventDetailPage /> },
-            { path: "/promotion", element: <PromotionListPage /> },
-            { path: "/reservation", element: <ReservationPage /> },
-            { path: "/recent", element: <RecentView /> },
-            { path: "/cart", element: <Cart /> },
-            { path: "/wishlist", element: <Wishlist /> },
+            { path: "login", element: <Login />, loader: guestOnlyLoader },
+            { path: "register", element: <Register />, loader: guestOnlyLoader },
+            {
+                path: "mypage",
+                children: [
+                    { index: true, element: <MyPage /> },
+                    { path: "edit", element: <AccountEdit /> },
+                ],
+            },
+            {
+                path: "notice",
+                children: [
+                    { index: true, element: <NoticeList /> },
+                    { path: "write", element: <NoticeWrite /> },
+                ],
+            },
+            { path: "faq", element: <FAQPage /> },
+            { path: "categories/:path", element: <CategoryListPage /> },
+            {
+                path: "event",
+                children: [
+                    { index: true, element: <EventListPage /> },
+                    { path: ":id", element: <EventDetailPage /> },
+                ],
+            },
+            { path: "promotion", element: <PromotionListPage /> },
+            { path: "reservation", element: <ReservationPage /> },
+            { path: "recent", element: <RecentView /> },
+            { path: "cart", element: <Cart /> },
+            { path: "wishlist", element: <Wishlist /> },
         ],
     },
     {

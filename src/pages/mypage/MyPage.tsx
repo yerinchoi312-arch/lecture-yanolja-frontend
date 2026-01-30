@@ -16,77 +16,131 @@ function MyPage() {
         }
     };
     return (
-        <div className={twMerge(["space-y-10", "py-10"], ["max-w-[800px]", "w-full", "mx-auto"])}>
-            {isLoggedIn && user ? (
-                <div className={twMerge("flex", "justify-between", "items-center")}>
-                    {/*로그인 했을때 보이게 작업*/}
-                    <div className={"flex items-end"}>
-                        <h2
-                            className={twMerge(
-                                ["text-2xl", "font-bold", "text-gray-700"],
-                                ["underline", "underline-offset-8"],
-                            )}>
-                            {user.name}
-                        </h2>
-                        <span>님</span>
-                    </div>
-                    <div className={twMerge(["flex", "gap-4"])}>
-                        <Button variant={"secondary"} size={"sm"} onClick={handleLogout}>
-                            로그아웃
-                        </Button>
-                        <Button size={"sm"} onClick={() => navigate(`/mypage/edit`)}>
-                            계정관리
-                        </Button>
-                    </div>
-                </div>
-            ) : (
-                <div
-                    className={twMerge([
-                        "p-8",
-                        "bg-white",
-                        "rounded-xl",
-                        "border",
-                        "border-gray-200",
-                    ])}>
-                    {/*로그인 하면 안보임*/}
-                    <p className={"text-gray-500 font-medium mb-2"}>신규회원 혜택 &#10024;</p>
-                    <h2 className={twMerge("font-bold", "text-gray-800", "text-xl")}>
-                        로그인 후 다양한
-                        <br /> 회원 혜택을 만나보세요 !
-                    </h2>
-                    <Button fullWidth={true} className={"mt-8"} onClick={() => navigate("/login")}>
-                        로그인 또는 회원가입
-                    </Button>
-                </div>
-            )}
+        <div className={"bg-gray-50"}>
             <div
                 className={twMerge(
-                    ["bg-white", "rounded-xl", "border", "border-gray-200"],
-                    ["p-4"],
-                    ["flex", "flex-col"],
-                    ["[&>*]:py-4", "[&>*]:px-4"],
-                    ["[&>*]:hover:bg-blue-50", "[&>*]:hover:rounded-xl", "[&>*]:hover:font-bold"],
+                    ["space-y-5", "py-10"],
+                    ["max-w-[800px]", "w-full", "mx-auto"],
                 )}>
-                <Link to={"/reservation"}>
-                    <span>예약 내역</span>
-                </Link>
-                <Link to={"/promotion"}>
-                    <span>기획전</span>
-                </Link>
-                <Link to={"/notice"}>
-                    <span>공지사항</span>
-                </Link>
-                <Link to={"/faq"}>
-                    <span>자주 묻는 질문</span>
-                </Link>
-            </div>
-            {isLoggedIn && user?.role === "ADMIN" && (
-                <div className={"flex justify-end"}>
-                    <Button size={"md"} onClick={() => navigate("/admin")}>
-                        관리자 페이지
-                    </Button>
+                {isLoggedIn && user ? (
+                    <div className={twMerge("flex", "justify-between", "items-center")}>
+                        {/*로그인 했을때 보이게 작업*/}
+                        <div className={"flex items-end"}>
+                            <h2
+                                className={twMerge(
+                                    ["text-2xl", "font-bold", "text-gray-700"],
+                                    ["underline", "underline-offset-8"],
+                                )}>
+                                {user.name}
+                            </h2>
+                            <span>님</span>
+                        </div>
+                        <div className={twMerge(["flex", "gap-4"])}>
+                            <Button variant={"secondary"} size={"sm"} onClick={handleLogout}>
+                                로그아웃
+                            </Button>
+                            <Button size={"sm"} onClick={() => navigate(`/mypage/edit`)}>
+                                계정관리
+                            </Button>
+                        </div>
+                    </div>
+                ) : (
+                    <div
+                        className={twMerge([
+                            "p-8",
+                            "bg-white",
+                            "rounded-xl",
+                            "border",
+                            "border-gray-200",
+                        ])}>
+                        {/*로그인 하면 안보임*/}
+                        <p className={"text-gray-500 font-medium mb-2"}>신규회원 혜택 &#10024;</p>
+                        <h2 className={twMerge("font-bold", "text-gray-800", "text-xl")}>
+                            로그인 후 다양한
+                            <br /> 회원 혜택을 만나보세요 !
+                        </h2>
+                        <Button
+                            fullWidth={true}
+                            className={"mt-8"}
+                            onClick={() => navigate("/login")}>
+                            로그인 또는 회원가입
+                        </Button>
+                    </div>
+                )}
+                <div className={"space-y-5"}>
+                    <div
+                        className={twMerge(
+                            ["bg-white", "rounded-xl", "shadow-sm"],
+                            ["p-4", "flex", "flex-col"],
+                        )}>
+                        <p
+                            className={
+                                "text-gray-500 font-semibold text-xs p-4 pl-2 border-b border-gray-200"
+                            }>
+                            예약 내역
+                        </p>
+                        <Link
+                            to={"/reservation"}
+                            className={twMerge(
+                                ["hover:bg-blue-50", "hover:rounded-xl"],
+                                ["font-bold", "py-4", "px-2", "text-gray-800"],
+                            )}>
+                            <span>국내숙소</span>
+                        </Link>
+                    </div>
+                    <div
+                        className={twMerge(
+                            ["bg-white", "rounded-xl", "shadow-sm"],
+                            ["p-4", "flex", "flex-col"],
+                        )}>
+                        <Link
+                            to={"/event"}
+                            className={twMerge(
+                                ["hover:bg-blue-50", "hover:rounded-xl"],
+                                ["font-bold", "py-4", "px-2", "text-gray-800"],
+                            )}>
+                            <span>이벤트</span>
+                        </Link>
+                        <Link
+                            to={"/promotion"}
+                            className={twMerge(
+                                ["hover:bg-blue-50", "hover:rounded-xl"],
+                                ["font-bold", "py-4", "px-2", "text-gray-800"],
+                            )}>
+                            <span>기획전</span>
+                        </Link>
+                    </div>
+                    <div
+                        className={twMerge(
+                            ["bg-white", "rounded-xl", "shadow-sm"],
+                            ["p-4", "flex", "flex-col"],
+                        )}>
+                        <Link
+                            to={"/notice"}
+                            className={twMerge(
+                                ["hover:bg-blue-50", "hover:rounded-xl"],
+                                ["font-bold", "py-4", "px-2", "text-gray-800"],
+                            )}>
+                            <span>공지사항</span>
+                        </Link>
+                        <Link
+                            to={"/faq"}
+                            className={twMerge(
+                                ["hover:bg-blue-50", "hover:rounded-xl"],
+                                ["font-bold", "py-4", "px-2", "text-gray-800"],
+                            )}>
+                            <span>자주 묻는 질문</span>
+                        </Link>
+                    </div>
                 </div>
-            )}
+                {isLoggedIn && user?.role === "ADMIN" && (
+                    <div className={"flex justify-end"}>
+                        <Button size={"md"} onClick={() => navigate("/admin")}>
+                            관리자 페이지
+                        </Button>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

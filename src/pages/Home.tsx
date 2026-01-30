@@ -42,7 +42,7 @@ function Home() {
                 </div>
             )}
             <CategoryTab categories={categories} />
-            <EventSlide id={"main"} />
+            <EventSlide slideId={"main"} />
             <div
                 className={twMerge(
                     ["flex", "justify-center", "items-center", "text-center"],
@@ -62,7 +62,7 @@ function Home() {
                 <Slide id={"subSlide"} />
             </div>
             <div>
-                <Banner />
+                <Banner slideId={"bannerSlide"} />
             </div>
             <div>
                 <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>

@@ -10,7 +10,7 @@ import "swiper/css/navigation";
 import { twMerge } from "tailwind-merge";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 
 const SLIDES = [
@@ -21,10 +21,11 @@ const SLIDES = [
 ];
 
 interface SlideProps {
-    id:string;
+    slideId:string;
 }
 
-function EventSlide({ id }:SlideProps) {
+function EventSlide({ slideId }:SlideProps) {
+    const {id}=useParams();
     return (
         <div className={twMerge(["h-[250px]", "w-full", "relative", "group"])}>
             <Swiper
@@ -35,15 +36,15 @@ function EventSlide({ id }:SlideProps) {
                 autoplay={{ delay: 5000, disableOnInteraction: false }}
                 pagination={{ clickable: true }}
                 navigation={{
-                    prevEl: `.prev-${id}`,
-                    nextEl: `.next-${id}`,
+                    prevEl: `.prev-${slideId}`,
+                    nextEl: `.next-${slideId}`,
                 }}
                 modules={[Autoplay, Pagination, Navigation]}
                 className={twMerge(["w-full", "h-full"])}>
                 {SLIDES.map(slide => (
                     <SwiperSlide key={slide.id}>
                         <div className={twMerge(["w-full", "h-full", "relative"])}>
-                            <Link to={"/event"}>
+                            <Link to={`/event/${id}`}>
                                 <img src={slide.image} alt={slide.image} />
                             </Link>
                         </div>
@@ -52,7 +53,7 @@ function EventSlide({ id }:SlideProps) {
             </Swiper>
             <button
                 className={twMerge(
-                    [`prev-${id}`],
+                    [`prev-${slideId}`],
                     ["cursor-pointer"],
                     ["bg-white", "rounded-xl", "shadow-lg","border","border-gray-200"],
                     ["flex", "justify-center", "items-center", "w-10", "h-10",],
@@ -62,7 +63,7 @@ function EventSlide({ id }:SlideProps) {
             </button>
             <button
                 className={twMerge(
-                    [`next-${id}`],
+                    [`next-${slideId}`],
                     ["cursor-pointer"],
                     ["bg-white", "rounded-xl", "shadow-lg","border","border-gray-200"],
                     ["flex", "justify-center", "items-center", "w-10", "h-10",],

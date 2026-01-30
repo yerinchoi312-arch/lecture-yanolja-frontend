@@ -105,9 +105,9 @@ const BANNER_SLIDE = [
 ];
 
 interface BannerSlideProps {
-    id: string;
+    slideId: string;
 }
-function Banner({ id }: BannerSlideProps) {
+function Banner({ slideId }: BannerSlideProps) {
     return (
         <div className={twMerge(["w-full", "relative"])}>
             <Swiper
@@ -115,8 +115,8 @@ function Banner({ id }: BannerSlideProps) {
                 slidesPerView={1}
                 pagination={{ clickable: true }}
                 navigation={{
-                    prevEl: `.prev-${id}`,
-                    nextEl: `.next-${id}`,
+                    prevEl: `.prev-${slideId}`,
+                    nextEl: `.next-${slideId}`,
                 }}
                 modules={[Autoplay, Pagination, Navigation]}
                 className={twMerge(["w-full", "h-full"])}>
@@ -196,7 +196,7 @@ function Banner({ id }: BannerSlideProps) {
             </Swiper>
             <button
                 className={twMerge(
-                    [`prev-${id}`],
+                    [`prev-${slideId}`],
                     ["cursor-pointer"],
                     ["bg-white", "rounded-xl", "shadow-lg","border","border-gray-200"],
                     ["flex", "justify-center", "items-center", "w-10", "h-10",],
@@ -206,7 +206,7 @@ function Banner({ id }: BannerSlideProps) {
             </button>
             <button
                 className={twMerge(
-                    [`next-${id}`],
+                    [`next-${slideId}`],
                     ["cursor-pointer"],
                     ["bg-white", "rounded-xl", "shadow-lg","border","border-gray-200"],
                     ["flex", "justify-center", "items-center", "w-10", "h-10",],
