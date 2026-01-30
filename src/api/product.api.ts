@@ -1,5 +1,9 @@
 import { httpClient } from "./axios.ts";
-import type { Product, ProductListParams, ProductListResponse } from "../type/product.ts";
+import type {
+    Product,
+    ProductListParams,
+    ProductListResponse,
+} from "../type/product.ts";
 
 export const fetchProducts = async (params?: ProductListParams) => {
     const response = await httpClient.get<ProductListResponse>("/products", { params });

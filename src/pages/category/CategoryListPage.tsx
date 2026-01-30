@@ -6,14 +6,21 @@ import { getCategories } from "../../api/category.api.ts";
 import EventSlide from "../components/EventSlide.tsx";
 import Promotion from "../components/PromotionBox.tsx";
 import Slide from "../components/Slide.tsx";
+import type { ProductListParams, ProductSummary } from "../../type/product.ts";
+import { fetchProducts } from "../../api/product.api.ts";
 
 function CategoryListPage() {
-    const { path } = useParams();
+
+    const { path , id } = useParams();
     const [category, setCategory] = useState<CategoryData | null>(null);
+    const [loading, setLoading]=useState(true);
+    const [products, setProducts] = useState<ProductSummary[]>([]);
+    const [keyword, setKeyword] = useState("");
 
     useEffect(() => {
-        const fetchInfo = async () => {
+        const fetchCategory = async () => {
             if (!path) return;
+            setLoading(true);
             try {
                 const response = await getCategories();
                 const data = response.data.find(item => item.path === path);
@@ -25,9 +32,31 @@ function CategoryListPage() {
                 console.log("데이터 로딩 실패:", e);
             }
         };
-        fetchInfo().then(()=>{});
+        fetchCategory().then(()=>{});
     }, [path]);
 
+    useEffect(() => {
+        const fetchProduct = async () => {
+
+            setLoading(true);
+            try{
+                const params :  ProductListParams={
+                    page: 1,
+                    limit: 10,
+                    categoryId: Number(id),
+                    keyword:keyword,
+                }
+                const response = await fetchProducts(params);
+                setProducts(response.data);
+            }catch (e){
+                console.log(e);
+            }finally {
+                setLoading(false);
+            }
+        }
+        fetchProduct().then(()=>{})
+    }, [path]);
+    console.log(products)
     return (
         <div
             className={twMerge(
@@ -58,9 +87,14 @@ function CategoryListPage() {
                             </button>
                         ))}
                     </div>
-                </div>
-                <div>
-                    숙소 목록 여기에 뜨게
+                    <div className={"bg-gray-200 w-full p-8"}>
+                        숙소 목록 여기에 뜨게
+                       {products.map(product => (
+                           <div key={product.id}>
+                               {product.name}
+                           </div>
+                       ))}
+                    </div>
                 </div>
             </div>
             <EventSlide slideId={"subEvent"} />
