@@ -22,6 +22,9 @@ import FAQPage from "../pages/faq/FAQPage.tsx";
 import RecentView from "../pages/recent/RecentView.tsx";
 import Cart from "../pages/cart/Cart.tsx";
 import Wishlist from "../pages/wishlist/Wishlist.tsx";
+import AdminProductList from "../pages/(admin)/products/AdminProductList.tsx";
+import AdminProductCreate from "../pages/(admin)/products/AdminProductCreate.tsx";
+import AdminProductEdit from "../pages/(admin)/products/AdminProductEdit.tsx";
 import NoticeWrite from "../pages/notice/NoticeWrite.tsx";
 import EventListPage from "../pages/event/EventListPage.tsx";
 
@@ -92,12 +95,29 @@ export const router = createBrowserRouter([
         element: <AdminLayout />,
         children: [
             { index: true, element: <AdminDashboard /> },
-            { path: "categories", element: <AdminCategoryList /> },
-            { path: "categories/new", element: <AdminCategoryCreate /> },
-            { path: "categories/new/sub/:parentId", element: <AdminSubCategoryCreate /> },
-
-            { path: "users", element: <AdminUserList /> },
-            { path: "users/:id", element: <AdminUserEdit /> },
+            {
+                path: "users",
+                children: [
+                    { index: true, element: <AdminUserList /> },
+                    { path: "users/:id", element: <AdminUserEdit /> },
+                ],
+            },
+            {
+                path: "categories",
+                children: [
+                    { index: true, element: <AdminCategoryList /> },
+                    { path: "new", element: <AdminCategoryCreate /> },
+                    { path: "sub/:parentId", element: <AdminSubCategoryCreate /> },
+                ],
+            },
+            {
+                path: "products",
+                children: [
+                    { index: true, element: <AdminProductList /> },
+                    { path: "new", element: <AdminProductCreate /> },
+                    { path: ":id", element: <AdminProductEdit /> },
+                ],
+            },
         ],
     },
 ]);
