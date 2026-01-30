@@ -19,20 +19,28 @@ const AdminLayout = () => {
                     <Link to="/admin" className="block px-4 py-2 hover:bg-slate-700 rounded">
                         대시보드
                     </Link>
+                    <Link to="/admin/users" className="block px-4 py-2 hover:bg-slate-700 rounded">
+                        회원 관리
+                    </Link>
                     <Link
                         to="/admin/categories"
                         className="block px-4 py-2 hover:bg-slate-700 rounded">
                         카테고리 관리
                     </Link>
-                    <Link to="/admin/users" className="block px-4 py-2 hover:bg-slate-700 rounded">
-                        회원 관리
+                    <Link
+                        to="/admin/products"
+                        className="block px-4 py-2 hover:bg-slate-700 rounded">
+                        상품 관리
                     </Link>
                 </nav>
                 <div className="p-4 border-t border-slate-700 space-y-4">
                     <button
                         onClick={() => navigate("/")}
-                        className={"w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-sm"}
-                    >홈화면</button>
+                        className={
+                            "w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-sm"
+                        }>
+                        홈화면
+                    </button>
                     <button
                         onClick={handleLogout}
                         className="w-full px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-sm">

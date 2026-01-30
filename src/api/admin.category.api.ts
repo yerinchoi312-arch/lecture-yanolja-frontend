@@ -1,5 +1,5 @@
 import { httpClient } from "./axios";
-import type { Category } from "../type/category";
+import type { CategoryData } from "../type/category";
 import type {
     CreateCategoryParams,
     CreateSubCategoryParams,
@@ -7,8 +7,8 @@ import type {
     CreateSubCategoryResponse,
 } from "../type/admin.category";
 
-export const fetchCategories = async (): Promise<Category[]> => {
-    const response = await httpClient.get<{ data: Category[] }>("/categories");
+export const fetchCategories = async (): Promise<CategoryData[]> => {
+    const response = await httpClient.get<{ data: CategoryData[] }>("/categories");
     return response.data.data;
 };
 
