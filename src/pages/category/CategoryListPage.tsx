@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import type { CategoryData } from "../../type/category.ts";
 import { getCategories } from "../../api/category.api.ts";
 import EventSlide from "../components/EventSlide.tsx";
@@ -10,12 +10,11 @@ import type { ProductListParams, ProductSummary } from "../../type/product.ts";
 import { fetchProducts } from "../../api/product.api.ts";
 
 function CategoryListPage() {
-
-    const { path , id } = useParams();
+    const { path ,id } = useParams(); //< category id
     const [category, setCategory] = useState<CategoryData | null>(null);
-    const [loading, setLoading]=useState(true);
+    const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState<ProductSummary[]>([]);
-    const [keyword, setKeyword] = useState("");
+    const [selectedId, setSelectedId] = useState<number | null>(null); //< subcategory id
 
     useEffect(() => {
         const fetchCategory = async () => {
@@ -24,45 +23,50 @@ function CategoryListPage() {
             try {
                 const response = await getCategories();
                 const data = response.data.find(item => item.path === path);
-
+                if (data) {
+                    setCategory(data);
+                    if (data.subCategories?.length > 0) {
+                        setSelectedId(data.subCategories[0].id);
+                    }
+                }
                 if (data) {
                     setCategory(data);
                 }
             } catch (e) {
                 console.log("데이터 로딩 실패:", e);
             }
+            finally {
+                setLoading(false);
+            }
         };
-        fetchCategory().then(()=>{});
+        fetchCategory().then(() => {});
     }, [path]);
 
     useEffect(() => {
         const fetchProduct = async () => {
-
+            const parentId = id || category?.id
+            if (!parentId || !selectedId) return;
             setLoading(true);
-            try{
-                const params :  ProductListParams={
+            try {
+                const params: ProductListParams = {
                     page: 1,
                     limit: 10,
-                    categoryId: Number(id),
-                    keyword:keyword,
-                }
+                    categoryId: Number(parentId),
+                    subCategoryId: Number(selectedId),
+                };
                 const response = await fetchProducts(params);
                 setProducts(response.data);
-            }catch (e){
+            } catch (e) {
                 console.log(e);
-            }finally {
+            } finally {
                 setLoading(false);
             }
-        }
-        fetchProduct().then(()=>{})
-    }, [path]);
-    console.log(products)
+        };
+        fetchProduct().then(() => {});
+    }, [id,selectedId,category]);
+
     return (
-        <div
-            className={twMerge(
-                ["space-y-30", "py-10"],
-                ["max-w-[1280px]", "mx-auto"],
-            )}>
+        <div className={twMerge(["space-y-30", "py-10"], ["max-w-[1280px]", "mx-auto"])}>
             <div>
                 <h2 className={twMerge(["text-3xl", "font-bold", "mb-10", "text-center"])}>
                     {category?.name}
@@ -79,21 +83,46 @@ function CategoryListPage() {
                             <button
                                 type={"button"}
                                 key={subcategory.id}
+                                onClick={() => setSelectedId(subcategory.id)}
                                 className={twMerge(
                                     ["px-4", "py-2", "rounded-2xl"],
-                                    ["text-gray-700", "bg-gray-50","font-medium"],
+                                    ["text-gray-700", "bg-gray-50", "font-medium"],
+                                    selectedId === subcategory.id && ["bg-gray-600", "text-white"],
                                 )}>
                                 {subcategory.name}
                             </button>
                         ))}
                     </div>
-                    <div className={"bg-gray-200 w-full p-8"}>
-                        숙소 목록 여기에 뜨게
-                       {products.map(product => (
-                           <div key={product.id}>
-                               {product.name}
-                           </div>
-                       ))}
+                    <div className=" w-full p-8 rounded-xl min-h-[200px]">
+                        {loading ? (
+                            <div className="text-center py-10">데이터 로딩 중...</div>
+                        ) : products.length > 0 ? (
+                            <div className="grid grid-cols-3 gap-3">
+                                {products.map(product => (
+                                    <Link
+                                        to={`/products/${product.id}`}
+                                        key={product.id}
+                                        className={twMerge(
+                                            ["flex",
+                                            "flex-col",],["bg-white","p-4","border","border-gray-200"]
+                                        )}>
+                                        <img
+                                            src={product.thumbnail}
+                                            alt={product.name}
+                                            className={"aspect-video rounded-xl mb-2"}
+                                        />
+                                        <h2 className={"text-lg font-semibold"}>{product.name}</h2>
+                                        <p className={"text-sm"}>{product.address.split(" ").slice(0,2).join(" ")}</p>
+                                        <p className={"text-right w-full font-bold"}>{product.minPrice}원 ~</p>
+                                    </Link>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-10 text-gray-500">
+                                "{category?.subCategories.find(s => s.id === selectedId)?.name}"
+                                지역에 등록된 숙소가 없습니다.
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

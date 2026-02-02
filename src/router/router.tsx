@@ -27,6 +27,7 @@ import AdminProductCreate from "../pages/(admin)/products/AdminProductCreate.tsx
 import AdminProductEdit from "../pages/(admin)/products/AdminProductEdit.tsx";
 import NoticeWrite from "../pages/notice/NoticeWrite.tsx";
 import EventListPage from "../pages/event/EventListPage.tsx";
+import ProductDetailPage from "../pages/products/ProductDetailPage.tsx";
 
 export const guestOnlyLoader = () => {
     const isLoggedIn = useAuthStore.getState().isLoggedIn;
@@ -75,6 +76,7 @@ export const router = createBrowserRouter([
             },
             { path: "faq", element: <FAQPage /> },
             { path: "categories/:path", element: <CategoryListPage /> },
+            { path: "products/:id", element: <ProductDetailPage /> },
             {
                 path: "event",
                 children: [
