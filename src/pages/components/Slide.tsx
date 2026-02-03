@@ -1,14 +1,3 @@
-import slide1 from "../../assets/images/slide/slide1.jpg";
-import slide2 from "../../assets/images/slide/slide2.jpg";
-import slide3 from "../../assets/images/slide/slide3.jpg";
-import slide4 from "../../assets/images/slide/slide4.png";
-import slide5 from "../../assets/images/slide/slide5.jpg";
-import slide6 from "../../assets/images/slide/slide6.jpg";
-import slide7 from "../../assets/images/slide/slide7.jpg";
-import slide8 from "../../assets/images/slide/slide8.jpg";
-import slide9 from "../../assets/images/slide/slide9.jpg";
-import slide10 from "../../assets/images/slide/slide10.jpg";
-
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -18,110 +7,71 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from "react-router";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
-
-const SLIDES = [
-    {
-        id: 1,
-        image: slide1,
-        title: "호텔 탑스텐 정동진",
-        sale: "8%",
-        price: "92,000원 ~",
-        path: "/category/1",
-    },
-    {
-        id: 2,
-        image: slide2,
-        title: "강릉 세인트존스호텔",
-        sale: "45%",
-        price: "110,000원 ~",
-        path: "/category/1",
-    },
-    {
-        id: 3,
-        image: slide3,
-        title: "스카이베이 호텔 경포",
-        sale: "",
-        price: "108,900원 ~",
-        path: "/category/1",
-    },
-    {
-        id: 4,
-        image: slide4,
-        title: "SL호텔 강릉",
-        sale: "72%",
-        price: "54,600원 ~",
-        path: "/category/1",
-    },
-    {
-        id: 5,
-        image: slide5,
-        title: "정동진 썬크루즈 호텔",
-        sale: "20%",
-        price: "176,000원 ~",
-        path: "/category/1",
-    },
-    {
-        id: 6,
-        image: slide6,
-        title: "호텔 탑스텐 정동진",
-        sale: "8%",
-        price: "92,000원 ~",
-        path: "/category/1",
-    },
-    {
-        id: 7,
-        image: slide7,
-        title: "강릉 세인트존스호텔",
-        sale: "45%",
-        price: "110,000원 ~",
-        path: "/category/1",
-    },
-    {
-        id: 8,
-        image: slide8,
-        title: "스카이베이 호텔 경포",
-        sale: "",
-        price: "108,900원 ~",
-        path: "/category/1",
-    },
-    {
-        id: 9,
-        image: slide9,
-        title: "SL호텔 강릉",
-        sale: "72%",
-        price: "54,600원 ~",
-        path: "/category/1",
-    },
-    {
-        id: 10,
-        image: slide10,
-        title: "정동진 썬크루즈 호텔",
-        sale: "20%",
-        price: "176,000원 ~",
-        path: "/category/1",
-    },
-];
+import { useEffect, useState } from "react";
+import type { ProductListParams, ProductSummary } from "../../type/product.ts";
+import {  fetchProducts } from "../../api/product.api.ts";
 
 interface SlideProps {
-    id: string;
+    slideId: string;
+    categoryId?: number;
+    subCategoryId?: number;
 }
-function Slide({ id }: SlideProps) {
+function Slide({ slideId ,categoryId=0,subCategoryId}: SlideProps) {
+    const [products, setProducts] = useState<ProductSummary[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const randomArray = (array: any[]) => {
+        return [...array].sort(()=>Math.random() - 0.5);
+    }
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            setLoading(true);
+            try {
+                const params: ProductListParams = {
+                    page: 1,
+                    limit: 10,
+                    ...(categoryId > 0 && { categoryId: Number(categoryId) }),
+                    ...(subCategoryId && { subCategoryId: Number(subCategoryId) }),
+                };
+
+                const response = await fetchProducts(params);
+                const shuffled = randomArray(response.data)
+
+                setProducts(shuffled);
+                //setPagination(response.pagination);
+
+            } catch (e) {
+                console.log(e);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchProduct().then(() => {});
+    }, [categoryId,subCategoryId]);
+
+
+    if (loading) return <div>로딩중</div>;
+
+
     return (
         <div className={twMerge(["w-full", "relative"])}>
             <Swiper
+
                 loop={true}
                 slidesPerView={5}
                 spaceBetween={16}
                 slidesPerGroup={5}
                 pagination={{ clickable: true }}
                 navigation={{
-                    prevEl: `.prev-${id}`,
-                    nextEl: `.next-${id}`,
+                    prevEl: `.prev-${slideId}`,
+                    nextEl: `.next-${slideId}`,
                 }}
                 modules={[Autoplay, Pagination, Navigation]}
                 className={twMerge(["w-full", "h-full"])}>
-                {SLIDES.map(slide => (
-                    <SwiperSlide key={slide.id} className={"!h-[330px]"}>
+                {products.map(product => (
+
+                    <SwiperSlide key={product.id} className={"!h-[330px]"}>
                         <div
                             className={twMerge([
                                 "w-full",
@@ -129,11 +79,11 @@ function Slide({ id }: SlideProps) {
                                 "relative",
                                 "overflow-hidden",
                             ])}>
-                            <Link to={slide.path} className={twMerge(["space-y-2 group"])}>
+                            <Link to={`/products/${product.id}`} className={twMerge(["space-y-2 group"])}>
                                 <div className={"aspect-square rounded-xl overflow-hidden"}>
                                     <img
-                                        src={slide.image}
-                                        alt={slide.image}
+                                        src={product.thumbnail}
+                                        alt={product.name}
                                         className={twMerge(
                                             ["w-full", "h-full", "object-cover"],
                                             ["transition-all", "duration-500"],
@@ -142,7 +92,7 @@ function Slide({ id }: SlideProps) {
                                     />
                                 </div>
                                 <h3 className={twMerge(["font-base", "text-base"])}>
-                                    {slide.title}
+                                    {product.name}
                                 </h3>
                                 <div className={twMerge(["flex", "items-center", "justify-start"])}>
                                     <p
@@ -151,10 +101,10 @@ function Slide({ id }: SlideProps) {
                                             "text-red-500",
                                             "mr-2",
                                         ])}>
-                                        {slide?.sale}
+                                        {product.minPrice}
                                     </p>
                                     <p className={twMerge(["font-bold", "text-lg", "text-black"])}>
-                                        {slide.price}
+                                        {product.minPrice}
                                     </p>
                                 </div>
                             </Link>
@@ -164,7 +114,7 @@ function Slide({ id }: SlideProps) {
             </Swiper>
             <button
                 className={twMerge(
-                    [`prev-${id}`],
+                    [`prev-${slideId}`],
                     ["cursor-pointer"],
                     ["bg-white", "rounded-xl", "shadow-lg", "border", "border-gray-200"],
                     ["flex", "justify-center", "items-center", "w-10", "h-10"],
@@ -174,7 +124,7 @@ function Slide({ id }: SlideProps) {
             </button>
             <button
                 className={twMerge(
-                    [`next-${id}`],
+                    [`next-${slideId}`],
                     ["cursor-pointer"],
                     ["bg-white", "rounded-xl", "shadow-lg", "border", "border-gray-200"],
                     ["flex", "justify-center", "items-center", "w-10", "h-10"],

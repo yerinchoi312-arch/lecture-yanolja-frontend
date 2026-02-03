@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import type { CategoryData } from "../../type/category.ts";
 import { getCategories } from "../../api/category.api.ts";
 import EventSlide from "../components/EventSlide.tsx";
@@ -10,49 +10,44 @@ import type { ProductListParams, ProductSummary } from "../../type/product.ts";
 import { fetchProducts } from "../../api/product.api.ts";
 
 function CategoryListPage() {
-    const { path ,id } = useParams(); //< category id
+    const navigate = useNavigate();
+    const { id , subId } = useParams(); //< category id
     const [category, setCategory] = useState<CategoryData | null>(null);
     const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState<ProductSummary[]>([]);
-    const [selectedId, setSelectedId] = useState<number | null>(null); //< subcategory id
 
+
+    const fetchCategory = async () => {
+        if (!id) return;
+        setLoading(true);
+        try {
+            const response = await getCategories();
+            const data = response.data.find(item => item.id === Number(id));
+            if (data) {
+                setCategory(data);
+            }
+        } catch (e) {
+            console.log("데이터 로딩 실패:", e);
+        }
+        finally {
+            setLoading(false);
+        }
+    };
     useEffect(() => {
-        const fetchCategory = async () => {
-            if (!path) return;
-            setLoading(true);
-            try {
-                const response = await getCategories();
-                const data = response.data.find(item => item.path === path);
-                if (data) {
-                    setCategory(data);
-                    if (data.subCategories?.length > 0) {
-                        setSelectedId(data.subCategories[0].id);
-                    }
-                }
-                if (data) {
-                    setCategory(data);
-                }
-            } catch (e) {
-                console.log("데이터 로딩 실패:", e);
-            }
-            finally {
-                setLoading(false);
-            }
-        };
         fetchCategory().then(() => {});
-    }, [path]);
+    }, [id]);
 
     useEffect(() => {
         const fetchProduct = async () => {
             const parentId = id || category?.id
-            if (!parentId || !selectedId) return;
+            if (!parentId) return;
             setLoading(true);
             try {
                 const params: ProductListParams = {
                     page: 1,
                     limit: 10,
                     categoryId: Number(parentId),
-                    subCategoryId: Number(selectedId),
+                    subCategoryId: subId ? Number(subId) : undefined,
                 };
                 const response = await fetchProducts(params);
                 setProducts(response.data);
@@ -63,7 +58,7 @@ function CategoryListPage() {
             }
         };
         fetchProduct().then(() => {});
-    }, [id,selectedId,category]);
+    }, [id,subId,category,navigate]);
 
     return (
         <div className={twMerge(["space-y-30", "py-10"], ["max-w-[1280px]", "mx-auto"])}>
@@ -83,11 +78,11 @@ function CategoryListPage() {
                             <button
                                 type={"button"}
                                 key={subcategory.id}
-                                onClick={() => setSelectedId(subcategory.id)}
+                                onClick={() => navigate(`/categories/${id}/${subcategory.id}`)}
                                 className={twMerge(
                                     ["px-4", "py-2", "rounded-2xl"],
                                     ["text-gray-700", "bg-gray-50", "font-medium"],
-                                    selectedId === subcategory.id && ["bg-gray-600", "text-white"],
+                                    Number(subId) === subcategory.id && ["bg-gray-600", "text-white"],
                                 )}>
                                 {subcategory.name}
                             </button>
@@ -119,7 +114,7 @@ function CategoryListPage() {
                             </div>
                         ) : (
                             <div className="text-center py-10 text-gray-500">
-                                "{category?.subCategories.find(s => s.id === selectedId)?.name}"
+                                "{category?.subCategories.find(s => s.id === Number(subId))?.name}"
                                 지역에 등록된 숙소가 없습니다.
                             </div>
                         )}
@@ -127,7 +122,7 @@ function CategoryListPage() {
                 </div>
             </div>
             <EventSlide slideId={"subEvent"} />
-            <Slide id={"subSlide"} />
+            <Slide slideId={"subSlide"} />
             <Promotion />
         </div>
     );

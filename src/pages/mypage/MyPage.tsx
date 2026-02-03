@@ -94,14 +94,6 @@ function MyPage() {
                             ["p-4", "flex", "flex-col"],
                         )}>
                         <Link
-                            to={"/event"}
-                            className={twMerge(
-                                ["hover:bg-blue-50", "hover:rounded-xl"],
-                                ["font-bold", "py-4", "px-2", "text-gray-800"],
-                            )}>
-                            <span>이벤트</span>
-                        </Link>
-                        <Link
                             to={"/promotion"}
                             className={twMerge(
                                 ["hover:bg-blue-50", "hover:rounded-xl"],

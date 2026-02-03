@@ -15,7 +15,7 @@ function CategoryTab({categories}: CategoryTabProps){
             {categories.map(category => (
                 <Link
                     key={category.id}
-                    to={`/categories/${category.path}`}
+                    to={`/categories/${category.id}/${category.subCategories[0].id}`}
                     className={twMerge(
                         ["flex", "flex-col", "justify-center", "items-center", "gap-2"],
                         ["flex-1", "w-full", "font-semibold", "text-lg"],

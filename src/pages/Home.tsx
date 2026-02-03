@@ -18,6 +18,7 @@ function Home() {
     useEffect(() => {
         getCategories().then(response => setCategories(response.data));
     }, []);
+
     return (
         <div
             className={twMerge(
@@ -59,7 +60,7 @@ function Home() {
                 <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>
                     이런 상품은 어떠세요?
                 </h2>
-                <Slide id={"subSlide"} />
+                <Slide categoryId={0} slideId={"subSlide"} />
             </div>
             <div>
                 <Banner slideId={"bannerSlide"} />
@@ -68,7 +69,13 @@ function Home() {
                 <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>
                     지금 떠나는 도심 호캉스!
                 </h2>
-                <Slide id={"subSlide2"} />
+                <Slide categoryId={categories.find(category => category.name ==="호텔/리조트")?.id || 0}
+                       subCategoryId={
+                           categories
+                               .flatMap(category => category.subCategories)
+                               .find(sub => sub.name === "서울")?.id || 0
+                       }
+                       slideId={"subSlide2"} />
             </div>
             <div>
                 <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>기획전 모음</h2>
