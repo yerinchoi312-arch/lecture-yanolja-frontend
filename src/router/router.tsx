@@ -81,7 +81,7 @@ export const router = createBrowserRouter([
                 path: "event",
                 children: [
                     { index: true, element: <EventListPage /> },
-                    { path: ":id", element: <EventDetailPage /> },
+                    { path: "detail", element: <EventDetailPage /> },
                 ],
             },
             { path: "promotion", element: <PromotionListPage /> },

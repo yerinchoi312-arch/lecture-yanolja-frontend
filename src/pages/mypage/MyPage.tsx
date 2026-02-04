@@ -2,10 +2,19 @@ import { twMerge } from "tailwind-merge";
 import Button from "../components/Button.tsx";
 import { Link, useNavigate } from "react-router";
 import { useAuthStore } from "../../store/useAuthStore.ts";
+import type { MouseEvent } from "react";
 
 function MyPage() {
     const { isLoggedIn, logout, user } = useAuthStore();
     const navigate = useNavigate();
+
+    const handleAutoClick = (e:MouseEvent<HTMLAnchorElement>) =>{
+        if(!isLoggedIn){
+            e.preventDefault();
+            alert("로그인을 먼저 해주세요");
+            navigate("/login");
+        }
+    }
 
     const handleLogout = () => {
         const confirm = window.confirm("로그아웃 하시겠습니까?");
@@ -16,7 +25,7 @@ function MyPage() {
         }
     };
     return (
-        <div className={"bg-gray-50"}>
+        <div className={"bg-gray-50 flex-1"}>
             <div
                 className={twMerge(
                     ["space-y-5", "py-10"],
@@ -80,6 +89,7 @@ function MyPage() {
                             예약 내역
                         </p>
                         <Link
+                            onClick={handleAutoClick}
                             to={"/reservation"}
                             className={twMerge(
                                 ["hover:bg-blue-50", "hover:rounded-xl"],

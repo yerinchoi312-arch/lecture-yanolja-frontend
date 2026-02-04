@@ -3,27 +3,28 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import { twMerge } from "tailwind-merge";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from "react-router";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useEffect, useState } from "react";
 import type { ProductListParams, ProductSummary } from "../../type/product.ts";
-import {  fetchProducts } from "../../api/product.api.ts";
+import { fetchProducts } from "../../api/product.api.ts";
 
 interface SlideProps {
     slideId: string;
     categoryId?: number;
     subCategoryId?: number;
+    slidesPerView: number;
+    slidesPerGroup:number;
 }
-function Slide({ slideId ,categoryId=0,subCategoryId}: SlideProps) {
+function Slide({ slideId, categoryId = 0, subCategoryId=0, slidesPerView ,slidesPerGroup}: SlideProps) {
     const [products, setProducts] = useState<ProductSummary[]>([]);
     const [loading, setLoading] = useState(true);
 
     const randomArray = (array: any[]) => {
-        return [...array].sort(()=>Math.random() - 0.5);
-    }
-
+        return [...array].sort(() => Math.random() - 0.5);
+    };
     useEffect(() => {
         const fetchProduct = async () => {
             setLoading(true);
@@ -31,47 +32,41 @@ function Slide({ slideId ,categoryId=0,subCategoryId}: SlideProps) {
                 const params: ProductListParams = {
                     page: 1,
                     limit: 10,
-                    ...(categoryId > 0 && { categoryId: Number(categoryId) }),
+                    ...(categoryId && { categoryId: Number(categoryId) }),
                     ...(subCategoryId && { subCategoryId: Number(subCategoryId) }),
                 };
 
                 const response = await fetchProducts(params);
-                const shuffled = randomArray(response.data)
+                const shuffled = randomArray(response.data);
 
                 setProducts(shuffled);
                 //setPagination(response.pagination);
-
             } catch (e) {
                 console.log(e);
             } finally {
                 setLoading(false);
             }
-        }
+        };
         fetchProduct().then(() => {});
-    }, [categoryId,subCategoryId]);
-
+    }, [categoryId, subCategoryId]);
 
     if (loading) return <div>로딩중</div>;
-
 
     return (
         <div className={twMerge(["w-full", "relative"])}>
             <Swiper
-
                 loop={true}
-                slidesPerView={5}
+                slidesPerView={slidesPerView}
                 spaceBetween={16}
-                slidesPerGroup={5}
-                pagination={{ clickable: true }}
+                slidesPerGroup={slidesPerGroup}
                 navigation={{
                     prevEl: `.prev-${slideId}`,
                     nextEl: `.next-${slideId}`,
                 }}
-                modules={[Autoplay, Pagination, Navigation]}
+                modules={[Autoplay, Navigation]}
                 className={twMerge(["w-full", "h-full"])}>
                 {products.map(product => (
-
-                    <SwiperSlide key={product.id} className={"!h-[330px]"}>
+                    <SwiperSlide key={product.id} >
                         <div
                             className={twMerge([
                                 "w-full",
@@ -79,7 +74,9 @@ function Slide({ slideId ,categoryId=0,subCategoryId}: SlideProps) {
                                 "relative",
                                 "overflow-hidden",
                             ])}>
-                            <Link to={`/products/${product.id}`} className={twMerge(["space-y-2 group"])}>
+                            <Link
+                                to={`/products/${product.id}`}
+                                className={twMerge(["space-y-3", "group"])}>
                                 <div className={"aspect-square rounded-xl overflow-hidden"}>
                                     <img
                                         src={product.thumbnail}
@@ -91,20 +88,12 @@ function Slide({ slideId ,categoryId=0,subCategoryId}: SlideProps) {
                                         )}
                                     />
                                 </div>
-                                <h3 className={twMerge(["font-base", "text-base"])}>
-                                    {product.name}
-                                </h3>
-                                <div className={twMerge(["flex", "items-center", "justify-start"])}>
-                                    <p
-                                        className={twMerge([
-                                            "font-semibold",
-                                            "text-red-500",
-                                            "mr-2",
-                                        ])}>
-                                        {product.minPrice}
-                                    </p>
+                                <div>
+                                    <h3 className={twMerge(["font-medium", "text-base"])}>
+                                        {product.name}
+                                    </h3>
                                     <p className={twMerge(["font-bold", "text-lg", "text-black"])}>
-                                        {product.minPrice}
+                                        {product.minPrice.toLocaleString()}원~
                                     </p>
                                 </div>
                             </Link>

@@ -8,9 +8,9 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import { twMerge } from "tailwind-merge";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Link, useParams } from "react-router";
+import { Link } from "react-router";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 
 const SLIDES = [
@@ -25,26 +25,24 @@ interface SlideProps {
 }
 
 function EventSlide({ slideId }:SlideProps) {
-    const {id}=useParams();
     return (
-        <div className={twMerge(["h-[250px]", "w-full", "relative", "group"])}>
+        <div className={twMerge([ "w-full", "relative", "group"])}>
             <Swiper
                 loop={true}
                 slidesPerView={2}
                 spaceBetween={8}
                 slidesPerGroup={2}
                 autoplay={{ delay: 5000, disableOnInteraction: false }}
-                pagination={{ clickable: true }}
                 navigation={{
                     prevEl: `.prev-${slideId}`,
                     nextEl: `.next-${slideId}`,
                 }}
-                modules={[Autoplay, Pagination, Navigation]}
+                modules={[Autoplay, Navigation]}
                 className={twMerge(["w-full", "h-full"])}>
                 {SLIDES.map(slide => (
                     <SwiperSlide key={slide.id}>
                         <div className={twMerge(["w-full", "h-full", "relative"])}>
-                            <Link to={`/event/${id}`}>
+                            <Link to={`/event/detail`}>
                                 <img src={slide.image} alt={slide.image} />
                             </Link>
                         </div>

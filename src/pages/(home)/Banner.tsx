@@ -5,7 +5,7 @@ import banner3 from "../../assets/images/slide/banner3.jpg";
 import { twMerge } from "tailwind-merge";
 import { Link } from "react-router";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Autoplay, Navigation  } from "swiper/modules";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 
 const BANNER_SLIDE = [
@@ -113,12 +113,11 @@ function Banner({ slideId }: BannerSlideProps) {
             <Swiper
                 loop={true}
                 slidesPerView={1}
-                pagination={{ clickable: true }}
                 navigation={{
                     prevEl: `.prev-${slideId}`,
                     nextEl: `.next-${slideId}`,
                 }}
-                modules={[Autoplay, Pagination, Navigation]}
+                modules={[Autoplay,  Navigation]}
                 className={twMerge(["w-full", "h-full"])}>
                 {BANNER_SLIDE.map((bannerSlide, index) => (
                     <SwiperSlide key={index}>

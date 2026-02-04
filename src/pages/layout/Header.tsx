@@ -3,21 +3,21 @@ import { twMerge } from "tailwind-merge";
 import { Link, useNavigate } from "react-router";
 import {
     IoBagHandleOutline,
-    IoHeartOutline,
+    //IoHeartOutline,
     IoPersonOutline,
     IoSearchOutline,
     IoTimeOutline,
 } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "../../store/useAuthStore.ts";
-import type { MouseEventHandler } from "react";
+import type {MouseEvent} from "react"
 
 function Header() {
     const navigate = useNavigate();
     const { handleSubmit } = useForm();
     const {isLoggedIn}=useAuthStore();
     const onSubmit = () => {};
-    const handelAutoClick:MouseEventHandler<HTMLAnchorElement> = (e) =>{
+    const handleAutoClick = (e:MouseEvent<HTMLAnchorElement>) =>{
         if(!isLoggedIn){
             e.preventDefault();
             alert("로그인을 먼저 해주세요");
@@ -36,7 +36,8 @@ function Header() {
                     ["flex", "justify-between", "items-center", "gap-10"],
                     ["max-w-[1280px]", "mx-auto", "w-full", "h-full"],
                 )}>
-                <Link to={"/"}>
+                <Link to={"/"}
+                      onClick={() => window.scrollTo({ top: 0})}>
                     <img src={Logo} alt={"logo"} />{" "}
                 </Link>
                 <div className={twMerge("w-full", "flex-1")}>
@@ -66,16 +67,16 @@ function Header() {
                         <IoPersonOutline className={"w-7 h-7"} />
                         My
                     </Link>
-                    <Link to={"/wishlist"}
-                          onClick={handelAutoClick}
-                        className={twMerge(
-                            ["flex", "flex-col", "justify-center", "items-center", "gap-2"],
-                            ["font-semibold", "font-sm"],
-                        )}>
-                        <IoHeartOutline className={"w-7 h-7"} />찜
-                    </Link>
+                    {/*<Link to={"/wishlist"}*/}
+                    {/*      onClick={handleAutoClick}*/}
+                    {/*    className={twMerge(*/}
+                    {/*        ["flex", "flex-col", "justify-center", "items-center", "gap-2"],*/}
+                    {/*        ["font-semibold", "font-sm"],*/}
+                    {/*    )}>*/}
+                    {/*    <IoHeartOutline className={"w-7 h-7"} />찜*/}
+                    {/*</Link>*/}
                     <Link to={"/cart"}
-                          onClick={handelAutoClick}
+                          onClick={handleAutoClick}
                         className={twMerge(
                             ["flex", "flex-col", "justify-center", "items-center", "gap-2"],
                             ["font-semibold", "font-sm", "tracking-[-0.07em]"],
