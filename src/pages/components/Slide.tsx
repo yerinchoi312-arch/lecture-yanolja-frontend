@@ -59,6 +59,7 @@ function Slide({ slideId, categoryId = 0, subCategoryId=0, slidesPerView ,slides
                 slidesPerView={slidesPerView}
                 spaceBetween={16}
                 slidesPerGroup={slidesPerGroup}
+                watchOverflow={true}
                 navigation={{
                     prevEl: `.prev-${slideId}`,
                     nextEl: `.next-${slideId}`,

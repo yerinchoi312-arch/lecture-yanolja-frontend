@@ -29,6 +29,8 @@ import NoticeWrite from "../pages/notice/NoticeWrite.tsx";
 import EventListPage from "../pages/event/EventListPage.tsx";
 import ProductDetailPage from "../pages/products/ProductDetailPage.tsx";
 import SearchPage from "../pages/search/SearchPage.tsx";
+import OrderDetail from "../pages/order/OrderDetail.tsx";
+import ReviewList from "../pages/review/ReviewList.tsx";
 
 export const guestOnlyLoader = () => {
     const isLoggedIn = useAuthStore.getState().isLoggedIn;
@@ -83,6 +85,18 @@ export const router = createBrowserRouter([
                 children: [
                     { index: true, element: <EventListPage /> },
                     { path: "detail", element: <EventDetailPage /> },
+                ],
+            },
+            {
+                path: "order",
+                children: [
+                    { index: true, element: <OrderDetail /> },
+                ],
+            },
+            {
+                path: "review",
+                children: [
+                    { index: true, element: <ReviewList /> },
                 ],
             },
             { path: "promotion", element: <PromotionListPage /> },

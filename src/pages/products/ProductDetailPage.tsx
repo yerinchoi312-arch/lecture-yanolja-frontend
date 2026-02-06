@@ -67,7 +67,7 @@ function ProductDetailPage() {
                                 />
                             </div>
                             <div className={"grid grid-cols-2 w-1/2 gap-2 aspect-video"}>
-                                {product.images.slice(1,5).map((image, i) => (
+                                {product.images.slice(1, 5).map((image, i) => (
                                     <div key={i}>
                                         <img
                                             src={image}
@@ -106,7 +106,7 @@ function ProductDetailPage() {
                             </div>
                             <button
                                 className={"underline underline-offset-4"}
-                                onClick={() => navigate("/products/review")}>
+                                onClick={() => navigate("/review")}>
                                 전체보기
                             </button>
                         </div>
@@ -117,12 +117,15 @@ function ProductDetailPage() {
                         className={twMerge(
                             ["flex", "gap-4", "py-4"],
                             ["w-full", "sticky", "top-25"],
-                            ["bg-white","border-b","border-gray-300"],
-
+                            ["bg-white", "border-b", "border-gray-300"],
                         )}>
                         {TAPS.map(tab => (
-                            <button key={tab.id} onClick={() => scrollToId(tab.id)}
-                            className={twMerge(isActive ===tab.id && ["text-blue-500", "font-bold"],)}>
+                            <button
+                                key={tab.id}
+                                onClick={() => scrollToId(tab.id)}
+                                className={twMerge(
+                                    isActive === tab.id && ["text-blue-500", "font-bold"],
+                                )}>
                                 {tab.label}
                             </button>
                         ))}
@@ -133,13 +136,14 @@ function ProductDetailPage() {
                     </div>
                     <div className={"space-y-4"} id={"location"}>
                         <h2 className={"font-semibold text-lg"}>위치/교통</h2>
-                        <div className={"flex items-center gap-2"}><FiMapPin size={14} />{product.address}</div>
+                        <div className={"flex items-center gap-2"}>
+                            <FiMapPin size={14} />
+                            {product.address}
+                        </div>
                     </div>
                     <div className={"space-y-4"} id={"info"}>
                         <h2 className={"font-semibold text-lg"}>숙소 소개</h2>
-                        <div>
-                            {product.description}
-                        </div>
+                        <div>{product.description}</div>
                     </div>
                     <div className={"space-y-4"} id={"notice"}>
                         <h2 className={"font-semibold text-lg"}>예약 공지</h2>
