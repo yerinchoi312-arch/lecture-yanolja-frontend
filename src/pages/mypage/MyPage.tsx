@@ -25,7 +25,7 @@ function MyPage() {
         }
     };
     return (
-        <div className={"bg-gray-50 flex-1"}>
+        <div className={"bg-gray-100 flex-1"}>
             <div
                 className={twMerge(
                     ["space-y-5", "py-10"],

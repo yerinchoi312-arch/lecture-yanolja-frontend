@@ -20,7 +20,6 @@ function ProductDetailPage() {
         element?.scrollIntoView({ behavior: "smooth" });
         setIsActive(id);
     };
-
     useEffect(() => {
         const getProduct = async () => {
             setLoading(true);

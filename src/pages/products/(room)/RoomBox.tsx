@@ -1,12 +1,56 @@
 import type { Product } from "../../../type/product.ts";
 import Button from "../../components/Button.tsx";
 import { useNavigate } from "react-router";
+import { useAuthStore } from "../../../store/useAuthStore.ts";
+import { useOrderStore } from "../../../store/useOrderStore.ts";
+import type { OrderItem } from "../../../type/order.ts";
 
 interface RoomBoxProps {
     product:Product;
 }
 function RoomBox({product}:RoomBoxProps) {
     const navigate = useNavigate();
+    const {isLoggedIn} = useAuthStore()
+    const {setOrderItems}=useOrderStore()
+
+    const handleClick = (room) => {
+        if(!isLoggedIn){
+            alert("로그인을 먼저 해주세요");
+            navigate("/login");
+            return;
+        }
+
+        const orderData : OrderItem ={
+            id: room.id,
+            createdAt: room.createdAt,
+            totalPrice: room.price,
+            status: "PENDING",
+            recipientName: "",
+            checkInDate: "14:00",
+            checkOutDate: "11:00",
+            items: [
+                {
+                    id: room.id,
+                    roomType: {
+                        id: room.id,
+                        name: room.name,
+                        image: room.image,
+                        product:{
+                           name: room.name
+                        }
+                    },
+                    quantity: 1,
+                    price: room.price,
+                },
+            ],
+        }
+        setOrderItems([orderData])
+
+        navigate("/order");
+        scrollTo(0,0)
+
+
+    }
     return(
         <div className={"space-y-4"}>
             {product.roomTypes.map(room => (
@@ -37,7 +81,7 @@ function RoomBox({product}:RoomBoxProps) {
                                 {(room.price).toLocaleString()}원
                             </h3>
                             <div className={"flex justify-end gap-2 mt-4"}>
-                                <Button onClick={()=>navigate("/order")}>예약하기</Button>
+                                <Button onClick={()=>handleClick(room)}>예약하기</Button>
                             </div>
                             <span className={"text-xs font-bold text-gray-500 mt-2"}>취소 및 환불 불가</span>
                         </div>

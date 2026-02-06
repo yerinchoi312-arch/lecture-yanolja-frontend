@@ -1,21 +1,15 @@
-export interface Pagination {
-    totalItems: number;
-    totalPages: number;
-    currentPage: number;
-    limit: number;
-}
-
 export interface CreateOrderRequest {
     adultNum: number;
-    checkInDate: string; // ISO 8601 형식
+    checkInDate: string;
     checkOutDate: string;
     childrenNum: number;
     recipientName: string;
     recipientPhone: string;
-    items: {
-        roomTypeId: number;
-        quantity: number;
-    }[];
+    items: CreateOrderItems[];
+}
+export interface CreateOrderItems{
+    roomTypeId: number;
+    quantity: number;
 }
 
 export interface CreateOrderResponse {
@@ -29,7 +23,12 @@ export interface CreateOrderResponse {
     };
 }
 
-export interface OrderHistoryItem {
+export interface OrderListResponse {
+    data: OrderItem[];
+    pagination: Pagination;
+}
+
+export interface OrderItem {
     id: number;
     createdAt: string;
     totalPrice: number;
@@ -37,19 +36,25 @@ export interface OrderHistoryItem {
     recipientName: string;
     checkInDate: string;
     checkOutDate: string;
-    items: {
-        id: number;
-        roomType: {
-            id: number;
-            name: string;
-            image: string;
-        };
-        quantity: number;
-        price: number;
-    }[];
+    items: OrderItems[];
 }
+export interface OrderItems{
+    id: number;
+    roomType: {
+        id: number;
+        name: string;
+        image: string;
+        product:{
+            name:string
+        }
+    };
+    quantity: number;
+    price: number;
 
-export interface OrderListResponse {
-    data: OrderHistoryItem[];
-    pagination: Pagination;
+}
+export interface Pagination {
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+    limit: number;
 }

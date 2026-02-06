@@ -25,6 +25,7 @@ function Login() {
             login(response.data.token, response.data.user);
             alert("로그인 되었습니다.");
             navigate("/");
+            scrollTo(0,0)
         } catch (error) {
             if (error instanceof AxiosError) {
                 setError("root", {

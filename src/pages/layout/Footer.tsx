@@ -5,7 +5,7 @@ import { FaBloggerB, FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
 
 function Footer() {
     return (
-        <div className={twMerge(["mt-auto","py-5"], ["bg-gray-100"])}>
+        <div className={twMerge(["mt-auto","py-5"], ["bg-gray-200"])}>
             <div className={twMerge(["max-w-[1280px]", "mx-auto"],["flex","flex-col","gap-4"])}>
                 <img src={footerLogo} alt={"nol"} className={"w-16 h-8"}/>
                 <div className={twMerge(["flex","gap-2","text-sm","text-gray-800","font-semibold"])}>

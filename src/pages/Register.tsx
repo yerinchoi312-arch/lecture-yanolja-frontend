@@ -25,6 +25,7 @@ function Register() {
             await registerUser(data);
             alert("회원가입이 완료되었습니다. 로그인을 해주세요.");
             navigate("/login")
+            scrollTo(0,0)
         }catch (error) {
             if (error instanceof AxiosError){
                 setError("root", {message:error.response?.data?.message})
