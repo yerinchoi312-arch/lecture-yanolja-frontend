@@ -151,7 +151,7 @@ function CategoryListPage() {
                     subCategoryId={
                         category.subCategories.find(subCate=>subCate.id === Number(subId))?.id
                     }
-                    slideId={"subSlide"}
+                    slideId={"subSlide2"}
                     slidesPerView={4}
                     slidesPerGroup={4}
                 />

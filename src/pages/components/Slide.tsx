@@ -31,7 +31,7 @@ function Slide({ slideId, categoryId = 0, subCategoryId=0, slidesPerView ,slides
             try {
                 const params: ProductListParams = {
                     page: 1,
-                    limit: 10,
+                    limit: 40,
                     ...(categoryId && { categoryId: Number(categoryId) }),
                     ...(subCategoryId && { subCategoryId: Number(subCategoryId) }),
                 };

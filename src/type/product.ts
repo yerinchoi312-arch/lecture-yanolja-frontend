@@ -34,6 +34,8 @@ export interface Product {
 
 export interface ProductSummary {
     id: number;
+    categoryId: number;
+    subCategoryId: number;
     name: string;
     address: string;
     thumbnail: string;
