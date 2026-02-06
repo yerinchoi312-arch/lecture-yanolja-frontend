@@ -2,28 +2,34 @@ import Logo from "../../assets/images/common/logo.svg";
 import { twMerge } from "tailwind-merge";
 import { Link, useNavigate } from "react-router";
 import {
-    IoBagHandleOutline,
+    //IoBagHandleOutline,
     //IoHeartOutline,
     IoPersonOutline,
     IoSearchOutline,
     IoTimeOutline,
 } from "react-icons/io5";
-import { useForm } from "react-hook-form";
-import { useAuthStore } from "../../store/useAuthStore.ts";
-import type {MouseEvent} from "react"
+import { type FormEvent, useState } from "react";
+// import { useAuthStore } from "../../store/useAuthStore.ts";
 
 function Header() {
     const navigate = useNavigate();
-    const { handleSubmit } = useForm();
-    const {isLoggedIn}=useAuthStore();
-    const onSubmit = () => {};
-    const handleAutoClick = (e:MouseEvent<HTMLAnchorElement>) =>{
-        if(!isLoggedIn){
-            e.preventDefault();
-            alert("로그인을 먼저 해주세요");
-            navigate("/login");
-        }
-    }
+   // const {isLoggedIn}=useAuthStore();
+
+    const [keywords, setKeywords] = useState("");
+    const handleSearch = (e:FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        if(!keywords.trim()) return;
+        navigate(`search?keyword=${keywords}`)
+        setKeywords("")
+    };
+
+    // const handleAutoClick = (e:MouseEvent<HTMLAnchorElement>) =>{
+    //     if(!isLoggedIn){
+    //         e.preventDefault();
+    //         alert("로그인을 먼저 해주세요");
+    //         navigate("/login");
+    //     }
+    // }
     return (
         <div
             className={twMerge(
@@ -36,29 +42,35 @@ function Header() {
                     ["flex", "justify-between", "items-center", "gap-10"],
                     ["max-w-[1280px]", "mx-auto", "w-full", "h-full"],
                 )}>
-                <Link to={"/"}
-                      onClick={() => window.scrollTo({ top: 0})}>
-                    <img src={Logo} alt={"logo"} />{" "}
-                </Link>
-                <div className={twMerge("w-full", "flex-1")}>
-                    <form
-                        onSubmit={handleSubmit(onSubmit)}
-                        className={twMerge(["w-full", "relative"])}>
-                        <input
-                            className={twMerge(
-                                ["w-full", "p-4"],
-                                ["border", "border-gray-200", "rounded-xl"],
-                                ["focus:outline-none", "font-semibold"],
-                                ["bg-blue-50"],
-                            )}
-                            placeholder={"어디로 떠나볼까요?"}
-                        />
-                        <button className={twMerge(["absolute", "right-2", "top-4"])}>
-                            <IoSearchOutline className={"w-7 h-7"} />
-                        </button>
-                    </form>
+                <div className={"flex items-center gap-10 w-4/5"}>
+                    <Link to={"/"}
+                          onClick={() => window.scrollTo({ top: 0})}>
+                        <img src={Logo} alt={"logo"} />{" "}
+                    </Link>
+                    <div className={twMerge("w-full",)}>
+                        <form
+                            onSubmit={handleSearch}
+
+                            className={twMerge(["w-full", "relative"])}>
+                            <input
+                                value={keywords}
+                                onChange={e=>setKeywords(e.target.value)}
+                                className={twMerge(
+                                    ["w-full", "p-4"],
+                                    ["border", "border-gray-200", "rounded-xl"],
+                                    ["focus:outline-none", "font-semibold"],
+                                    ["bg-blue-50"],
+                                )}
+                                placeholder={"어디로 떠나볼까요?"}
+                            />
+                            <button className={twMerge(["absolute", "right-2", "top-4"])}>
+                                <IoSearchOutline className={"w-7 h-7"} />
+                            </button>
+                        </form>
+                    </div>
+
                 </div>
-                <div className={twMerge(["flex", "gap-8", "items-center", "justify-end"])}>
+                <div className={twMerge(["flex", "gap-8", "items-center", "justify-end","w-1/5"])}>
                     <Link to={'/mypage'}
                         className={twMerge(
                             ["flex", "flex-col", "justify-center", "items-center", "gap-2"],
@@ -75,15 +87,15 @@ function Header() {
                     {/*    )}>*/}
                     {/*    <IoHeartOutline className={"w-7 h-7"} />찜*/}
                     {/*</Link>*/}
-                    <Link to={"/cart"}
-                          onClick={handleAutoClick}
-                        className={twMerge(
-                            ["flex", "flex-col", "justify-center", "items-center", "gap-2"],
-                            ["font-semibold", "font-sm", "tracking-[-0.07em]"],
-                        )}>
-                        <IoBagHandleOutline className={"w-7 h-7"} />
-                        장바구니
-                    </Link>
+                    {/*<Link to={"/cart"}*/}
+                    {/*      onClick={handleAutoClick}*/}
+                    {/*    className={twMerge(*/}
+                    {/*        ["flex", "flex-col", "justify-center", "items-center", "gap-2"],*/}
+                    {/*        ["font-semibold", "font-sm", "tracking-[-0.07em]"],*/}
+                    {/*    )}>*/}
+                    {/*    <IoBagHandleOutline className={"w-7 h-7"} />*/}
+                    {/*    장바구니*/}
+                    {/*</Link>*/}
                     <Link to={"/recent"}
                         className={twMerge(
                             ["flex", "flex-col", "justify-center", "items-center", "gap-2"],

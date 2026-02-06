@@ -1,6 +1,5 @@
 import type { Product } from "../../../type/product.ts";
 import Button from "../../components/Button.tsx";
-import { FaCartPlus } from "react-icons/fa";
 
 interface RoomBoxProps {
     product:Product;
@@ -36,9 +35,6 @@ function RoomBox({product}:RoomBoxProps) {
                                 {(room.price).toLocaleString()}원
                             </h3>
                             <div className={"flex justify-end gap-2 mt-4"}>
-                                <Button variant={"secondary"}>
-                                    <FaCartPlus />
-                                </Button>
                                 <Button>예약하기</Button>
                             </div>
                             <span className={"text-xs font-bold text-gray-500 mt-2"}>취소 및 환불 불가</span>
