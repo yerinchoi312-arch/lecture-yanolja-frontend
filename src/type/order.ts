@@ -7,7 +7,7 @@ export interface CreateOrderRequest {
     recipientPhone: string;
     items: CreateOrderItems[];
 }
-export interface CreateOrderItems{
+export interface CreateOrderItems {
     roomTypeId: number;
     quantity: number;
 }
@@ -27,30 +27,30 @@ export interface OrderListResponse {
     data: OrderItem[];
     pagination: Pagination;
 }
+export type OrderState = "PENDING" | "PAID" | "CANCELED";
 
 export interface OrderItem {
     id: number;
     createdAt: string;
     totalPrice: number;
-    status: string;
+    status: OrderState;
     recipientName: string;
     checkInDate: string;
     checkOutDate: string;
     items: OrderItems[];
 }
-export interface OrderItems{
+export interface OrderItems {
     id: number;
     roomType: {
         id: number;
         name: string;
         image: string;
-        product:{
-            name:string
-        }
+        product: {
+            name: string;
+        };
     };
     quantity: number;
     price: number;
-
 }
 export interface Pagination {
     totalItems: number;

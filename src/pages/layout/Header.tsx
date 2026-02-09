@@ -9,13 +9,21 @@ import {
     IoTimeOutline,
 } from "react-icons/io5";
 import { type FormEvent, useState } from "react";
+import { IoIosLogOut } from "react-icons/io";
+import { useAuthStore } from "../../store/useAuthStore.ts";
 // import { useAuthStore } from "../../store/useAuthStore.ts";
 
 function Header() {
     const navigate = useNavigate();
-   // const {isLoggedIn}=useAuthStore();
+   const {isLoggedIn,logout}=useAuthStore();
 
     const [keywords, setKeywords] = useState("");
+
+    const handleLogout = () => {
+        logout();
+        alert("로그아웃 되었습니다.")
+        navigate("/")
+    }
     const handleSearch = (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if(!keywords.trim()) return;
@@ -79,6 +87,14 @@ function Header() {
                         <IoPersonOutline className={"w-7 h-7"} />
                         My
                     </Link>
+                    {isLoggedIn &&
+                    <button
+                        className={twMerge(
+                            ["flex", "flex-col", "justify-center", "items-center", "gap-2"],
+                            ["font-semibold", "font-sm"],
+                        )} onClick={handleLogout}>
+                        <IoIosLogOut className={"w-7 h-7"} /> Logout
+                    </button>}
                     {/*<Link to={"/wishlist"}*/}
                     {/*      onClick={handleAutoClick}*/}
                     {/*    className={twMerge(*/}

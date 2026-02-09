@@ -31,6 +31,8 @@ import ProductDetailPage from "../pages/products/ProductDetailPage.tsx";
 import SearchPage from "../pages/search/SearchPage.tsx";
 import OrderDetail from "../pages/order/OrderDetail.tsx";
 import ReviewList from "../pages/review/ReviewList.tsx";
+import OrderSuccess from "../pages/order/OrderSuccess.tsx";
+import OrderFail from "../pages/order/OrderFail.tsx";
 
 export const guestOnlyLoader = () => {
     const isLoggedIn = useAuthStore.getState().isLoggedIn;
@@ -91,6 +93,8 @@ export const router = createBrowserRouter([
                 path: "order",
                 children: [
                     { index: true, element: <OrderDetail /> },
+                    { path:"success", element: <OrderSuccess/> },
+                    { path:"fail", element: <OrderFail /> },
                 ],
             },
             {
