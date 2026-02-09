@@ -59,7 +59,7 @@ function PaymentModal() {
                 orderName:orderName,
                 customerName:customerName,
                 customerEmail:customerEmail,
-                successUrl:`${window.location.origin}/order/success`,
+                successUrl:`${window.location.origin}/order/success/`,
                 failUrl:`${window.location.origin}/order/fail`,
             })
         }catch (e) {

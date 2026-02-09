@@ -16,7 +16,7 @@ import AdminCategoryCreate from "../pages/(admin)/categories/AdminCategoryCreate
 import AdminSubCategoryCreate from "../pages/(admin)/categories/AdminSubCategoryCreate.tsx";
 import AdminUserList from "../pages/(admin)/users/AdminUserList.tsx";
 import AdminUserEdit from "../pages/(admin)/users/AdminUserEdit.tsx";
-import ReservationPage from "../pages/reservation/ReservationPage.tsx";
+import ReservationListPage from "../pages/reservation/ReservationListPage.tsx";
 import NoticeList from "../pages/notice/NoticeList.tsx";
 import FAQPage from "../pages/faq/FAQPage.tsx";
 import RecentView from "../pages/recent/RecentView.tsx";
@@ -33,6 +33,7 @@ import OrderDetail from "../pages/order/OrderDetail.tsx";
 import ReviewList from "../pages/review/ReviewList.tsx";
 import OrderSuccess from "../pages/order/OrderSuccess.tsx";
 import OrderFail from "../pages/order/OrderFail.tsx";
+import ReservationDetailPage from "../pages/reservation/ReservationDetailPage.tsx";
 
 export const guestOnlyLoader = () => {
     const isLoggedIn = useAuthStore.getState().isLoggedIn;
@@ -93,18 +94,22 @@ export const router = createBrowserRouter([
                 path: "order",
                 children: [
                     { index: true, element: <OrderDetail /> },
-                    { path:"success", element: <OrderSuccess/> },
-                    { path:"fail", element: <OrderFail /> },
+                    { path: "success", element: <OrderSuccess /> },
+                    { path: "fail", element: <OrderFail /> },
                 ],
             },
             {
                 path: "review",
-                children: [
-                    { index: true, element: <ReviewList /> },
-                ],
+                children: [{ index: true, element: <ReviewList /> }],
             },
             { path: "promotion", element: <PromotionListPage /> },
-            { path: "reservation", element: <ReservationPage /> },
+            {
+                path: "reservation",
+                children: [
+                    { index: true, element: <ReservationListPage /> },
+                    { path: ":id", element: <ReservationDetailPage /> },
+                ],
+            },
             { path: "recent", element: <RecentView /> },
             { path: "cart", element: <Cart /> },
             { path: "wishlist", element: <Wishlist /> },

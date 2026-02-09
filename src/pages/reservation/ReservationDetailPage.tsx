@@ -1,62 +1,43 @@
+import { useNavigate, useParams, useSearchParams } from "react-router";
+import { useAuthStore } from "../../store/useAuthStore.ts";
+import { useEffect, useState } from "react";
+import type { OrderItem } from "../../type/order.ts";
+import { OrderDetail } from "../../api/order.api.ts";
 import { twMerge } from "tailwind-merge";
 import BackButton from "../components/BackButton.tsx";
 import Button from "../components/Button.tsx";
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router";
-import type { OrderItem } from "../../type/order.ts";
-import { confirmOrder } from "../../api/order.api.ts";
-import { AxiosError } from "axios";
 
-function OrderSuccess() {
+function ReservationDetailPage() {
+
+    const { id } = useParams();
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
+    const { user } = useAuthStore();
 
     const [isLoading, setIsLoading] = useState(false);
     const [orderData, setOrderData] = useState<OrderItem | null>(null);
 
     useEffect(() => {
-        const orderId = searchParams.get("orderId");
-        const paymentKey = searchParams.get("paymentKey");
-        const amount = Number(searchParams.get("amount"));
-
-        if(!paymentKey || !orderId || !amount){
-            navigate("/order/fail?message=잘못된 접근입니다.");
-            return
-        }
-
-        const processPayment = async () => {
+        const fetchOrders = async () => {
+            if (!id) return;
             setIsLoading(true);
             try {
-                const result = await confirmOrder({
-                    paymentKey,
-                    orderId,
-                    amount
-                })
-                setOrderData(result)
-            }catch (e){
-                console.log("결제 검증 실패",e)
-                let message = "알 수 없는 오류가 발생했습니다."
-                if(e instanceof AxiosError) message=e.response?.data.message;
-
-                navigate(`order/fail/message=${encodeURIComponent(message)}`)
-            }finally {
+                const response = await OrderDetail(String(id));
+                setOrderData(response);
+            } catch (e) {
+                console.error(e);
+            } finally {
                 setIsLoading(false);
             }
-
-        }
-        processPayment().then(()=>{})
-
-    }, [searchParams,navigate]);
+        };
+        fetchOrders().then(() => {});
+    }, [id]);
 
     useEffect(() => {
-        console.log("데이터 상태 변경 감지:", orderData);
+        if (orderData) {
+            console.log("실제 들어온 데이터:", orderData);
+        }
     }, [orderData]);
-    if (isLoading) {
-        return <div className={"h-[60dvh] flex flex-col items-center justify-center"}>
-            <p className={"text-xl font-medium"}>결제 승인 처리중입니다...</p>
-            <p className={"text-gray-500 mt-3"}>잠시만 기다려주세요.</p>
-        </div>
-    }
+    if (!user) return null;
     return (
         <div className={"bg-gray-100 py-10"}>
             <div
@@ -69,7 +50,7 @@ function OrderSuccess() {
                     <div className={"bg-white p-6 rounded-2xl shadow-xs"}>
                         <div>
                             <h2>예약이 완료되었습니다.</h2>
-                            <p>예약 일시 : {orderData?.createdAt} </p>
+                            <p>예약 일시 : {orderData?.id} </p>
                         </div>
                         <div> 배너 </div>
                         <div>
@@ -78,22 +59,26 @@ function OrderSuccess() {
                                 <p>숙소 예약 번호 :</p>
                                 <h2>숙소 이름</h2>
                                 <div className={"flex justify-between"}>
-                                    <div></div>
+                                    <div>숙소 사진</div>
                                     <div>
-                                        <p>{orderData?.checkInDate}</p> ~ <p>{orderData?.checkOutDate}</p>
+                                        <p>방이름</p>
+                                        <p>체크인 날짜</p> ~ <p>체크아웃 날짜</p> (체크아웃날짜 -
+                                        체크인 날짜)
+                                        <p>사람 수</p>
                                     </div>
                                 </div>
                             </div>
+                            <div>무료 취소 (체크인시간하루전) 까지</div>
                         </div>
                         <div>
                             <div>예약자 정보</div>
                             <div className={"flex justify-between"}>
                                 <p>이름</p>
-                                <p>{orderData?.recipientName}</p>
+                                <p>{user.name}</p>
                             </div>
                             <div className={"flex justify-between"}>
                                 <p>휴대폰 번호</p>
-                                <p>{orderData?.recipientPhone}</p>
+                                <p>{user.phone}</p>
                             </div>
                         </div>
                         <div>
@@ -137,4 +122,4 @@ function OrderSuccess() {
         </div>
     );
 }
-export default OrderSuccess;
+export default ReservationDetailPage;

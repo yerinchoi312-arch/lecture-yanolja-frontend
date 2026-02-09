@@ -1,18 +1,34 @@
 import { httpClient } from "./axios.ts";
 import type {
+    ConfirmOrderRequest,
     CreateOrderRequest,
     CreateOrderResponse,
+    OrderItem,
     OrderListResponse,
 } from "../type/order.ts";
-
+interface OrderParams {
+    page?: number;
+    limit?: number;
+}
+export const fetchMyOrders = async (params:OrderParams) => {
+    const response = await httpClient.get<OrderListResponse>("/orders", {
+        params: params
+    });
+    return response.data;
+};
 export const createOrder = async (orderData: CreateOrderRequest) => {
     const response = await httpClient.post<CreateOrderResponse>("/orders", orderData);
     return response.data;
 };
 
-export const fetchMyOrders = async (page: number = 1, limit: number = 10) => {
-    const response = await httpClient.get<OrderListResponse>("/orders", {
-        params: { page, limit },
-    });
+
+
+export const OrderDetail = async (orderId: string) => {
+    const response = await httpClient.get<OrderItem>(`/orders/${orderId}`);
     return response.data;
-};
+}
+
+export const confirmOrder = async (data:ConfirmOrderRequest) => {
+    const response = await httpClient.post<OrderItem>(`/orders/confirm`,data);
+    return response.data;
+}

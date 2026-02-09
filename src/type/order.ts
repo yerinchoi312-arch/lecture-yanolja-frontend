@@ -35,6 +35,7 @@ export interface OrderItem {
     totalPrice: number;
     status: OrderState;
     recipientName: string;
+    recipientPhone:string;
     checkInDate: string;
     checkOutDate: string;
     items: OrderItems[];
@@ -57,4 +58,10 @@ export interface Pagination {
     totalPages: number;
     currentPage: number;
     limit: number;
+}
+
+export interface ConfirmOrderRequest {
+    paymentKey: string;
+    orderId: string;
+    amount: number;
 }
