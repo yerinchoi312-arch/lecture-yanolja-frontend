@@ -1,11 +1,11 @@
 import { twMerge } from "tailwind-merge";
-import BackButton from "../components/BackButton.tsx";
-import Button from "../components/Button.tsx";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import type { OrderItem } from "../../type/order.ts";
 import { confirmOrder } from "../../api/order.api.ts";
 import { AxiosError } from "axios";
+import { FaCheckCircle } from "react-icons/fa";
+import Button from "../components/Button.tsx";
 
 function OrderSuccess() {
     const navigate = useNavigate();
@@ -19,9 +19,9 @@ function OrderSuccess() {
         const paymentKey = searchParams.get("paymentKey");
         const amount = Number(searchParams.get("amount"));
 
-        if(!paymentKey || !orderId || !amount){
+        if (!paymentKey || !orderId || !amount) {
             navigate("/order/fail?message=잘못된 접근입니다.");
-            return
+            return;
         }
 
         const processPayment = async () => {
@@ -30,108 +30,58 @@ function OrderSuccess() {
                 const result = await confirmOrder({
                     paymentKey,
                     orderId,
-                    amount
-                })
-                setOrderData(result)
-            }catch (e){
-                console.log("결제 검증 실패",e)
-                let message = "알 수 없는 오류가 발생했습니다."
-                if(e instanceof AxiosError) message=e.response?.data.message;
+                    amount,
+                });
 
-                navigate(`order/fail/message=${encodeURIComponent(message)}`)
-            }finally {
+                setOrderData(result);
+            } catch (e) {
+                console.log("결제 검증 실패", e);
+                let message = "알 수 없는 오류가 발생했습니다.";
+                if (e instanceof AxiosError) message = e.response?.data.message;
+
+                navigate(`/order/fail?message=${encodeURIComponent(message)}`);
+            } finally {
                 setIsLoading(false);
             }
-
-        }
-        processPayment().then(()=>{})
-
-    }, [searchParams,navigate]);
+        };
+        processPayment().then(() => {});
+    }, [searchParams, navigate]);
 
     useEffect(() => {
-        console.log("데이터 상태 변경 감지:", orderData);
+        console.log("서버에서 온 데이터 전체:", orderData);
     }, [orderData]);
+
+
     if (isLoading) {
-        return <div className={"h-[60dvh] flex flex-col items-center justify-center"}>
-            <p className={"text-xl font-medium"}>결제 승인 처리중입니다...</p>
-            <p className={"text-gray-500 mt-3"}>잠시만 기다려주세요.</p>
-        </div>
+        return (
+            <div className={"h-[60dvh] flex flex-col items-center justify-center"}>
+                <p className={"text-xl font-medium"}>결제 승인 처리중입니다...</p>
+                <p className={"text-gray-500 mt-3"}>잠시만 기다려주세요.</p>
+            </div>
+        );
+    }
+    if (!orderData) {
+        return <div className="h-screen flex items-center justify-center">데이터가 없습니다</div>;
     }
     return (
-        <div className={"bg-gray-100 py-10"}>
-            <div
-                className={twMerge(
-                    ["flex", "flex-col", "gap-20"],
-                    ["max-w-[800px]", "mx-auto", "w-full"],
-                )}>
-                <div className={"relative"}>
-                    <BackButton className={"absolute top-2 md:hidden"} />
-                    <div className={"bg-white p-6 rounded-2xl shadow-xs"}>
-                        <div>
-                            <h2>예약이 완료되었습니다.</h2>
-                            <p>예약 일시 : {orderData?.createdAt} </p>
+        <div className={"bg-gray-100 py-10 flex-1"}>
+            <div className={twMerge(["max-w-[800px]", "mx-auto", "w-full"])}>
+                <div className={"bg-white p-6 rounded-xl shadow-xs"}>
+                    <div className={"flex flex-col gap-5 items-center py-10"}>
+                        <FaCheckCircle size={40} color={"green"} />
+                        <h2 className={"text-2xl font-bold"}>예약이 완료 되었습니다</h2>
+                        <p className="text-gray-600 mb-10">
+                            주문하신 상품의 결제가 성공적으로 완료되었습니다.
+                            <br />
+                            주문 상세 내역은 마이페이지에서 확인하실 수 있습니다.
+                        </p>
+                        <div className={"bg-gray-100 p-6 w-2/3 mx-auto rounded-xl space-y-6 text-center"}>
+                            <p>예약번호 : {orderData.orderId}</p>
+                            <p>예약 숙소명 : {orderData.orderName}</p>
+                            <p>총 금액 : {(orderData.totalAmount).toLocaleString()}원</p>
                         </div>
-                        <div> 배너 </div>
-                        <div>
-                            <div>상품 정보</div>
-                            <div>
-                                <p>숙소 예약 번호 :</p>
-                                <h2>숙소 이름</h2>
-                                <div className={"flex justify-between"}>
-                                    <div></div>
-                                    <div>
-                                        <p>{orderData?.checkInDate}</p> ~ <p>{orderData?.checkOutDate}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div>예약자 정보</div>
-                            <div className={"flex justify-between"}>
-                                <p>이름</p>
-                                <p>{orderData?.recipientName}</p>
-                            </div>
-                            <div className={"flex justify-between"}>
-                                <p>휴대폰 번호</p>
-                                <p>{orderData?.recipientPhone}</p>
-                            </div>
-                        </div>
-                        <div>
-                            <div>이용자 정보</div>
-                            <div className={"flex justify-between"}>
-                                <p>이름</p>
-                                <p>user.name</p>
-                            </div>
-                            <div className={"flex justify-between"}>
-                                <p>휴대폰 번호</p>
-                                <p>user.phone</p>
-                            </div>
-                        </div>
-                        <div>
-                            <div>예약 정보</div>
-                            <div className={"flex justify-between"}>
-                                <p>예약 번호</p>
-                                <p>orderId</p>
-                            </div>
-                            <div className={"flex justify-between"}>
-                                <p>예약 상품</p>
-                                <p>product.name</p>
-                            </div>
-                        </div>
-                        <div>
-                            <div>결제 금액</div>
-                            <div className={"flex justify-between"}>
-                                <p>상품 금액</p>
-                                <p>totalPrice</p>
-                            </div>
-                        </div>
-                        <div className={"flex justify-between"}>
-                            <p>총 결제 금액</p>
-                            <p>totalPrice</p>
-                        </div>
+                        <Button onClick={()=>navigate("/reservation")}>예약 상세보기</Button>
                     </div>
-
-                    <Button className={"flex justify-end"}>홈으로 가기</Button>
                 </div>
             </div>
         </div>

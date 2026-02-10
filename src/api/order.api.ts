@@ -24,11 +24,11 @@ export const createOrder = async (orderData: CreateOrderRequest) => {
 
 
 export const OrderDetail = async (orderId: string) => {
-    const response = await httpClient.get<OrderItem>(`/orders/${orderId}`);
+    const response = await httpClient.get<{ data: OrderItem }>(`/orders/${orderId}`);
     return response.data;
 }
 
 export const confirmOrder = async (data:ConfirmOrderRequest) => {
-    const response = await httpClient.post<OrderItem>(`/orders/confirm`,data);
-    return response.data;
+    const response = await httpClient.post< { data: OrderItem }>(`/orders/confirm`,data);
+    return response.data.data;
 }

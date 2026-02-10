@@ -116,7 +116,7 @@ function CategoryListPage() {
                                             {product.address.split(" ").slice(0, 2).join(" ")}
                                         </p>
                                         <p className={"text-right w-full font-bold"}>
-                                            {product.minPrice}원 ~
+                                            {(product.minPrice).toLocaleString()}원 ~
                                         </p>
                                     </Link>
                                 ))}

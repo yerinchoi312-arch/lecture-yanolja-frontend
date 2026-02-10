@@ -17,7 +17,7 @@ import AdminSubCategoryCreate from "../pages/(admin)/categories/AdminSubCategory
 import AdminUserList from "../pages/(admin)/users/AdminUserList.tsx";
 import AdminUserEdit from "../pages/(admin)/users/AdminUserEdit.tsx";
 import ReservationListPage from "../pages/reservation/ReservationListPage.tsx";
-import NoticeList from "../pages/notice/NoticeList.tsx";
+import InquiryList from "../pages/inquiry/InquiryList.tsx";
 import FAQPage from "../pages/faq/FAQPage.tsx";
 import RecentView from "../pages/recent/RecentView.tsx";
 import Cart from "../pages/cart/Cart.tsx";
@@ -25,7 +25,7 @@ import Wishlist from "../pages/wishlist/Wishlist.tsx";
 import AdminProductList from "../pages/(admin)/products/AdminProductList.tsx";
 import AdminProductCreate from "../pages/(admin)/products/AdminProductCreate.tsx";
 import AdminProductEdit from "../pages/(admin)/products/AdminProductEdit.tsx";
-import NoticeWrite from "../pages/notice/NoticeWrite.tsx";
+import InquiryWrite from "../pages/inquiry/InquiryWrite.tsx";
 import EventListPage from "../pages/event/EventListPage.tsx";
 import ProductDetailPage from "../pages/products/ProductDetailPage.tsx";
 import SearchPage from "../pages/search/SearchPage.tsx";
@@ -34,6 +34,7 @@ import ReviewList from "../pages/review/ReviewList.tsx";
 import OrderSuccess from "../pages/order/OrderSuccess.tsx";
 import OrderFail from "../pages/order/OrderFail.tsx";
 import ReservationDetailPage from "../pages/reservation/ReservationDetailPage.tsx";
+import InquiryDetail from "../pages/inquiry/InquiryDetail.tsx";
 
 export const guestOnlyLoader = () => {
     const isLoggedIn = useAuthStore.getState().isLoggedIn;
@@ -74,10 +75,11 @@ export const router = createBrowserRouter([
                 ],
             },
             {
-                path: "notice",
+                path: "inquiry",
                 children: [
-                    { index: true, element: <NoticeList /> },
-                    { path: "write", element: <NoticeWrite /> },
+                    { index: true, element: <InquiryList /> },
+                    { path: "write", element: <InquiryWrite /> },
+                    { path: ":id", element: <InquiryDetail /> },
                 ],
             },
             { path: "faq", element: <FAQPage /> },
@@ -110,6 +112,7 @@ export const router = createBrowserRouter([
                     { path: ":id", element: <ReservationDetailPage /> },
                 ],
             },
+            {path:"review",element: <div>리뷰</div>},
             { path: "recent", element: <RecentView /> },
             { path: "cart", element: <Cart /> },
             { path: "wishlist", element: <Wishlist /> },

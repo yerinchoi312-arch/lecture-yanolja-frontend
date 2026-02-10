@@ -6,9 +6,10 @@ import Button from "../components/Button.tsx";
 import { useOrderStore } from "../../store/useOrderStore.ts";
 import { type ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import type {CreateOrderRequest } from "../../type/order.ts";
+import type { CreateOrderRequest } from "../../type/order.ts";
 import { createOrder } from "../../api/order.api.ts";
 import { useModalStore } from "../../store/useModalStore.ts";
+import dayjs from "dayjs";
 
 interface OrderFormData {
     recipientName: string;
@@ -24,15 +25,14 @@ interface OrderFormData {
 function OrderDetail() {
     const { user } = useAuthStore();
     const { orderItems, getTotalPrice } = useOrderStore();
-    const {openModal}=useModalStore();
+    const { openModal } = useModalStore();
     const [adultNum, setAdultNum] = useState(1);
     const [childrenNum, setChildrenNum] = useState(0);
     const [checkInDate, setCheckInDate] = useState("");
     const [checkOutDate, setCheckOutDate] = useState("");
     const currentOrder = orderItems[0];
 
-    const nights = (Number(new Date(checkOutDate)) - Number(new Date(checkInDate))) / 86400000;
-    const totalNights = nights > 0 ? nights : 0;
+    const totalNights = dayjs(checkOutDate).diff(dayjs(checkInDate), 'day');
     const TotalPrice = totalNights > 0 ? totalNights * getTotalPrice() : getTotalPrice();
 
     const {
@@ -42,44 +42,41 @@ function OrderDetail() {
         formState: { errors },
     } = useForm<OrderFormData>();
 
-
     const onSubmit = async (data: OrderFormData) => {
-        try{
-            const orderInput : CreateOrderRequest = {
+        try {
+            const orderInput: CreateOrderRequest = {
                 adultNum: Number(data.adultNum),
-                childrenNum: Number(data.childrenNum ||0),
+                childrenNum: Number(data.childrenNum || 0),
                 checkInDate: data.checkInDate,
                 checkOutDate: data.checkOutDate,
                 recipientName: data.recipientName,
                 recipientPhone: data.recipientPhone,
-                items: orderItems.flatMap(orderItem=>
-                    orderItem.items.map(item=>({
-                        roomTypeId : item.roomType.id,
-                        quantity : item.quantity
-                    }))
-
+                items: orderItems.flatMap(orderItem =>
+                    orderItem.items.map(item => ({
+                        roomTypeId: item.roomType.id,
+                        quantity: item.quantity,
+                    })),
                 ),
             };
 
             const createdOrder = await createOrder(orderInput);
 
             const originOrderId = String(createdOrder.data.orderId);
-            const newOrderId = `${new Date().getTime()}_${originOrderId}`
+            const newOrderId = `${new Date().getTime()}_${originOrderId}`;
 
-            openModal("PAYMENT",{
-                orderNumber:newOrderId,
-                orderName:createdOrder.data.orderName,
-                customerName:createdOrder.data.customerName,
-                customerEmail:createdOrder.data.customerEmail,
-                amount:TotalPrice,
-            })
-        }catch (e) {
+            openModal("PAYMENT", {
+                orderNumber: newOrderId,
+                orderName: createdOrder.data.orderName,
+                customerName: createdOrder.data.customerName,
+                customerEmail: createdOrder.data.customerEmail,
+                amount: TotalPrice,
+            });
+        } catch (e) {
             console.log(e);
-            alert("주문생성 중 오류가 발생했습니다.")
+            alert("주문생성 중 오류가 발생했습니다.");
         }
         return;
     };
-
 
     useEffect(() => {
         if (user) {
@@ -156,7 +153,11 @@ function OrderDetail() {
                                             {currentOrder.checkInDate}
                                         </div>
                                     </div>
-                                    {errors.checkInDate && (<p className={"text-red-500 text-sm"}>{errors.checkInDate.message}</p>)}
+                                    {errors.checkInDate && (
+                                        <p className={"text-red-500 text-sm"}>
+                                            {errors.checkInDate.message}
+                                        </p>
+                                    )}
                                 </div>
                                 <div
                                     className={
@@ -167,12 +168,12 @@ function OrderDetail() {
                                         <input
                                             {...register("checkOutDate", {
                                                 required: "체크아웃 날짜를 선택하세요",
-                                                validate:(value)=>{
-                                                    if(value<=checkInDate){
-                                                        return "체크아웃 날짜는 체크인 날짜보다 이후여야 합니다."
+                                                validate: value => {
+                                                    if (value <= checkInDate) {
+                                                        return "체크아웃 날짜는 체크인 날짜보다 이후여야 합니다.";
                                                     }
-                                                    return
-                                                }
+                                                    return;
+                                                },
                                             })}
                                             className={"focus:outline-none"}
                                             type={"date"}
@@ -187,7 +188,11 @@ function OrderDetail() {
                                             {currentOrder.checkOutDate}
                                         </div>
                                     </div>
-                                    {errors.checkOutDate && (<p className={"text-red-500 text-sm"}>{errors.checkOutDate.message}</p>)}
+                                    {errors.checkOutDate && (
+                                        <p className={"text-red-500 text-sm"}>
+                                            {errors.checkOutDate.message}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                             <div
@@ -200,7 +205,9 @@ function OrderDetail() {
                                     }>
                                     <p className={"font-bold text-xs text-gray-500"}>성인</p>
                                     <input
-                                        {...register("adultNum",{required:"인원을 입력해주세요."})}
+                                        {...register("adultNum", {
+                                            required: "인원을 입력해주세요.",
+                                        })}
                                         type={"number"}
                                         className={"text-center"}
                                         min={1}

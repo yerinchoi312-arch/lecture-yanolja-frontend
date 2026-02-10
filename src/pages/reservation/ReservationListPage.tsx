@@ -5,20 +5,28 @@ import type { OrderItem } from "../../type/order.ts";
 import { Link } from "react-router";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
+import Pagination from "../components/Pagination.tsx";
 dayjs.locale("ko");
 function ReservationListPage() {
     const [orderList, setOrderList] = useState<OrderItem[]>([]);
     const [loading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
+
+    const LIMIT = 10;
     useEffect(() => {
         const fetchOrderList = async () => {
             setLoading(true);
             try {
-                const params = {
-                    page: 1,
-                    limit: 100,
-                };
+                const params ={
+                    page:currentPage,
+                    limit:LIMIT
+                }
                 const result = await fetchMyOrders(params);
                 setOrderList(result.data);
+                setTotalPages(result.pagination.totalPages);
+                setTotalCount(result.pagination.totalItems)
             } catch (e) {
                 console.log(e);
             } finally {
@@ -26,53 +34,99 @@ function ReservationListPage() {
             }
         };
         fetchOrderList().then(() => {});
-    }, []);
+    }, [currentPage]);
 
-    if (loading) return <div> 예약 로딩중 ...</div>
+    const onPageChange = (page:number) =>{
+        setCurrentPage(page);
+        window.scrollTo(0, 0);
+    }
+
+    if (loading) return <div>Loading...</div>;
 
     return (
-        <div
-            className={twMerge(
-                ["flex", "flex-col", "gap-20", "py-10"],
-                ["max-w-[1280px]", "mx-auto", "w-full"],
-            )}>
-            <div className={"space-y-20 relative"}>
-                <h2 className={twMerge(["text-2xl", "font-bold", "text-center"])}>예약 내역</h2>
-            </div>
-            <div className={"grid grid-cols-2"}>
-                {orderList.flatMap(item =>
-                    item.items.map(orderItem => (
-                        <Link
-                            to={`${item.id}`}
-                            key={orderItem.id}
-                            className={twMerge(
-                                ["flex","flex-col", "gap-1"],
-                                ["bg-white", "p-4", "border", "border-gray-200"],
-                            )}>
-                            <div> 숙소 예약 번호 : {item.id}</div>
-                            <div>{item.status}</div>
-                            <div className={"flex gap-2"}>
-                                <div className={"w-1/4"}>
-                                    <img
-                                        src={orderItem.roomType.image}
-                                        alt={orderItem.roomType.product.name}
-                                        className={"aspect-square rounded-xl mb-2"}
-                                    />
+        <div className={"bg-gray-100 py-10"}>
+            <div
+                className={twMerge(
+                    ["flex", "flex-col", "gap-10"],
+                    ["max-w-[800px]", "mx-auto", "w-full"],
+                )}>
+                <h2 className={twMerge(["text-xl", "font-medium", "text-left"])}>
+                    다가오는 여행{" "}
+                    <span className={"text-2xl font-bold text-blue-500"}>{totalCount}</span>건
+                </h2>
+                <div className={"grid grid-cols-2 gap-4"}>
+                    {orderList.flatMap(item =>
+                        item.items.map(orderItem => (
+                            <Link
+                                to={`${item.id}`}
+                                key={orderItem.id}
+                                className={twMerge(
+                                    ["flex", "flex-col", "gap-2", "rounded-xl"],
+                                    ["bg-white", "px-4", "py-8", "shadow-xs"],
+                                )}>
+                                <div className={"flex flex-col gap-4"}>
+                                    <div className={"w-full aspect-video relative rounded-xl"}>
+                                        <img
+                                            src={orderItem.roomType.image}
+                                            alt={orderItem.roomType.product.name}
+                                        />
+                                        <div
+                                            className={twMerge(
+                                                ["text-xs", "py-1", "px-2"],
+                                                ["rounded-lg", "absolute", "top-2", "right-2"],
+                                                item.status === "PENDING" && [
+                                                    "bg-[#FFF6E6]",
+                                                    "text-orange-500",
+                                                ],
+                                                item.status === "PAID" && [
+                                                    "bg-[#EDF7ED]",
+                                                    "text-green-500",
+                                                ],
+                                                item.status === "CANCELED" && [
+                                                    "bg-[#FEEDEB]",
+                                                    "text-red-500",
+                                                ],
+                                            )}>
+                                            {item.status}
+                                        </div>
+                                    </div>
+
+                                    <div className={"space-y-1"}>
+                                        <div className={"text-lg font-bold"}>
+                                            {orderItem.roomType.product.name}
+                                            <p className={"text-xs font-light text-gray-600"}>
+                                                RESERVATION NO.{item.id}
+                                            </p>
+                                        </div>
+                                        <div
+                                            className={
+                                                "flex border-t border-b border-gray-200 py-2 my-2 mt-4"
+                                            }>
+                                            <div className={"w-1/2 border-r border-gray-200 mr-2"}>
+                                                <p className={"text-sm font-medium"}>일정</p>
+                                                <p className={"text-sm text-gray-600"}>
+                                                    {dayjs(item.checkInDate).format("YYYY.MM.DD")} ~{" "}
+                                                    {dayjs(item.checkOutDate).format("YYYY.MM.DD")}
+                                                </p>
+                                            </div>
+                                            <div className={"w-1/2"}>
+                                                <p className={"text-sm font-medium"}>예약자</p>
+                                                <p className={"text-sm text-gray-600"}>
+                                                    {item.recipientName}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className={"text-right font-bold"}>
+                                            {item.totalPrice.toLocaleString()}원
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h2 className={"text-base font-semibold"}>
-                                        {orderItem.roomType.product.name}
-                                    </h2>
-                                    <p>
-                                        {dayjs(item.checkInDate).format("YYYY.MM.DD")} ~ {dayjs(item.checkOutDate).format("YYYY.MM.DD")}
-                                    </p>
-                                    <p className={"w-full font-bold"}>{item.totalPrice}원</p>
-                                </div>
-                            </div>
-                        </Link>
-                    )),
-                )}
+                            </Link>
+                        )),
+                    )}
+                </div>
             </div>
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange}/>
         </div>
     );
 }

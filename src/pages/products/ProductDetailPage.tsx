@@ -14,8 +14,8 @@ import type { OrderItem } from "../../type/order.ts";
 function ProductDetailPage() {
     const navigate = useNavigate();
     const { id } = useParams();
-    const {isLoggedIn} = useAuthStore()
-    const {setOrderItems}=useOrderStore()
+    const { isLoggedIn } = useAuthStore();
+    const { setOrderItems } = useOrderStore();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
     const [isActive, setIsActive] = useState("");
@@ -41,16 +41,15 @@ function ProductDetailPage() {
         getProduct().then(() => {});
     }, [id]);
 
-
-    const handleClick = (room:RoomType) => {
-        if(!isLoggedIn){
+    const handleClick = (room: RoomType) => {
+        if (!isLoggedIn) {
             alert("로그인을 먼저 해주세요");
             navigate("/login");
             return;
         }
-        if(!product) return;
+        if (!product) return;
 
-        const orderData : OrderItem ={
+        const orderData: OrderItem = {
             id: room.id,
             createdAt: new Date().toISOString(),
             totalPrice: room.price,
@@ -65,22 +64,26 @@ function ProductDetailPage() {
                         id: room.id,
                         name: room.name,
                         image: room.image,
-                        product:{
-                            name: product.name
-                        }
+                        product: {
+                            name: product.name,
+                        },
                     },
                     quantity: 1,
                     price: room.price,
                 },
             ],
-        }
-        setOrderItems([orderData])
+            adultNum: 0,
+            childrenNum: 0,
+            recipientPhone: "",
+            orderId: "",
+            orderName: "",
+            requestedAt: "",
+        };
+        setOrderItems([orderData]);
 
         navigate("/order");
-        scrollTo(0,0)
-
-
-    }
+        scrollTo(0, 0);
+    };
 
     if (!product) return <div>상품이 없습니다.</div>;
     if (loading) return <div>로딩 중...</div>;
@@ -201,15 +204,20 @@ function ProductDetailPage() {
                                                 className={
                                                     "text-gray-600 font-light text-md line-through"
                                                 }>
-                                                {(room.originPrice).toLocaleString()}원
+                                                {room.originPrice.toLocaleString()}원
                                             </p>
                                             <h3 className={"text-gray-800 font-bold text-xl"}>
-                                                {(room.price).toLocaleString()}원
+                                                {room.price.toLocaleString()}원
                                             </h3>
                                             <div className={"flex justify-end gap-2 mt-4"}>
-                                                <Button onClick={()=>handleClick(room)}>예약하기</Button>
+                                                <Button onClick={() => handleClick(room)}>
+                                                    예약하기
+                                                </Button>
                                             </div>
-                                            <span className={"text-xs font-bold text-gray-500 mt-2"}>당일 취소 및 환불 불가</span>
+                                            <span
+                                                className={"text-xs font-bold text-gray-500 mt-2"}>
+                                                당일 취소 및 환불 불가
+                                            </span>
                                         </div>
                                     </div>
                                 </div>

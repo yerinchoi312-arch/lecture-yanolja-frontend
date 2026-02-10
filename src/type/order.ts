@@ -34,11 +34,16 @@ export interface OrderItem {
     createdAt: string;
     totalPrice: number;
     status: OrderState;
+    adultNum: number;
+    childrenNum: number;
     recipientName: string;
     recipientPhone:string;
     checkInDate: string;
     checkOutDate: string;
     items: OrderItems[];
+    orderId:string;
+    orderName:string;
+    requestedAt:string;
 }
 export interface OrderItems {
     id: number;

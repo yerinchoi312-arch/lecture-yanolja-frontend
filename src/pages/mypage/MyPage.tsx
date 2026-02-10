@@ -118,12 +118,12 @@ function MyPage() {
                             ["p-4", "flex", "flex-col"],
                         )}>
                         <Link
-                            to={"/notice"}
+                            to={"/inquiry"}
                             className={twMerge(
                                 ["hover:bg-blue-50", "hover:rounded-xl"],
                                 ["font-bold", "py-4", "px-2", "text-gray-800"],
                             )}>
-                            <span>공지사항</span>
+                            <span>1:1 문의</span>
                         </Link>
                         <Link
                             to={"/faq"}
