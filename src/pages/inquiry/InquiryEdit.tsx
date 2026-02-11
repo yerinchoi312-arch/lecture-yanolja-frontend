@@ -1,18 +1,18 @@
 import { twMerge } from "tailwind-merge";
-import Input from "../components/Input.tsx";
-import Button from "../components/Button.tsx";
-import { createInquiries } from "../../api/inquiry.api.ts";
-import { useNavigate } from "react-router";
 import Select from "../components/Select.tsx";
-import { type ChangeEvent, type FormEvent, useRef, useState } from "react";
 import type { InquiryType } from "../../type/inquiry.ts";
-import { uploadFile } from "../../api/upload.api.ts";
-import { FaTimes } from "react-icons/fa";
+import Input from "../components/Input.tsx";
 import { GoPlus } from "react-icons/go";
+import { FaTimes } from "react-icons/fa";
+import Button from "../components/Button.tsx";
+import { useNavigate, useParams } from "react-router";
+import { type ChangeEvent, type FormEvent, useEffect, useRef, useState } from "react";
+import { uploadFile } from "../../api/upload.api.ts";
+import {inquiryDetail, updateInquiry } from "../../api/inquiry.api.ts";
 
-function InquiryWrite() {
+function InquiryEdit() {
     const navigate = useNavigate();
-
+    const {id} = useParams();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const [title, setTitle] = useState("");
@@ -20,6 +20,26 @@ function InquiryWrite() {
     const [type, setType] = useState<InquiryType>("RESERVATION");
     const [attachImage, setAttachImage] = useState<string[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+
+    useEffect(() => {
+        const loadData = async ()=> {
+            try{
+                const response = await inquiryDetail(String(id))
+                const data = response.data;
+                setTitle(data.title);
+                setContent(data.content);
+                setType(data.type as InquiryType);
+                if (data.images && data.images.length > 0) {
+                    const imageUrls = data.images.map((img) => img.url); //
+                    setAttachImage(imageUrls);
+                }
+            }catch (e) {
+                console.error(e);
+            }
+        }
+        loadData().then(()=>{})
+    },[id])
 
     const handelFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
@@ -49,20 +69,14 @@ function InquiryWrite() {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!title.trim()) {
-            alert("제목을 입력해주세요");
-            return;
-        }
-        if (content.length < 5) {
-            alert("문의내용을 5글자 이상 적어주세요");
-            return;
-        }
+        if(!id) return;
         try {
-            await createInquiries({ title, content, type, images: attachImage });
+            await updateInquiry(String(id),{ title, content, type, images: attachImage });
+            alert("수정되었습니다.")
             navigate("/inquiry");
         } catch (error) {
             console.log(error);
-            alert("등록 실패했습니다.");
+            alert("수정 실패했습니다.");
         } finally {
             setIsSubmitting(false);
         }
@@ -74,7 +88,7 @@ function InquiryWrite() {
                     ["flex", "flex-col", "py-10", "gap-10"],
                     ["max-w-[800px]", "mx-auto", "w-full", "h-full", "min-h-[calc(100dvh-280px)]"],
                 )}>
-                <h2 className={"font-bold text-xl"}>1:1 문의 작성</h2>
+                <h2 className={"font-bold text-xl"}>1:1 문의 수정</h2>
                 <form
                     onSubmit={handleSubmit}
                     className={"flex flex-col gap-4 w-full relative bg-white  p-6 rounded-xl"}>
@@ -186,11 +200,11 @@ function InquiryWrite() {
                         <Button type={"button"} variant={"secondary"} fullWidth={true} onClick={() => navigate(-1)}>
                             취소
                         </Button>
-                        <Button type={"submit"} fullWidth={true}>{isSubmitting ? "등록 중" : "문의 등록"}</Button>
+                        <Button type={"submit"} fullWidth={true}>{isSubmitting ? "수정 중" : "문의 수정"}</Button>
                     </div>
                 </form>
             </div>
         </div>
     );
 }
-export default InquiryWrite;
+export default InquiryEdit

@@ -102,7 +102,7 @@ function ReservationDetailPage() {
                                         </p>
                                     </div>
                                 </div>
-                                {new Date(orderData.checkOutDate) > new Date() && (
+                                {new Date(orderData.checkOutDate) < new Date() && (
                                     <div className={"flex justify-end "}>
                                         <button
                                             onClick={()=>navigate("")}

@@ -5,50 +5,78 @@ import { useAuthStore } from "../../store/useAuthStore.ts";
 import { Link, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import Pagination from "../components/Pagination.tsx";
-import { FetchMyInquiries } from "../../api/inquiry.api.ts";
-import type { Inquiry } from "../../type/inquiry.ts";
+import { fetchMyInquiries } from "../../api/inquiry.api.ts";
+import type { Inquiry, InquiryStatus, InquiryType } from "../../type/inquiry.ts";
 
 function InquiryList() {
     const { isLoggedIn } = useAuthStore();
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const[loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [inquiries, setInquiries] = useState<Inquiry[]>([]);
-    const LIMIT=10;
+    const LIMIT = 10;
 
     useEffect(() => {
-        const loadInquiries = async (page:number) => {
+        const loadInquiries = async (page: number) => {
             setLoading(true);
-            try{
-                const response = await FetchMyInquiries(page,LIMIT)
-                setInquiries(response.data)      ;
+            try {
+                const response = await fetchMyInquiries(page, LIMIT);
+                setInquiries(response.data);
                 setTotalPages(response.pagination.totalPages);
-            }catch (e) {
+            } catch (e) {
                 console.error(e);
-            }finally {
+            } finally {
                 setLoading(false);
             }
-        }
-        loadInquiries(currentPage).then(()=>{})
+        };
+        loadInquiries(currentPage).then(() => {});
     }, [currentPage]);
 
-    const onPageChange = (page:number) =>{
+    const TypeLabel = (type: InquiryType) => {
+        const map: Record<InquiryType, string> = {
+            RESERVATION: "예약 문의",
+            PRODUCT: "상품 문의",
+            EXCHANGE_RETURN: "교환/환불 문의",
+            MEMBER: "회원 문의",
+            OTHER: "기타 문의",
+        };
+        return map[type];
+    };
+
+    const renderStatusBadge = (status: InquiryStatus) => {
+        if (status === "ANSWERED") {
+            return (
+                <span className={"px-2 py-1 text-xs font-bold text-white bg-black rounded-sm"}>
+                    답변완료
+                </span>
+            );
+        } else {
+            return (
+                <span
+                    className={"px-2 py-1 text-xs font-bold text-gray-500 bg-gray-200 rounded-sm"}>
+                    답변대기
+                </span>
+            );
+        }
+    };
+
+    const onPageChange = (page: number) => {
         setCurrentPage(page);
         window.scrollTo(0, 0);
-    }
-    if(loading) return <div>loading,,,</div>
+    };
+    if (loading) return <div>loading,,,</div>;
     return (
         <div className={"bg-gray-50"}>
             <div
                 className={twMerge(
-                    ["flex", "flex-col", "py-10","gap-10"],
+                    ["flex", "flex-col", "py-10", "gap-10"],
                     ["max-w-[800px]", "mx-auto", "w-full", "h-full", "min-h-[calc(100dvh-280px)]"],
                 )}>
                 <div className={"relative"}>
                     <BackButton className={"absolute top-2 md:hidden"} />
-                    <h2 className={twMerge(["text-2xl", "font-bold", "mb-8", "text-left"])}>
-                        내 문의 목록
+                    <h2 className={twMerge(["text-2xl", "font-bold", "mb-8", "text-center"])}>
+                        1:1 문의
                     </h2>
                     {isLoggedIn && (
                         <div className={"flex justify-end"}>
@@ -58,14 +86,49 @@ function InquiryList() {
                         </div>
                     )}
                 </div>
-                <div className={"bg-white"}>
-                    {inquiries.map(inquiry=>(
-                        <Link to={`/inquiry/${inquiry.id}`} key={inquiry.id}>
-                            {inquiry.title}
+                <div className={"bg-white rounded-2xl shadow p-8"}>
+                    <div
+                        className={twMerge(
+                            ["flex items-center justify-between"],
+                            [" pb-4 px-2 w-full"],
+                            ["border-b-2 border-gray-500"],
+                        )}>
+                        <div className={"flex gap-2 items-center"}>
+                            <div className={"text-sm font-bold text-gray-700 w-24"}>문의 유형</div>
+                            <h2 className={"text-sm font-bold text-gray-700"}>문의 제목</h2>
+                        </div>
+                        <div className={"text-sm font-bold text-gray-700"}>문의 상태</div>
+                    </div>
+                    {inquiries.map((inquiry, index) => (
+                        <Link
+                            to={`/inquiry/${inquiry.id}`}
+                            key={index}
+                            className={twMerge(
+                                ["flex items-center justify-between"],
+                                ["w-full p-4 px-2"],
+                                ["border-b border-gray-300"],
+                                ["hover:bg-blue-50"],
+                            )}>
+                            <div className={"flex items-center gap-2"}>
+                                <div className={"w-24"}>
+                                    <p
+                                        className={twMerge(
+                                            ["bg-blue-400 font-semibold text-white text-xs"],
+                                            ["rounded-sm px-2 py-1 inline"],
+                                        )}>{TypeLabel(inquiry.type)}</p>
+
+                                </div>
+                                <h2 className={"text-sm font-medium text-gray-700"}>{inquiry.title}</h2>
+                            </div>
+                            <div>{renderStatusBadge(inquiry.status)}</div>
                         </Link>
                     ))}
                 </div>
-                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange}/>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={onPageChange}
+                />
             </div>
         </div>
     );

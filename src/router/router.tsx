@@ -19,9 +19,7 @@ import AdminUserEdit from "../pages/(admin)/users/AdminUserEdit.tsx";
 import ReservationListPage from "../pages/reservation/ReservationListPage.tsx";
 import InquiryList from "../pages/inquiry/InquiryList.tsx";
 import FAQPage from "../pages/faq/FAQPage.tsx";
-import RecentView from "../pages/recent/RecentView.tsx";
 import Cart from "../pages/cart/Cart.tsx";
-import Wishlist from "../pages/wishlist/Wishlist.tsx";
 import AdminProductList from "../pages/(admin)/products/AdminProductList.tsx";
 import AdminProductCreate from "../pages/(admin)/products/AdminProductCreate.tsx";
 import AdminProductEdit from "../pages/(admin)/products/AdminProductEdit.tsx";
@@ -35,6 +33,10 @@ import OrderSuccess from "../pages/order/OrderSuccess.tsx";
 import OrderFail from "../pages/order/OrderFail.tsx";
 import ReservationDetailPage from "../pages/reservation/ReservationDetailPage.tsx";
 import InquiryDetail from "../pages/inquiry/InquiryDetail.tsx";
+import ReviewDetail from "../pages/review/ReviewDetail.tsx";
+import AdminInquiryList from "../pages/(admin)/inquiry/AdminInquiryList.tsx";
+import AdminInquiryDetail from "../pages/(admin)/inquiry/AdminInquiryDetail.tsx";
+import InquiryEdit from "../pages/inquiry/InquiryEdit.tsx";
 
 export const guestOnlyLoader = () => {
     const isLoggedIn = useAuthStore.getState().isLoggedIn;
@@ -80,6 +82,7 @@ export const router = createBrowserRouter([
                     { index: true, element: <InquiryList /> },
                     { path: "write", element: <InquiryWrite /> },
                     { path: ":id", element: <InquiryDetail /> },
+                    { path: "edit/:id", element: <InquiryEdit /> },
                 ],
             },
             { path: "faq", element: <FAQPage /> },
@@ -102,7 +105,8 @@ export const router = createBrowserRouter([
             },
             {
                 path: "review",
-                children: [{ index: true, element: <ReviewList /> }],
+                children: [{ index: true, element: <ReviewList /> },
+                    {path:":id",element: <ReviewDetail/>}],
             },
             { path: "promotion", element: <PromotionListPage /> },
             {
@@ -112,10 +116,7 @@ export const router = createBrowserRouter([
                     { path: ":id", element: <ReservationDetailPage /> },
                 ],
             },
-            {path:"review",element: <div>리뷰</div>},
-            { path: "recent", element: <RecentView /> },
             { path: "cart", element: <Cart /> },
-            { path: "wishlist", element: <Wishlist /> },
             { path: "search", element: <SearchPage /> },
         ],
     },
@@ -146,6 +147,13 @@ export const router = createBrowserRouter([
                     { index: true, element: <AdminProductList /> },
                     { path: "new", element: <AdminProductCreate /> },
                     { path: ":id", element: <AdminProductEdit /> },
+                ],
+            },
+            {
+                path: "inquiries",
+                children: [
+                    { index: true, element: <AdminInquiryList /> },
+                    { path: ":id", element: <AdminInquiryDetail /> },
                 ],
             },
         ],

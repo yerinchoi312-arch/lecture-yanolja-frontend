@@ -6,7 +6,7 @@ import {
     //IoHeartOutline,
     IoPersonOutline,
     IoSearchOutline,
-    IoTimeOutline,
+    //IoTimeOutline,
 } from "react-icons/io5";
 import { type FormEvent, useState } from "react";
 import { IoIosLogOut } from "react-icons/io";
@@ -112,14 +112,14 @@ function Header() {
                     {/*    <IoBagHandleOutline className={"w-7 h-7"} />*/}
                     {/*    장바구니*/}
                     {/*</Link>*/}
-                    <Link to={"/recent"}
-                        className={twMerge(
-                            ["flex", "flex-col", "justify-center", "items-center", "gap-2"],
-                            ["font-semibold", "font-sm", "tracking-[-0.07em]"],
-                        )}>
-                        <IoTimeOutline className={"w-7 h-7"} />
-                        최근 본 상품
-                    </Link>
+                    {/*<Link to={"/recent"}*/}
+                    {/*    className={twMerge(*/}
+                    {/*        ["flex", "flex-col", "justify-center", "items-center", "gap-2"],*/}
+                    {/*        ["font-semibold", "font-sm", "tracking-[-0.07em]"],*/}
+                    {/*    )}>*/}
+                    {/*    <IoTimeOutline className={"w-7 h-7"} />*/}
+                    {/*    최근 본 상품*/}
+                    {/*</Link>*/}
                 </div>
             </div>
         </div>

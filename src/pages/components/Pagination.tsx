@@ -37,8 +37,9 @@ function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) 
                 )}>
                 <MdChevronLeft />
             </button>
-            {getPageNumbers().map(page => (
+            {getPageNumbers().map((page,index) => (
                 <button
+                    key={index}
                     onClick={()=>onPageChange(page)}
                     className={twMerge(
                         ["w-9", "h-9", "flex", "justify-center", "items-center"],

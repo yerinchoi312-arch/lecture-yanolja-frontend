@@ -4,7 +4,6 @@ import { Link, useNavigate, useParams } from "react-router";
 import type { CategoryData } from "../../type/category.ts";
 import { getCategories } from "../../api/category.api.ts";
 import EventSlide from "../components/EventSlide.tsx";
-import Promotion from "../components/PromotionBox.tsx";
 import Slide from "../components/Slide.tsx";
 import type { ProductListParams, ProductSummary } from "../../type/product.ts";
 import { fetchProducts } from "../../api/product.api.ts";
@@ -155,10 +154,6 @@ function CategoryListPage() {
                     slidesPerView={4}
                     slidesPerGroup={4}
                 />
-            </div>
-            <div>
-                <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>기획전 모음</h2>
-                <Promotion />
             </div>
             <TopButton/>
         </div>

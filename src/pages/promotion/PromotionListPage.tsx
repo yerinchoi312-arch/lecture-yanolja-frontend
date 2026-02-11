@@ -30,14 +30,6 @@ function PromotionListPage() {
                 <h2 className={twMerge(["text-2xl", "font-bold", "text-center"])}>기획전 전체</h2>
             </div>
             <div className={"space-x-4"}>
-                <button
-                    type={"button"}
-                    className={twMerge(
-                        ["px-4", "py-2", "rounded-2xl"],
-                        ["bg-gray-100", "font-medium"],
-                    )}>
-                    전체
-                </button>
                 {allCategories.map(category => (
                     <button
                         className={twMerge(

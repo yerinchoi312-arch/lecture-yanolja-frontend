@@ -95,43 +95,49 @@ function MyPage() {
                                 ["hover:bg-blue-50", "hover:rounded-xl"],
                                 ["font-bold", "py-4", "px-2", "text-gray-800"],
                             )}>
-                            <span>국내숙소</span>
+                            국내숙소
                         </Link>
                     </div>
+                    <div
+                    className={twMerge(
+                        ["bg-white", "rounded-xl", "shadow-sm"],
+                        ["p-4", "flex", "flex-col"],
+                    )}>
+                        <p
+                            className={
+                                "text-gray-500 font-semibold text-xs p-4 pl-2 border-b border-gray-200"
+                            }>
+                            활동 내역
+                        </p>
+                    <Link
+                        to={"/review"}
+                        className={twMerge(
+                            ["hover:bg-blue-50", "hover:rounded-xl"],
+                            ["font-bold", "py-4", "px-2", "text-gray-800"],
+                        )}>
+                        리뷰
+                    </Link>
+                    <Link
+                        to={"/inquiry"}
+                        className={twMerge(
+                            ["hover:bg-blue-50", "hover:rounded-xl"],
+                            ["font-bold", "py-4", "px-2", "text-gray-800"],
+                        )}>
+                        1:1 문의
+                    </Link>
+                </div>
                     <div
                         className={twMerge(
                             ["bg-white", "rounded-xl", "shadow-sm"],
                             ["p-4", "flex", "flex-col"],
                         )}>
-                        <Link
-                            to={"/promotion"}
-                            className={twMerge(
-                                ["hover:bg-blue-50", "hover:rounded-xl"],
-                                ["font-bold", "py-4", "px-2", "text-gray-800"],
-                            )}>
-                            <span>기획전</span>
-                        </Link>
-                    </div>
-                    <div
-                        className={twMerge(
-                            ["bg-white", "rounded-xl", "shadow-sm"],
-                            ["p-4", "flex", "flex-col"],
-                        )}>
-                        <Link
-                            to={"/inquiry"}
-                            className={twMerge(
-                                ["hover:bg-blue-50", "hover:rounded-xl"],
-                                ["font-bold", "py-4", "px-2", "text-gray-800"],
-                            )}>
-                            <span>1:1 문의</span>
-                        </Link>
                         <Link
                             to={"/faq"}
                             className={twMerge(
                                 ["hover:bg-blue-50", "hover:rounded-xl"],
                                 ["font-bold", "py-4", "px-2", "text-gray-800"],
                             )}>
-                            <span>자주 묻는 질문</span>
+                            자주 묻는 질문
                         </Link>
                     </div>
                 </div>

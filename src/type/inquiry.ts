@@ -11,13 +11,20 @@ export interface Inquiry{
     type:InquiryType;
     title:string;
     content:string;
-    status:"PENDING"|"ANSWERED";
+    status:InquiryStatus
     answer:string|null;
     answeredAt:string|null;
     images:InquiryImage[]
 }
-export type InquiryType =
-    "RESERVATION" | "PRODUCT" | "EXCHANGE_RETURN" | "MEMBER" |"OTHER";
+export type InquiryStatus ="PENDING"|"ANSWERED";
+export type InquiryType = "RESERVATION" | "PRODUCT" | "EXCHANGE_RETURN" | "MEMBER" |"OTHER";
+
+export interface createInquiryResponse {
+    type: InquiryType;
+    title: string;
+    content: string;
+    images?:string[];
+}
 
 export interface InquiryImage{
     id: number;
@@ -27,4 +34,7 @@ export interface InquiryImage{
 export interface MyInquiry{
     data:Inquiry[];
     pagination:Pagination;
+}
+export interface AnswerRequest {
+    answer: string;
 }

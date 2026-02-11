@@ -78,7 +78,6 @@ function OrderSuccess() {
                         <div className={"bg-gray-100 p-6 w-2/3 mx-auto rounded-xl space-y-6 text-center"}>
                             <p>예약번호 : {orderData.orderId}</p>
                             <p>예약 숙소명 : {orderData.orderName}</p>
-                            <p>총 금액 : {(orderData.totalAmount).toLocaleString()}원</p>
                         </div>
                         <Button onClick={()=>navigate("/reservation")}>예약 상세보기</Button>
                     </div>
