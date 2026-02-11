@@ -41,9 +41,6 @@ export interface OrderItem {
     checkInDate: string;
     checkOutDate: string;
     items: OrderItems[];
-    orderId:string;
-    orderName:string;
-    requestedAt:string;
 }
 export interface OrderItems {
     id: number;
@@ -69,4 +66,7 @@ export interface ConfirmOrderRequest {
     paymentKey: string;
     orderId: string;
     amount: number;
+}
+export interface CancelOrderRequest {
+    cancelReason: string;
 }

@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router";
 import { useAuthStore } from "../../store/useAuthStore.ts";
 import { useEffect, useState } from "react";
 import type { OrderItem } from "../../type/order.ts";
-import { OrderDetail } from "../../api/order.api.ts";
+import { orderDetail } from "../../api/order.api.ts";
 import { twMerge } from "tailwind-merge";
 import BackButton from "../components/BackButton.tsx";
 import Button from "../components/Button.tsx";
@@ -21,7 +21,7 @@ function ReservationDetailPage() {
             if (!id) return;
             setIsLoading(true);
             try {
-                const response = await OrderDetail(String(id));
+                const response = await orderDetail(String(id));
                 setOrderData(response.data);
             } catch (e) {
                 console.error(e);
@@ -31,6 +31,8 @@ function ReservationDetailPage() {
         };
         fetchOrders().then(() => {});
     }, [id]);
+
+    const handleCancel = () => {};
 
     if (isLoading) return <div>loading...</div>;
     if (!user || !orderData) return null;
@@ -50,23 +52,60 @@ function ReservationDetailPage() {
                                     <div className={"text-sm text-gray-600"}>
                                         RESERVATION NO.{item.id}
                                     </div>
-                                    <div
-                                        className={twMerge(
-                                            ["text-xs", "py-1", "px-2", "rounded-lg"],
-                                            orderData.status === "PENDING" && [
-                                                "bg-[#FFA500]/10",
-                                                "text-orange-500",
-                                            ],
-                                            orderData.status === "PAID" && [
-                                                "bg-[#4CAF50]/10",
-                                                "text-green-500",
-                                            ],
-                                            orderData.status === "CANCELED" && [
-                                                "bg-[#F44336]/10",
-                                                "text-red-500",
-                                            ],
-                                        )}>
-                                        {orderData.status}
+                                    <div className={"flex items-center gap-2"}>
+                                        <div
+                                            className={twMerge(
+                                                ["text-xs", "py-1", "px-2", "rounded-lg"],
+                                                orderData.status === "PENDING" && [
+                                                    "bg-[#FFA500]/10",
+                                                    "text-orange-500",
+                                                ],
+                                                orderData.status === "PAID" && [
+                                                    "bg-[#4CAF50]/10",
+                                                    "text-green-500",
+                                                ],
+                                                orderData.status === "CANCELED" && [
+                                                    "bg-[#F44336]/10",
+                                                    "text-red-500",
+                                                ],
+                                            )}>
+                                            {orderData.status}
+                                        </div><div className="flex justify-end gap-2">
+
+                                        {orderData.status !== "CANCELED" ? (
+                                            <>
+                                                {/* 체크인 전: 주문 취소 가능 */}
+                                                {new Date(orderData.checkInDate) > new Date() && (
+                                                    <button
+                                                        onClick={handleCancel}
+                                                        className="border border-gray-400 px-2 py-1 rounded-md font-bold text-sm text-gray-600 cursor-pointer"
+                                                    >
+                                                        주문취소
+                                                    </button>
+                                                )}
+
+                                                {/* 체크인 날짜 지남 & 체크아웃 전: 주문 확정 (숙박 중) */}
+                                                {new Date(orderData.checkInDate) <= new Date() && new Date(orderData.checkOutDate) >= new Date() && (
+                                                    <div className="bg-gray-400 px-2 py-1 rounded-md font-bold text-sm text-gray-50 cursor-default">
+                                                        주문 확정
+                                                    </div>
+                                                )}
+
+                                                {/* 체크아웃 날짜 지남: 리뷰 쓰기 */}
+                                                {new Date(orderData.checkOutDate) < new Date() && orderData.status ==="PAID" && (
+                                                    <button
+                                                        onClick={() => navigate(`/review/write/${orderData.id}`)} // 경로 확인 필요
+                                                        className="border border-blue-500 text-blue-600 px-2 py-1 rounded-md font-bold text-sm cursor-pointer hover:bg-blue-50"
+                                                    >
+                                                        리뷰쓰기
+                                                    </button>
+                                                )}
+                                            </>
+                                        ) : (
+                                            /* 2. 취소된 주문일 때 보여줄 UI (선택 사항) */
+                                            <div className="text-red-500 font-bold text-sm">취소된 예약입니다</div>
+                                        )}
+                                    </div>
                                     </div>
                                 </div>
                                 {/*숙소명*/}
@@ -102,18 +141,7 @@ function ReservationDetailPage() {
                                         </p>
                                     </div>
                                 </div>
-                                {new Date(orderData.checkOutDate) < new Date() && (
-                                    <div className={"flex justify-end "}>
-                                        <button
-                                            onClick={()=>navigate("")}
-                                            className={
-                                                "border border-gray-400 px-2 py-1 rounded-xl font-bold text-sm text-gray-600 cursor-pointer"
-                                            }>
-                                            리뷰쓰기
-                                        </button>
 
-                                    </div>
-                                )}
                                 <div className={"text-blue-700 font-bold text-sm text-right"}>
                                     무료 취소
                                     {

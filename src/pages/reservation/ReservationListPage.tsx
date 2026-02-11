@@ -54,6 +54,13 @@ function ReservationListPage() {
                     다가오는 여행{" "}
                     <span className={"text-2xl font-bold text-blue-500"}>{totalCount}</span>건
                 </h2>
+                <div>
+                    <nav>
+                        <button>결제완료</button>
+                        <button>결제대기</button>
+                        <button>취소</button>
+                    </nav>
+                </div>
                 <div className={"grid grid-cols-2 gap-4"}>
                     {orderList.flatMap(item =>
                         item.items.map(orderItem => (

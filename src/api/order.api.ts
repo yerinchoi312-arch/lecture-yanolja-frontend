@@ -1,5 +1,6 @@
 import { httpClient } from "./axios.ts";
 import type {
+    CancelOrderRequest,
     ConfirmOrderRequest,
     CreateOrderRequest,
     CreateOrderResponse,
@@ -23,7 +24,7 @@ export const createOrder = async (orderData: CreateOrderRequest) => {
 
 
 
-export const OrderDetail = async (orderId: string) => {
+export const orderDetail = async (orderId: string) => {
     const response = await httpClient.get<{ data: OrderItem }>(`/orders/${orderId}`);
     return response.data;
 }
@@ -31,4 +32,11 @@ export const OrderDetail = async (orderId: string) => {
 export const confirmOrder = async (data:ConfirmOrderRequest) => {
     const response = await httpClient.post< { data: OrderItem }>(`/orders/confirm`,data);
     return response.data.data;
+}
+
+export const orderCancel = async (orderId: string,data:CancelOrderRequest) => {
+    const response = await httpClient.post<{ data: OrderItem }>(`/orders/${orderId}/cancel`,{
+        data:data
+    });
+    return response.data;
 }

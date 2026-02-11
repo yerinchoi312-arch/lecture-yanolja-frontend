@@ -67,20 +67,23 @@ function OrderSuccess() {
         <div className={"bg-gray-100 py-10 flex-1"}>
             <div className={twMerge(["max-w-[800px]", "mx-auto", "w-full"])}>
                 <div className={"bg-white p-6 rounded-xl shadow-xs"}>
-                    <div className={"flex flex-col gap-5 items-center py-10"}>
-                        <FaCheckCircle size={40} color={"green"} />
-                        <h2 className={"text-2xl font-bold"}>예약이 완료 되었습니다</h2>
-                        <p className="text-gray-600 mb-10">
-                            주문하신 상품의 결제가 성공적으로 완료되었습니다.
-                            <br />
-                            주문 상세 내역은 마이페이지에서 확인하실 수 있습니다.
-                        </p>
-                        <div className={"bg-gray-100 p-6 w-2/3 mx-auto rounded-xl space-y-6 text-center"}>
-                            <p>예약번호 : {orderData.orderId}</p>
-                            <p>예약 숙소명 : {orderData.orderName}</p>
+                    {orderData.items.map((item) => (
+                        <div className={"flex flex-col gap-5 items-center py-10"} key={item.id}>
+                            <FaCheckCircle size={40} color={"green"} />
+                            <h2 className={"text-2xl font-bold"}>예약이 완료 되었습니다</h2>
+                            <p className="text-gray-600 mb-10">
+                                주문하신 상품의 결제가 성공적으로 완료되었습니다.
+                                <br />
+                                주문 상세 내역은 마이페이지에서 확인하실 수 있습니다.
+                            </p>
+                            <div className={"bg-gray-100 p-6 w-2/3 mx-auto rounded-xl space-y-6 text-center"}>
+                                <p>예약번호 : {orderData.id}</p>
+                                <p>예약 숙소명 : {item.roomType.product.name}</p>
+                            </div>
+                            <Button onClick={()=>navigate("/reservation")}>예약 상세보기</Button>
                         </div>
-                        <Button onClick={()=>navigate("/reservation")}>예약 상세보기</Button>
-                    </div>
+
+                    ))}
                 </div>
             </div>
         </div>

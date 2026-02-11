@@ -37,6 +37,16 @@ const AdminLayout = () => {
                         className="block px-4 py-2 hover:bg-slate-700 rounded">
                         1:1문의 관리
                     </Link>
+                    <Link
+                        to="/admin/orders"
+                        className="block px-4 py-2 hover:bg-slate-700 rounded">
+                        주문 관리
+                    </Link>
+                    <Link
+                        to="/admin/reviews"
+                        className="block px-4 py-2 hover:bg-slate-700 rounded">
+                        리뷰 관리
+                    </Link>
                 </nav>
                 <div className="p-4 border-t border-slate-700 space-y-4">
                     <button

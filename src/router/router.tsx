@@ -37,6 +37,11 @@ import ReviewDetail from "../pages/review/ReviewDetail.tsx";
 import AdminInquiryList from "../pages/(admin)/inquiry/AdminInquiryList.tsx";
 import AdminInquiryDetail from "../pages/(admin)/inquiry/AdminInquiryDetail.tsx";
 import InquiryEdit from "../pages/inquiry/InquiryEdit.tsx";
+import AdminOrderList from "../pages/(admin)/orders/AdminOrderListPage.tsx";
+import AdminOrderDetail from "../pages/(admin)/orders/AdminOrderDetailPage.tsx";
+import AdminReviewList from "../pages/(admin)/reviews/AdminReviewList.tsx";
+import AdminReviewDetail from "../pages/(admin)/reviews/AdminReviewDetail.tsx";
+import ReviewWrite from "../pages/review/ReviewWrite.tsx";
 
 export const guestOnlyLoader = () => {
     const isLoggedIn = useAuthStore.getState().isLoggedIn;
@@ -105,8 +110,11 @@ export const router = createBrowserRouter([
             },
             {
                 path: "review",
-                children: [{ index: true, element: <ReviewList /> },
-                    {path:":id",element: <ReviewDetail/>}],
+                children: [
+                    { index: true, element: <ReviewList /> },
+                    { path: ":id", element: <ReviewDetail /> },
+                    { path: "write/:id", element: <ReviewWrite /> },
+                ],
             },
             { path: "promotion", element: <PromotionListPage /> },
             {
@@ -154,6 +162,20 @@ export const router = createBrowserRouter([
                 children: [
                     { index: true, element: <AdminInquiryList /> },
                     { path: ":id", element: <AdminInquiryDetail /> },
+                ],
+            },
+            {
+                path: "orders",
+                children: [
+                    { index: true, element: <AdminOrderList /> },
+                    { path: ":id", element: <AdminOrderDetail /> },
+                ],
+            },
+            {
+                path: "reviews",
+                children: [
+                    { index: true, element: <AdminReviewList /> },
+                    { path: ":id", element: <AdminReviewDetail /> },
                 ],
             },
         ],
