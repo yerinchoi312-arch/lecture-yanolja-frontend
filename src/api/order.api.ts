@@ -35,8 +35,6 @@ export const confirmOrder = async (data:ConfirmOrderRequest) => {
 }
 
 export const orderCancel = async (orderId: string,data:CancelOrderRequest) => {
-    const response = await httpClient.post<{ data: OrderItem }>(`/orders/${orderId}/cancel`,{
-        data:data
-    });
+    const response = await httpClient.post<{ data: OrderItem }>(`/orders/${orderId}/cancel`,data);
     return response.data;
 }

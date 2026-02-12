@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import type { CategoryData } from "../../type/category.ts";
 import { getCategories } from "../../api/category.api.ts";
-import EventSlide from "../components/EventSlide.tsx";
+import EventSlide from "../(home)/EventSlide.tsx";
 import Slide from "../components/Slide.tsx";
 import type { ProductListParams, ProductSummary } from "../../type/product.ts";
 import { fetchProducts } from "../../api/product.api.ts";

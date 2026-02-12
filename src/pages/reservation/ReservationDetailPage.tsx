@@ -2,20 +2,32 @@ import { useNavigate, useParams } from "react-router";
 import { useAuthStore } from "../../store/useAuthStore.ts";
 import { useEffect, useState } from "react";
 import type { OrderItem } from "../../type/order.ts";
-import { orderDetail } from "../../api/order.api.ts";
+import { orderCancel, orderDetail } from "../../api/order.api.ts";
 import { twMerge } from "tailwind-merge";
 import BackButton from "../components/BackButton.tsx";
 import Button from "../components/Button.tsx";
 import dayjs from "dayjs";
+import { useModalStore } from "../../store/useModalStore.ts";
+import { createReviewCheck } from "../../api/review.api.ts";
+import type { CreateReviewCheck } from "../../type/review.ts";
 
 function ReservationDetailPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { user } = useAuthStore();
+    const { openModal } = useModalStore();
 
+    const [hasReview, setHasReview] = useState<CreateReviewCheck | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [orderData, setOrderData] = useState<OrderItem | null>(null);
 
+    const checkReview = async (roomTypeId:number) =>{
+        try{
+            const result = await createReviewCheck(roomTypeId);
+            setHasReview(result);
+        } catch (e) {
+            console.error(e);}
+    }
     useEffect(() => {
         const fetchOrders = async () => {
             if (!id) return;
@@ -32,7 +44,30 @@ function ReservationDetailPage() {
         fetchOrders().then(() => {});
     }, [id]);
 
-    const handleCancel = () => {};
+
+    const handleCancel = async () => {
+        if (!id || !orderData) return;
+
+        if (!window.confirm("정말로 예약을 취소 하시겠습니까?")) return;
+
+        const cancelReason = window.prompt("취소 사유를 입력해주세요.", "단순 변심");
+        if (cancelReason === null) return;
+
+        try {
+            setIsLoading(true);
+            await orderCancel(String(id), { cancelReason });
+            alert("예약이 취소되었습니다.");
+
+            const updatedResponse = await orderDetail(id);
+            setOrderData(updatedResponse.data);
+            return;
+        } catch (e) {
+            console.error(e);
+            alert("취소 중 오류가 발생했습니다.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     if (isLoading) return <div>loading...</div>;
     if (!user || !orderData) return null;
@@ -40,7 +75,7 @@ function ReservationDetailPage() {
     const totalNights = dayjs(orderData.checkOutDate).diff(dayjs(orderData.checkInDate), "day");
 
     return (
-        <div className={"bg-gray-100 py-10"}>
+        <div className={"bg-gray-100 flex-1 py-10"}>
             <div className={twMerge(["max-w-[800px]", "mx-auto", "w-full"])}>
                 {orderData.items.map(item => (
                     <div className={"relative"} key={item.id}>
@@ -70,42 +105,88 @@ function ReservationDetailPage() {
                                                 ],
                                             )}>
                                             {orderData.status}
-                                        </div><div className="flex justify-end gap-2">
+                                        </div>
+                                        <div className="flex justify-end gap-2">
+                                            {orderData.status !== "CANCELED" ? (
+                                                <>
+                                                    {/* 체크인 전: 주문 취소 가능 */}
+                                                    {new Date(orderData.checkInDate) >
+                                                        new Date() && (
+                                                        <button
+                                                            onClick={handleCancel}
+                                                            className="border border-gray-400 px-2 py-1 rounded-md font-bold text-sm text-gray-600 cursor-pointer">
+                                                            주문취소
+                                                        </button>
+                                                    )}
 
-                                        {orderData.status !== "CANCELED" ? (
-                                            <>
-                                                {/* 체크인 전: 주문 취소 가능 */}
-                                                {new Date(orderData.checkInDate) > new Date() && (
-                                                    <button
-                                                        onClick={handleCancel}
-                                                        className="border border-gray-400 px-2 py-1 rounded-md font-bold text-sm text-gray-600 cursor-pointer"
-                                                    >
-                                                        주문취소
-                                                    </button>
-                                                )}
+                                                    {/* 체크인 날짜 지남 & 체크아웃 전: 주문 확정 (숙박 중) */}
+                                                    {new Date(orderData.checkInDate) <=
+                                                        new Date() &&
+                                                        new Date(orderData.checkOutDate) >=
+                                                            new Date() && (
+                                                            <div className="bg-gray-400 px-2 py-1 rounded-md font-bold text-sm text-gray-50 cursor-default">
+                                                                주문 확정
+                                                            </div>
+                                                        )}
 
-                                                {/* 체크인 날짜 지남 & 체크아웃 전: 주문 확정 (숙박 중) */}
-                                                {new Date(orderData.checkInDate) <= new Date() && new Date(orderData.checkOutDate) >= new Date() && (
-                                                    <div className="bg-gray-400 px-2 py-1 rounded-md font-bold text-sm text-gray-50 cursor-default">
-                                                        주문 확정
-                                                    </div>
-                                                )}
-
-                                                {/* 체크아웃 날짜 지남: 리뷰 쓰기 */}
-                                                {new Date(orderData.checkOutDate) < new Date() && orderData.status ==="PAID" && (
-                                                    <button
-                                                        onClick={() => navigate(`/review/write/${orderData.id}`)} // 경로 확인 필요
-                                                        className="border border-blue-500 text-blue-600 px-2 py-1 rounded-md font-bold text-sm cursor-pointer hover:bg-blue-50"
-                                                    >
-                                                        리뷰쓰기
-                                                    </button>
-                                                )}
-                                            </>
-                                        ) : (
-                                            /* 2. 취소된 주문일 때 보여줄 UI (선택 사항) */
-                                            <div className="text-red-500 font-bold text-sm">취소된 예약입니다</div>
-                                        )}
-                                    </div>
+                                                    {/* 체크아웃 날짜 지남: 리뷰 쓰기 */}
+                                                    {new Date(orderData.checkOutDate) <
+                                                        new Date() &&
+                                                        orderData.status === "PAID" && (
+                                                            <div>
+                                                                {hasReview. ? (
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            openModal(
+                                                                                "REVIEW_FORM",
+                                                                                {
+                                                                                    roomTypeId:
+                                                                                        item
+                                                                                            .roomType
+                                                                                            .id,
+                                                                                    productName:
+                                                                                        item
+                                                                                            .roomType
+                                                                                            .product
+                                                                                            .name,
+                                                                                    productImage:
+                                                                                        item
+                                                                                            .roomType
+                                                                                            .image,
+                                                                                    roomName:
+                                                                                        item
+                                                                                            .roomType
+                                                                                            .name,
+                                                                                },
+                                                                            )
+                                                                        }
+                                                                        className={twMerge(
+                                                                            "border border-blue-500",
+                                                                            " text-blue-600 font-bold text-sm ",
+                                                                            " px-2 py-1 rounded-md cursor-pointer",
+                                                                            " hover:bg-blue-50",
+                                                                        )}>
+                                                                        리뷰쓰기
+                                                                    </button>
+                                                                ) : (
+                                                                    <button
+                                                                        onClick={()=>navigate("/mypage/review")}
+                                                                        className={twMerge(
+                                                                            "border border-blue-500",
+                                                                            " text-blue-600 font-bold text-sm ",
+                                                                            " px-2 py-1 rounded-md cursor-pointer",
+                                                                            " hover:bg-blue-50",
+                                                                        )}>리뷰보기</button>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                </>
+                                            ) : (
+                                                <div className="text-red-500 font-bold text-sm">
+                                                    취소된 예약입니다
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                                 {/*숙소명*/}

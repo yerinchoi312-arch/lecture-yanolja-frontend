@@ -11,24 +11,25 @@ import {
 import { type FormEvent, useState } from "react";
 import { IoIosLogOut } from "react-icons/io";
 import { useAuthStore } from "../../store/useAuthStore.ts";
+import { AiOutlineNotification } from "react-icons/ai";
 // import { useAuthStore } from "../../store/useAuthStore.ts";
 
 function Header() {
     const navigate = useNavigate();
-   const {isLoggedIn,logout}=useAuthStore();
+    const { isLoggedIn, logout } = useAuthStore();
 
     const [keywords, setKeywords] = useState("");
 
     const handleLogout = () => {
         logout();
-        alert("로그아웃 되었습니다.")
-        navigate("/")
-    }
-    const handleSearch = (e:FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        if(!keywords.trim()) return;
-        navigate(`search?keyword=${keywords}`)
-        setKeywords("")
+        alert("로그아웃 되었습니다.");
+        navigate("/");
+    };
+    const handleSearch = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (!keywords.trim()) return;
+        navigate(`search?keyword=${keywords}`);
+        setKeywords("");
     };
 
     // const handleAutoClick = (e:MouseEvent<HTMLAnchorElement>) =>{
@@ -51,18 +52,14 @@ function Header() {
                     ["max-w-[1280px]", "mx-auto", "w-full", "h-full"],
                 )}>
                 <div className={"flex items-center gap-10 w-4/5"}>
-                    <Link to={"/"}
-                          onClick={() => window.scrollTo({ top: 0})}>
+                    <Link to={"/"} onClick={() => window.scrollTo({ top: 0 })}>
                         <img src={Logo} alt={"logo"} />{" "}
                     </Link>
-                    <div className={twMerge("w-full",)}>
-                        <form
-                            onSubmit={handleSearch}
-
-                            className={twMerge(["w-full", "relative"])}>
+                    <div className={twMerge("w-full")}>
+                        <form onSubmit={handleSearch} className={twMerge(["w-full", "relative"])}>
                             <input
                                 value={keywords}
-                                onChange={e=>setKeywords(e.target.value)}
+                                onChange={e => setKeywords(e.target.value)}
                                 className={twMerge(
                                     ["w-full", "p-4"],
                                     ["border", "border-gray-200", "rounded-xl"],
@@ -76,51 +73,63 @@ function Header() {
                             </button>
                         </form>
                     </div>
-
                 </div>
-                <div className={twMerge(["flex", "gap-8", "items-center", "justify-end","w-1/5"])}>
-                    <Link to={'/mypage'}
-                        className={twMerge(
-                            ["flex", "flex-col", "justify-center", "items-center", "gap-2"],
-                            ["font-semibold", "font-sm"],
-                        )}>
-                        <IoPersonOutline className={"w-7 h-7"} />
-                        My
-                    </Link>
-                    {isLoggedIn &&
-                    <button
-                        className={twMerge(
-                            ["flex", "flex-col", "justify-center", "items-center", "gap-2"],
-                            ["font-semibold", "font-sm"],
-                        )} onClick={handleLogout}>
-                        <IoIosLogOut className={"w-7 h-7"} /> Logout
-                    </button>}
-                    {/*<Link to={"/wishlist"}*/}
-                    {/*      onClick={handleAutoClick}*/}
-                    {/*    className={twMerge(*/}
-                    {/*        ["flex", "flex-col", "justify-center", "items-center", "gap-2"],*/}
-                    {/*        ["font-semibold", "font-sm"],*/}
-                    {/*    )}>*/}
-                    {/*    <IoHeartOutline className={"w-7 h-7"} />찜*/}
-                    {/*</Link>*/}
-                    {/*<Link to={"/cart"}*/}
-                    {/*      onClick={handleAutoClick}*/}
-                    {/*    className={twMerge(*/}
-                    {/*        ["flex", "flex-col", "justify-center", "items-center", "gap-2"],*/}
-                    {/*        ["font-semibold", "font-sm", "tracking-[-0.07em]"],*/}
-                    {/*    )}>*/}
-                    {/*    <IoBagHandleOutline className={"w-7 h-7"} />*/}
-                    {/*    장바구니*/}
-                    {/*</Link>*/}
-                    {/*<Link to={"/recent"}*/}
-                    {/*    className={twMerge(*/}
-                    {/*        ["flex", "flex-col", "justify-center", "items-center", "gap-2"],*/}
-                    {/*        ["font-semibold", "font-sm", "tracking-[-0.07em]"],*/}
-                    {/*    )}>*/}
-                    {/*    <IoTimeOutline className={"w-7 h-7"} />*/}
-                    {/*    최근 본 상품*/}
-                    {/*</Link>*/}
-                </div>
+                {isLoggedIn ? (
+                    <div
+                        className={twMerge([
+                            "flex",
+                            "gap-8",
+                            "items-center",
+                            "justify-end",
+                            "w-1/5",
+                        ])}>
+                        <Link
+                            to={"/mypage"}
+                            className={twMerge(
+                                ["flex", "flex-col", "justify-center", "items-center", "gap-2"],
+                                ["font-semibold", "font-sm"],
+                            )}>
+                            <IoPersonOutline className={"w-7 h-7"} />
+                            My
+                        </Link>
+                        <button
+                            className={twMerge(
+                                ["flex", "flex-col", "justify-center", "items-center", "gap-2"],
+                                ["font-semibold", "font-sm"],
+                            )}
+                            onClick={handleLogout}>
+                            <IoIosLogOut className={"w-7 h-7"} /> 로그아웃
+                        </button>
+                    </div>
+                ) : (
+                    <div
+                        className={twMerge([
+                            "flex",
+                            "gap-8",
+                            "items-center",
+                            "justify-end",
+                            "w-1/5",
+                        ])}>
+                        <Link
+                            to={"/login"}
+                            className={twMerge(
+                                ["flex", "flex-col", "justify-center", "items-center", "gap-2"],
+                                ["font-semibold", "font-sm"],
+                            )}>
+                            <IoPersonOutline className={"w-7 h-7"} />
+                            로그인
+                        </Link>
+                        <button
+                            className={twMerge(
+                                ["flex", "flex-col", "justify-center", "items-center", "gap-2"],
+                                ["font-semibold", "font-sm"],
+                            )}
+                            onClick={() => navigate("/FAQ")}>
+                            <AiOutlineNotification   className={"w-7 h-7"} />
+                            공지사항
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );

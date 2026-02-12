@@ -1,8 +1,10 @@
 import PaymentModal from "./PaymentModal.tsx";
+import ReviewModal from "./ReviewModal.tsx";
 import { useModalStore } from "../../store/useModalStore.ts";
 
 const MODAL_COMPONENT={
     PAYMENT:PaymentModal,
+    REVIEW_FORM:ReviewModal
 }
 
 function GlobalModal(){

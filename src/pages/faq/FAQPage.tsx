@@ -4,15 +4,15 @@ import BackButton from "../components/BackButton.tsx";
 
 function FAQPage() {
     return (
-        <div className={"bg-gray-50"}>
+        <div className={"bg-gray-100"}>
             <div
                 className={twMerge(
-                    ["flex", "flex-col", "py-10"],
-                    ["max-w-[800px]", "mx-auto", "w-full","h-full","min-h-[calc(100dvh-280px)]"],
+                    ["flex", "flex-col", "py-10", "gap-10"],
+                    ["max-w-[800px]", "mx-auto", "w-full", "h-full", "min-h-[calc(100dvh-280px)]"],
                 )}>
-                <div className={"space-y-20 relative"}>
+                <div className={"relative"}>
                     <BackButton className={"absolute top-2 md:hidden"} />
-                    <h2 className={twMerge(["text-2xl", "font-bold", "text-center"])}>FAQ</h2>
+                    <h2 className={twMerge(["text-2xl", "font-bold", "mb-8", "text-center"])}>FAQ</h2>
                     <div>
                         <p className={twMerge(["text-lg", "font-semibold", "mb-4"])}>
                             자주 묻는 질문 Best 5

@@ -5,7 +5,7 @@ import { useAuthStore } from "../../store/useAuthStore.ts";
 import type { MouseEvent } from "react";
 
 function MyPage() {
-    const { isLoggedIn, logout, user } = useAuthStore();
+    const { isLoggedIn,  user } = useAuthStore();
     const navigate = useNavigate();
 
     const handleAutoClick = (e:MouseEvent<HTMLAnchorElement>) =>{
@@ -16,14 +16,6 @@ function MyPage() {
         }
     }
 
-    const handleLogout = () => {
-        const confirm = window.confirm("로그아웃 하시겠습니까?");
-        if (confirm) {
-            logout();
-            alert("로그아웃 되었습니다.");
-            navigate("/");
-        }
-    };
     return (
         <div className={"bg-gray-100 flex-1"}>
             <div
@@ -45,9 +37,6 @@ function MyPage() {
                             <span>님</span>
                         </div>
                         <div className={twMerge(["flex", "gap-4"])}>
-                            <Button variant={"secondary"} size={"sm"} onClick={handleLogout}>
-                                로그아웃
-                            </Button>
                             <Button size={"sm"} onClick={() => navigate(`/mypage/edit`)}>
                                 계정관리
                             </Button>
@@ -110,7 +99,7 @@ function MyPage() {
                             활동 내역
                         </p>
                     <Link
-                        to={"/review"}
+                        to={"review"}
                         className={twMerge(
                             ["hover:bg-blue-50", "hover:rounded-xl"],
                             ["font-bold", "py-4", "px-2", "text-gray-800"],

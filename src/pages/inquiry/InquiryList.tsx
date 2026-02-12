@@ -1,7 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import BackButton from "../components/BackButton.tsx";
 import Button from "../components/Button.tsx";
-import { useAuthStore } from "../../store/useAuthStore.ts";
 import { Link, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import Pagination from "../components/Pagination.tsx";
@@ -9,7 +8,6 @@ import { fetchMyInquiries } from "../../api/inquiry.api.ts";
 import type { Inquiry, InquiryStatus, InquiryType } from "../../type/inquiry.ts";
 
 function InquiryList() {
-    const { isLoggedIn } = useAuthStore();
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -67,7 +65,7 @@ function InquiryList() {
     };
     if (loading) return <div>loading,,,</div>;
     return (
-        <div className={"bg-gray-50"}>
+        <div className={"bg-gray-100"}>
             <div
                 className={twMerge(
                     ["flex", "flex-col", "py-10", "gap-10"],
@@ -78,52 +76,63 @@ function InquiryList() {
                     <h2 className={twMerge(["text-2xl", "font-bold", "mb-8", "text-center"])}>
                         1:1 문의
                     </h2>
-                    {isLoggedIn && (
-                        <div className={"flex justify-end"}>
-                            <Button size={"sm"} onClick={() => navigate("write")}>
-                                글쓰기
-                            </Button>
-                        </div>
-                    )}
-                </div>
-                <div className={"bg-white rounded-2xl shadow p-8"}>
-                    <div
-                        className={twMerge(
-                            ["flex items-center justify-between"],
-                            [" pb-4 px-2 w-full"],
-                            ["border-b-2 border-gray-500"],
-                        )}>
-                        <div className={"flex gap-2 items-center"}>
-                            <div className={"text-sm font-bold text-gray-700 w-24"}>문의 유형</div>
-                            <h2 className={"text-sm font-bold text-gray-700"}>문의 제목</h2>
-                        </div>
-                        <div className={"text-sm font-bold text-gray-700"}>문의 상태</div>
+                    <div className={"flex justify-end"}>
+                        <Button size={"sm"} onClick={() => navigate("write")}>
+                            글쓰기
+                        </Button>
                     </div>
-                    {inquiries.map((inquiry, index) => (
-                        <Link
-                            to={`/inquiry/${inquiry.id}`}
-                            key={index}
-                            className={twMerge(
-                                ["flex items-center justify-between"],
-                                ["w-full p-4 px-2"],
-                                ["border-b border-gray-300"],
-                                ["hover:bg-blue-50"],
-                            )}>
-                            <div className={"flex items-center gap-2"}>
-                                <div className={"w-24"}>
-                                    <p
-                                        className={twMerge(
-                                            ["bg-blue-400 font-semibold text-white text-xs"],
-                                            ["rounded-sm px-2 py-1 inline"],
-                                        )}>{TypeLabel(inquiry.type)}</p>
-
-                                </div>
-                                <h2 className={"text-sm font-medium text-gray-700"}>{inquiry.title}</h2>
-                            </div>
-                            <div>{renderStatusBadge(inquiry.status)}</div>
-                        </Link>
-                    ))}
                 </div>
+                {inquiries.length > 0 ? (
+                    <>
+                        <div className={"bg-white rounded-2xl shadow p-8"}>
+                            <div
+                                className={twMerge(
+                                    ["flex items-center justify-between"],
+                                    [" pb-4 px-2 w-full"],
+                                    ["border-b-2 border-gray-500"],
+                                )}>
+                                <div className={"flex gap-2 items-center"}>
+                                    <div className={"text-sm font-bold text-gray-700 w-24"}>
+                                        문의 유형
+                                    </div>
+                                    <h2 className={"text-sm font-bold text-gray-700"}>문의 제목</h2>
+                                </div>
+                                <div className={"text-sm font-bold text-gray-700"}>문의 상태</div>
+                            </div>
+                            {inquiries.map((inquiry, index) => (
+                                <Link
+                                    to={`/inquiry/${inquiry.id}`}
+                                    key={index}
+                                    className={twMerge(
+                                        ["flex items-center justify-between"],
+                                        ["w-full p-4 px-2"],
+                                        ["border-b border-gray-300"],
+                                        ["hover:bg-blue-50"],
+                                    )}>
+                                    <div className={"flex items-center gap-2"}>
+                                        <div className={"w-24"}>
+                                            <p
+                                                className={twMerge(
+                                                    [
+                                                        "bg-blue-400 font-semibold text-white text-xs",
+                                                    ],
+                                                    ["rounded-sm px-2 py-1 inline"],
+                                                )}>
+                                                {TypeLabel(inquiry.type)}
+                                            </p>
+                                        </div>
+                                        <h2 className={"text-sm font-medium text-gray-700"}>
+                                            {inquiry.title}
+                                        </h2>
+                                    </div>
+                                    <div>{renderStatusBadge(inquiry.status)}</div>
+                                </Link>
+                            ))}
+                        </div>
+                    </>
+                ) : (
+                    <div>작성된 문의사항이 없습니다.</div>
+                )}
                 <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}

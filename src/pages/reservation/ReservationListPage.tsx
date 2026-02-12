@@ -19,14 +19,14 @@ function ReservationListPage() {
         const fetchOrderList = async () => {
             setLoading(true);
             try {
-                const params ={
-                    page:currentPage,
-                    limit:LIMIT
-                }
+                const params = {
+                    page: currentPage,
+                    limit: LIMIT,
+                };
                 const result = await fetchMyOrders(params);
                 setOrderList(result.data);
                 setTotalPages(result.pagination.totalPages);
-                setTotalCount(result.pagination.totalItems)
+                setTotalCount(result.pagination.totalItems);
             } catch (e) {
                 console.log(e);
             } finally {
@@ -36,15 +36,15 @@ function ReservationListPage() {
         fetchOrderList().then(() => {});
     }, [currentPage]);
 
-    const onPageChange = (page:number) =>{
+    const onPageChange = (page: number) => {
         setCurrentPage(page);
         window.scrollTo(0, 0);
-    }
+    };
 
     if (loading) return <div>Loading...</div>;
 
     return (
-        <div className={"bg-gray-100 py-10"}>
+        <div className={"bg-gray-100 flex-1 py-10"}>
             <div
                 className={twMerge(
                     ["flex", "flex-col", "gap-10"],
@@ -54,86 +54,119 @@ function ReservationListPage() {
                     다가오는 여행{" "}
                     <span className={"text-2xl font-bold text-blue-500"}>{totalCount}</span>건
                 </h2>
-                <div>
-                    <nav>
-                        <button>결제완료</button>
-                        <button>결제대기</button>
-                        <button>취소</button>
-                    </nav>
-                </div>
+                {/*<div>*/}
+                {/*    <nav>*/}
+                {/*        <button>결제완료</button>*/}
+                {/*        <button>결제대기</button>*/}
+                {/*        <button>취소</button>*/}
+                {/*    </nav>*/}
+                {/*</div>*/}
                 <div className={"grid grid-cols-2 gap-4"}>
-                    {orderList.flatMap(item =>
-                        item.items.map(orderItem => (
-                            <Link
-                                to={`${item.id}`}
-                                key={orderItem.id}
-                                className={twMerge(
-                                    ["flex", "flex-col", "gap-2", "rounded-xl"],
-                                    ["bg-white", "px-4", "py-8", "shadow-xs"],
-                                )}>
-                                <div className={"flex flex-col gap-4"}>
-                                    <div className={"w-full aspect-video relative rounded-xl"}>
-                                        <img
-                                            src={orderItem.roomType.image}
-                                            alt={orderItem.roomType.product.name}
-                                        />
-                                        <div
-                                            className={twMerge(
-                                                ["text-xs", "py-1", "px-2"],
-                                                ["rounded-lg", "absolute", "top-2", "right-2"],
-                                                item.status === "PENDING" && [
-                                                    "bg-[#FFF6E6]",
-                                                    "text-orange-500",
-                                                ],
-                                                item.status === "PAID" && [
-                                                    "bg-[#EDF7ED]",
-                                                    "text-green-500",
-                                                ],
-                                                item.status === "CANCELED" && [
-                                                    "bg-[#FEEDEB]",
-                                                    "text-red-500",
-                                                ],
-                                            )}>
-                                            {item.status}
-                                        </div>
-                                    </div>
+                    {orderList.length > 0 ? (
+                        <>
+                            {orderList.flatMap(item =>
+                                item.items.map(orderItem => (
+                                    <Link
+                                        to={`${item.id}`}
+                                        key={orderItem.id}
+                                        className={twMerge(
+                                            ["flex", "flex-col", "gap-2", "rounded-xl"],
+                                            ["bg-white", "px-4", "py-8", "shadow-xs"],
+                                        )}>
+                                        <div className={"flex flex-col gap-4"}>
+                                            <div
+                                                className={
+                                                    "w-full aspect-video relative rounded-xl"
+                                                }>
+                                                <img
+                                                    src={orderItem.roomType.image}
+                                                    alt={orderItem.roomType.product.name}
+                                                />
+                                                <div
+                                                    className={twMerge(
+                                                        ["text-xs", "py-1", "px-2"],
+                                                        [
+                                                            "rounded-lg",
+                                                            "absolute",
+                                                            "top-2",
+                                                            "right-2",
+                                                        ],
+                                                        item.status === "PENDING" && [
+                                                            "bg-[#FFF6E6]",
+                                                            "text-orange-500",
+                                                        ],
+                                                        item.status === "PAID" && [
+                                                            "bg-[#EDF7ED]",
+                                                            "text-green-500",
+                                                        ],
+                                                        item.status === "CANCELED" && [
+                                                            "bg-[#FEEDEB]",
+                                                            "text-red-500",
+                                                        ],
+                                                    )}>
+                                                    {item.status}
+                                                </div>
+                                            </div>
 
-                                    <div className={"space-y-1"}>
-                                        <div className={"text-lg font-bold"}>
-                                            {orderItem.roomType.product.name}
-                                            <p className={"text-xs font-light text-gray-600"}>
-                                                RESERVATION NO.{item.id}
-                                            </p>
-                                        </div>
-                                        <div
-                                            className={
-                                                "flex border-t border-b border-gray-200 py-2 my-2 mt-4"
-                                            }>
-                                            <div className={"w-1/2 border-r border-gray-200 mr-2"}>
-                                                <p className={"text-sm font-medium"}>일정</p>
-                                                <p className={"text-sm text-gray-600"}>
-                                                    {dayjs(item.checkInDate).format("YYYY.MM.DD")} ~{" "}
-                                                    {dayjs(item.checkOutDate).format("YYYY.MM.DD")}
-                                                </p>
+                                            <div className={"space-y-1"}>
+                                                <div className={"text-lg font-bold"}>
+                                                    {orderItem.roomType.product.name}
+                                                    <p
+                                                        className={
+                                                            "text-xs font-light text-gray-600"
+                                                        }>
+                                                        RESERVATION NO.{item.id}
+                                                    </p>
+                                                </div>
+                                                <div
+                                                    className={
+                                                        "flex border-t border-b border-gray-200 py-2 my-2 mt-4"
+                                                    }>
+                                                    <div
+                                                        className={
+                                                            "w-1/2 border-r border-gray-200 mr-2"
+                                                        }>
+                                                        <p className={"text-sm font-medium"}>
+                                                            일정
+                                                        </p>
+                                                        <p className={"text-sm text-gray-600"}>
+                                                            {dayjs(item.checkInDate).format(
+                                                                "YYYY.MM.DD",
+                                                            )}{" "}
+                                                            ~{" "}
+                                                            {dayjs(item.checkOutDate).format(
+                                                                "YYYY.MM.DD",
+                                                            )}
+                                                        </p>
+                                                    </div>
+                                                    <div className={"w-1/2"}>
+                                                        <p className={"text-sm font-medium"}>
+                                                            예약자
+                                                        </p>
+                                                        <p className={"text-sm text-gray-600"}>
+                                                            {item.recipientName}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className={"text-right font-bold"}>
+                                                    {item.totalPrice.toLocaleString()}원
+                                                </div>
                                             </div>
-                                            <div className={"w-1/2"}>
-                                                <p className={"text-sm font-medium"}>예약자</p>
-                                                <p className={"text-sm text-gray-600"}>
-                                                    {item.recipientName}
-                                                </p>
-                                            </div>
                                         </div>
-                                        <div className={"text-right font-bold"}>
-                                            {item.totalPrice.toLocaleString()}원
-                                        </div>
-                                    </div>
-                                </div>
-                            </Link>
-                        )),
+                                    </Link>
+                                )),
+                            )}
+                        </>
+                    ) : (
+                        <div>예약한 여행이 없습니다.</div>
                     )}
                 </div>
             </div>
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange}/>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={onPageChange}
+            />
         </div>
     );
 }

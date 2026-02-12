@@ -1,4 +1,3 @@
-import type { Review } from "./review.ts";
 import type { PaginationResponse } from "./common.ts";
 
 export interface RoomType {
@@ -23,8 +22,6 @@ export interface Product {
     images: string[];
 
     roomTypes: RoomType[];
-    reviews: Review[];
-
     ratingAvg: number;
     reviewCount: number;
 

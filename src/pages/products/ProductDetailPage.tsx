@@ -10,6 +10,10 @@ import Button from "../components/Button.tsx";
 import { useAuthStore } from "../../store/useAuthStore.ts";
 import { useOrderStore } from "../../store/useOrderStore.ts";
 import type { OrderItem } from "../../type/order.ts";
+import { fetchReview } from "../../api/review.api.ts";
+import type { Review } from "../../type/review.ts";
+import dayjs from "dayjs";
+import RenderStar from "../components/RenderStar.tsx";
 
 function ProductDetailPage() {
     const navigate = useNavigate();
@@ -17,6 +21,7 @@ function ProductDetailPage() {
     const { isLoggedIn } = useAuthStore();
     const { setOrderItems } = useOrderStore();
     const [product, setProduct] = useState<Product | null>(null);
+    const [review, setReview] = useState<Review[]>([]);
     const [loading, setLoading] = useState(true);
     const [isActive, setIsActive] = useState("");
 
@@ -40,6 +45,21 @@ function ProductDetailPage() {
         };
         getProduct().then(() => {});
     }, [id]);
+
+    useEffect(() => {
+        const getReviews = async () => {
+            setLoading(true);
+            try {
+                const response = await fetchReview(Number(id));
+                setReview(response.data);
+            } catch (e) {
+                console.log(e);
+            } finally {
+                setLoading(false);
+            }
+        };
+        getReviews().then(() => {});
+    }, []);
 
     const handleClick = (room: RoomType) => {
         if (!isLoggedIn) {
@@ -75,9 +95,6 @@ function ProductDetailPage() {
             adultNum: 0,
             childrenNum: 0,
             recipientPhone: "",
-            orderId: "",
-            orderName: "",
-            requestedAt: "",
         };
         setOrderItems([orderData]);
 
@@ -149,16 +166,58 @@ function ProductDetailPage() {
                         <div className={"flex items-center justify-between"}>
                             <div className={"flex items-center"}>
                                 <FaStar size={20} color={"gold"} />
-                                <p className={"font-bold"}>{product.ratingAvg}</p>
-                                <p>({product.reviewCount.toLocaleString()})</p>
+                                <p className={"font-bold text-lg"}>{product.ratingAvg}</p>
+                                <p className={"text-xs"}>
+                                    ({product.reviewCount.toLocaleString()})
+                                </p>
                             </div>
-                            <button
-                                className={"underline underline-offset-4"}
-                                onClick={() => navigate("/review")}>
-                                전체보기
-                            </button>
                         </div>
-                        <div className={"bg-gray-200 p-4"}>리뷰 보이는 영역</div>
+                        <div className={"bg-gray-100 rounded-2xl p-4"}>
+                            {review.length > 0 ? (
+                                <div className={"flex gap-2"}>
+                                    {review.map(review => {
+                                        const name = review.user.name
+                                        const maskedName = name.length===3
+                                        ? name[0] + "*" + name[2] :
+                                            name.length>3 ?
+                                                name[0] + "*".repeat(name.length -2) + name.slice(-1) :
+                                                name[0] + "*";
+                                        return (
+                                            <div
+                                                key={review.id}
+                                                className={
+                                                    "bg-white w-1/4 space-y-2 p-4 rounded-xl"
+                                                }>
+                                                <div
+                                                    className={
+                                                        "flex items-center justify-between gap-1"
+                                                    }>
+                                                    <div className={"flex"}>
+                                                        <RenderStar rating={review.rating} />
+                                                    </div>
+
+                                                    <p className={"text-gray-500 text-sm"}>
+                                                        {dayjs(review.createdAt).format(
+                                                            "YYYY.MM.DD",
+                                                        )}
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p className={"text-gray-700"}>
+                                                        {review.content}
+                                                    </p>
+                                                </div>
+                                                <p className={"text-xs text-right"}>
+                                                    {maskedName}님
+                                                </p>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <div>아직 리뷰가 없습니다.</div>
+                            )}
+                        </div>
                     </div>
                     {/*객실선택*/}
                     <nav
