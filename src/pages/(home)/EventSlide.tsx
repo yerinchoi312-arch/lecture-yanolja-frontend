@@ -26,7 +26,7 @@ interface SlideProps {
 
 function EventSlide({ slideId }:SlideProps) {
     return (
-        <div className={twMerge([ "w-full", "relative", "group"])}>
+        <div className={twMerge(["w-full", "relative", "group"])}>
             <Swiper
                 loop={true}
                 slidesPerView={2}
@@ -42,7 +42,7 @@ function EventSlide({ slideId }:SlideProps) {
                 {SLIDES.map(slide => (
                     <SwiperSlide key={slide.id}>
                         <div className={twMerge(["w-full", "h-full", "relative"])}>
-                            <Link to={`/event/detail`}>
+                            <Link to={`/event/${slide.id}`}>
                                 <img src={slide.image} alt={slide.image} />
                             </Link>
                         </div>
@@ -53,8 +53,8 @@ function EventSlide({ slideId }:SlideProps) {
                 className={twMerge(
                     [`prev-${slideId}`],
                     ["cursor-pointer"],
-                    ["bg-white", "rounded-xl", "shadow-lg","border","border-gray-200"],
-                    ["flex", "justify-center", "items-center", "w-10", "h-10",],
+                    ["bg-white", "rounded-xl", "shadow-lg", "border", "border-gray-200"],
+                    ["flex", "justify-center", "items-center", "w-10", "h-10"],
                     ["absolute", "-left-5", "top-1/2", "-translate-y-1/2", "z-5"],
                 )}>
                 <GrFormPrevious className={"w-8 h-8"} />
@@ -63,8 +63,8 @@ function EventSlide({ slideId }:SlideProps) {
                 className={twMerge(
                     [`next-${slideId}`],
                     ["cursor-pointer"],
-                    ["bg-white", "rounded-xl", "shadow-lg","border","border-gray-200"],
-                    ["flex", "justify-center", "items-center", "w-10", "h-10",],
+                    ["bg-white", "rounded-xl", "shadow-lg", "border", "border-gray-200"],
+                    ["flex", "justify-center", "items-center", "w-10", "h-10"],
                     ["absolute", "-right-5", "top-1/2", "-translate-y-1/2", "z-5"],
                 )}>
                 <GrFormNext className={"w-8 h-8"} />
