@@ -9,6 +9,7 @@ import Button from "../components/Button.tsx";
 import dayjs from "dayjs";
 import { useModalStore } from "../../store/useModalStore.ts";
 import { createReviewCheck } from "../../api/review.api.ts";
+import { statusLabel, statusTheme } from "./ReservationListPage.tsx";
 
 function ReservationDetailPage() {
     const { id } = useParams();
@@ -63,7 +64,15 @@ function ReservationDetailPage() {
     if (isLoading) return <div>loading...</div>;
     if (!user || !orderData) return null;
 
-    const totalNights = dayjs(orderData.checkOutDate).diff(dayjs(orderData.checkInDate), "day");
+    const today = dayjs();
+    const checkIn = dayjs(orderData.checkInDate);
+    const checkOut = dayjs(orderData.checkOutDate);
+    const totalNights = checkOut.diff(checkIn, "day");
+
+    const isBeforeCheckIn = today.isBefore(checkIn, "day");
+    const isStaying =
+        (today.isSame(checkIn, "day") || today.isAfter(checkIn)) && today.isBefore(checkOut, "day");
+    const isAfterCheckOut = today.isAfter(checkOut, "day") || today.isSame(checkOut, "day");
 
     return (
         <div className={"bg-gray-100 flex-1 py-10"}>
@@ -81,48 +90,46 @@ function ReservationDetailPage() {
                                     <div className={"flex items-center gap-2"}>
                                         <div
                                             className={twMerge(
-                                                ["text-xs", "py-1", "px-2", "rounded-lg"],
-                                                orderData.status === "PENDING" && [
-                                                    "bg-[#FFA500]/10",
-                                                    "text-orange-500",
+                                                [
+                                                    "text-xs",
+                                                    "font-bold",
+                                                    "py-1",
+                                                    "px-2",
+                                                    "rounded-md",
+                                                    "flex",
                                                 ],
-                                                orderData.status === "PAID" && [
-                                                    "bg-[#4CAF50]/10",
-                                                    "text-green-500",
-                                                ],
-                                                orderData.status === "CANCELED" && [
-                                                    "bg-[#F44336]/10",
-                                                    "text-red-500",
-                                                ],
+                                                statusTheme(orderData.status),
                                             )}>
-                                            {orderData.status}
+                                            {statusLabel(orderData.status)}
                                         </div>
-                                        <div className="flex justify-end gap-2">
+                                        <div className="flex justify-end items-center gap-2">
                                             {orderData.status !== "CANCELED" ? (
                                                 <>
-                                                    {/* 체크인 전: 주문 취소 가능 */}
-                                                    {new Date(orderData.checkInDate) >
-                                                        new Date() && (
+                                                    {isBeforeCheckIn && (
                                                         <button
                                                             onClick={handleCancel}
-                                                            className="border border-gray-400 px-2 py-1 rounded-md font-bold text-sm text-gray-600 cursor-pointer">
+                                                            className={twMerge(
+                                                                "border border-gray-400 px-2 py-1",
+                                                                " rounded-md cursor-pointer",
+                                                                "font-bold text-sm text-gray-600",
+                                                            )}>
                                                             주문취소
                                                         </button>
                                                     )}
 
-                                                    {/* 체크인 날짜 지남 & 체크아웃 전: 주문 확정 (숙박 중) */}
-                                                    {new Date(orderData.checkInDate) <=
-                                                        new Date() &&
-                                                        new Date(orderData.checkOutDate) >=
-                                                            new Date() && (
-                                                            <div className="bg-gray-400 px-2 py-1 rounded-md font-bold text-sm text-gray-50 cursor-default">
-                                                                주문 확정
-                                                            </div>
-                                                        )}
+                                                    {isStaying && (
+                                                        <div
+                                                            className={twMerge(
+                                                                "bg-gray-400 px-2 py-1",
+                                                                " rounded-md",
+                                                                " font-bold text-sm text-gray-50",
+                                                            )}>
+                                                            주문 확정
+                                                        </div>
+                                                    )}
 
                                                     {/* 체크아웃 날짜 지남: 리뷰 쓰기 */}
-                                                    {new Date(orderData.checkOutDate) <
-                                                        new Date() &&
+                                                    {isAfterCheckOut &&
                                                         orderData.status === "PAID" && (
                                                             <div>
                                                                 <button

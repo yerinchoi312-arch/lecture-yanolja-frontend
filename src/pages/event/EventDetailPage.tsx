@@ -8,11 +8,18 @@ import event3_img1 from "../../assets/images/event/event3_img1.png";
 import event3_img2 from "../../assets/images/event/event3_img2.png";
 import event4_img1 from "../../assets/images/event/event4_img1.png";
 import event4_img2 from "../../assets/images/event/event4_img2.png";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import TopButton from "../components/TopButton.tsx";
+import Button from "../components/Button.tsx";
 function EventDetailPage() {
     const { id } = useParams();
-
+    const navigate = useNavigate();
+    const onClick = () => {
+        navigate('/')
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 0);
+    }
     const EVENT = [
         { id: 1, title: "설 황금연휴 펜션 할인", image: [event1_img1, event1_img2] },
         { id: 2, title: "설 황금연휴 국내여행 혜택", image: [event2_img1, event2_img2] },
@@ -24,8 +31,8 @@ function EventDetailPage() {
     return (
         <div
             className={twMerge(
-                ["flex", "flex-col", "py-10"],
-                ["max-w-[1280px]", "mx-auto", "w-full"],
+                ["flex", "flex-col", "py-10", "space-y-10"],
+                ["max-w-[800px]", "mx-auto", "w-full"],
             )}>
             <div className={"relative"}>
                 <BackButton className={"absolute top-2 "} />
@@ -44,6 +51,7 @@ function EventDetailPage() {
                     ))}
                 </div>
             </div>
+            <Button onClick={onClick}>상품보러가기</Button>
             <TopButton />
         </div>
     );

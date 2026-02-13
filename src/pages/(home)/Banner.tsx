@@ -29,7 +29,8 @@ function Banner({ slideId }: BannerSlideProps) {
                     page:1,
                     limit: 100,};
                 const response = await fetchProducts(params);
-                setProducts(response.data);
+                const shuffled = [...response.data].sort(()=>Math.random() - 0.5);
+                setProducts(shuffled);
             } catch (e) {
                 console.log(e);
             } finally {
