@@ -5,9 +5,15 @@ import Button from "../components/Button.tsx";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "../../store/useAuthStore.ts";
-import type { UserInfoResponse, UserResponse } from "../../type/user.ts";
-import { httpClient } from "../../api/axios.ts";
+import type { UserResponse } from "../../type/user.ts";
 import type { AxiosError } from "axios";
+import { updatePassword, updateUserInfo } from "../../api/user.api.ts";
+
+interface AccountEditForm extends UserResponse{
+    currentPassword?: string;
+    newPassword?: string;
+    newPasswordConfirm?: string;
+}
 
 function AccountEdit() {
     const navigate = useNavigate();
@@ -15,8 +21,9 @@ function AccountEdit() {
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors, isSubmitting },
-    } = useForm<UserResponse>({
+    } = useForm<AccountEditForm>({
         defaultValues: {
             username:user?.username || "",
             name: user?.name || "",
@@ -27,26 +34,29 @@ function AccountEdit() {
         },
     });
 
+    const newPassword = watch("newPassword")
 
     if(!user) return null;
-    const onSubmit = async (data:UserResponse) => {
+    const onSubmit = async (data:AccountEditForm) => {
 
         try{
             const updatedData={
-                username:data.username,
                 name:data.name,
-                email:data.email,
                 phone:data.phone,
                 birthdate:data.birthdate,
-                gender:data.gender,
-
             };
-            const response = await httpClient.put<UserInfoResponse>("/users/me",updatedData);
-            if(user){
-                updateUser({
-                    ...user,
-                    ...response.data.data
+
+            const response = await updateUserInfo(updatedData);
+
+            if( newPassword && newPassword.length > 0) {
+                await updatePassword({
+                    currentPassword:data.currentPassword || "",
+                    newPassword:data.newPassword || "",
+                    newPasswordConfirm:data.newPasswordConfirm || "",
                 })
+            }
+            if (response && response.data) {
+                updateUser({ ...user, ...response.data });
             }
             alert("프로필이 수정되었습니다.")
             navigate("/");
@@ -67,6 +77,7 @@ function AccountEdit() {
             <form onSubmit={handleSubmit(onSubmit)} className={"space-y-3"}>
                 <Input
                     label={"아이디"}
+                    readOnly
                     placeholder={"아이디를 입력해주세요."}
                     registration={register("username", {
                         required: "아이디는 필수값입니다.",
@@ -78,31 +89,39 @@ function AccountEdit() {
                     error={errors.username}
                 />
                 <Input
-                    label={"비밀번호"}
-                    placeholder={"비밀번호를 입력해주세요. (8자 이상)"}
+                    label={"현재 비밀번호"}
+                    placeholder={"현재 비밀번호를 입력해주세요."}
                     type={"password"}
-                    registration={register("password", {
-                        required: "비밀번호는 필수값입니다.",
-                        minLength: {
-                            value: 8,
-                            message: "비밀번호는 최소 8자입니다.",
-                        },
+                    registration={register("currentPassword", {
+                        required: newPassword ? "현재 비밀번호를 입력해야 변경 가능합니다." : false,
                     })}
-                    error={errors.password}
+                    error={errors.currentPassword}
+                />
+                <Input
+                    label={"새 비밀번호"}
+                    placeholder={"8자 이상 (변경시에만 입력하세요.)"}
+                    type={"password"}
+                    registration={register("newPassword", {
+                        minLength:{
+                            value:8,
+                            message:"비밀번호는 최소 8자 이상입니다."
+                        }
+                    })}
+                    error={errors.newPassword}
                 />
                 <Input
                     label={"비밀번호 확인"}
                     placeholder={"비밀번호를 다시 입력해주세요."}
                     type={"password"}
-                    registration={register("password_confirm", {
-                        required: "비밀번호 확인을 입력해주세요.",
+                    registration={register("newPasswordConfirm", {
                         validate: value =>
-                            value === watch("password") || "비밀번호가 일치하지 않습니다.",
+                           !newPassword || value === newPassword || "새 비밀번호가 일치하지 않습니다.",
                     })}
-                    error={errors.password_confirm}
+                    error={errors.newPasswordConfirm}
                 />
                 <Input
                     label={"이메일"}
+                    readOnly
                     placeholder={"이메일을 입력해주세요."}
                     registration={register("email", {
                         required: "이메일은 필수값입니다.",

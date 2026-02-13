@@ -9,7 +9,6 @@ import EventDetailPage from "../pages/event/EventDetailPage.tsx";
 import { useAuthStore } from "../store/useAuthStore.ts";
 import AccountEdit from "../pages/mypage/AccountEdit.tsx";
 import AdminLayout from "../layouts/AdminLayout.tsx";
-import PromotionListPage from "../pages/promotion/PromotionListPage.tsx";
 import AdminDashboard from "../pages/(admin)/AdminDashboard.tsx";
 import AdminCategoryList from "../pages/(admin)/categories/AdminCategoryList.tsx";
 import AdminCategoryCreate from "../pages/(admin)/categories/AdminCategoryCreate.tsx";
@@ -28,7 +27,6 @@ import EventListPage from "../pages/event/EventListPage.tsx";
 import ProductDetailPage from "../pages/products/ProductDetailPage.tsx";
 import SearchPage from "../pages/search/SearchPage.tsx";
 import OrderDetail from "../pages/order/OrderDetail.tsx";
-import ReviewList from "../pages/review/ReviewList.tsx";
 import OrderSuccess from "../pages/order/OrderSuccess.tsx";
 import OrderFail from "../pages/order/OrderFail.tsx";
 import ReservationDetailPage from "../pages/reservation/ReservationDetailPage.tsx";
@@ -112,11 +110,9 @@ export const router = createBrowserRouter([
             {
                 path: "review",
                 children: [
-                    { index: true, element: <ReviewList /> },
                     { path: ":id", element: <ReviewDetail /> },
                 ],
             },
-            { path: "promotion", element: <PromotionListPage /> },
             {
                 path: "reservation",
                 children: [

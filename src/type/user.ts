@@ -42,3 +42,18 @@ export interface LoginResponse {
         user: UserResponse;
     };
 }
+
+export interface userData{
+    birthdate: string;
+    name: string;
+    phone: string;
+}
+export interface passwordResponse {
+    message: string;
+}
+export interface passwordData{
+    currentPassword : string;
+    newPassword : string;
+    newPasswordConfirm: string;
+}
+
