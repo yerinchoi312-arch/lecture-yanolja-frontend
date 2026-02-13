@@ -7,7 +7,6 @@ import { FaAngleRight } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "../store/useAuthStore.ts";
 import Banner from "./(home)/Banner.tsx";
-import Promotion from "./(home)/PromotionBox.tsx";
 import { useEffect, useState } from "react";
 import type { CategoryData } from "../type/category.ts";
 import { getCategories } from "../api/category.api.ts";
@@ -16,11 +15,20 @@ function Home() {
     const navigate = useNavigate();
     const { isLoggedIn } = useAuthStore();
     const [categories, setCategories] = useState<CategoryData[]>([]);
+
     useEffect(() => {
         getCategories().then(response => setCategories(response.data));
     }, []);
 
-
+    const SEOUL_ARRAY = categories.flatMap(category =>
+        category.subCategories.filter(sub => sub.name === "서울").map(sub => sub.id),
+    );
+    const BUSAN_ARRAY = categories.flatMap(category =>
+        category.subCategories.filter(sub => sub.name === "부산").map(sub => sub.id),
+    );
+    const JEJU_ARRAY = categories.flatMap(category =>
+        category.subCategories.filter(sub => sub.name === "제주").map(sub => sub.id),
+    );
     return (
         <div
             className={twMerge(
@@ -75,19 +83,29 @@ function Home() {
                     slidesPerView={4}
                     slidesPerGroup={4}
                     categoryId={0}
-                    subCategoryId={
-                        categories
-                            .flatMap(category => category.subCategories)
-                            .find(sub => sub.name === "서울")?.id
-                    }
-                    slideId={"subSlide2"}
+                    subCategoryId={SEOUL_ARRAY}
+                    slideId={"seoul_slide"}
                 />
             </div>
             <div>
-                <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>기획전 모음</h2>
-                <Promotion />
+                <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>
+                    지금 떠나는 부산 여행!
+                </h2>
+                <Slide slidesPerView={4} slidesPerGroup={4} slideId={"busan_slide"} categoryId={0} subCategoryId={BUSAN_ARRAY} />
             </div>
-            <TopButton/>
+            <div>
+                <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>
+                    지금 떠나는 제주도 여행!
+                </h2>
+                <Slide
+                    slidesPerView={4}
+                    slidesPerGroup={4}
+                    categoryId={0}
+                    subCategoryId={JEJU_ARRAY}
+                    slideId={"jeju_slide"}
+                />
+            </div>
+            <TopButton />
         </div>
     );
 }

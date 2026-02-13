@@ -37,7 +37,7 @@ export interface CreateReviewResponse {
     rating: number;
     images: string[];
 }
-export interface CreateReviewCheck{
+export interface ReviewCheckResponse{
     hasReview: boolean;
     reviewId: number | null;
 }

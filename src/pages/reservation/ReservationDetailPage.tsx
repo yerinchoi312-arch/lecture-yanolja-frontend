@@ -9,7 +9,6 @@ import Button from "../components/Button.tsx";
 import dayjs from "dayjs";
 import { useModalStore } from "../../store/useModalStore.ts";
 import { createReviewCheck } from "../../api/review.api.ts";
-import type { CreateReviewCheck } from "../../type/review.ts";
 
 function ReservationDetailPage() {
     const { id } = useParams();
@@ -17,17 +16,10 @@ function ReservationDetailPage() {
     const { user } = useAuthStore();
     const { openModal } = useModalStore();
 
-    const [hasReview, setHasReview] = useState<CreateReviewCheck | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
     const [orderData, setOrderData] = useState<OrderItem | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const checkReview = async (roomTypeId:number) =>{
-        try{
-            const result = await createReviewCheck(roomTypeId);
-            setHasReview(result);
-        } catch (e) {
-            console.error(e);}
-    }
+
     useEffect(() => {
         const fetchOrders = async () => {
             if (!id) return;
@@ -43,7 +35,6 @@ function ReservationDetailPage() {
         };
         fetchOrders().then(() => {});
     }, [id]);
-
 
     const handleCancel = async () => {
         if (!id || !orderData) return;
@@ -134,50 +125,59 @@ function ReservationDetailPage() {
                                                         new Date() &&
                                                         orderData.status === "PAID" && (
                                                             <div>
-                                                                {hasReview. ? (
-                                                                    <button
-                                                                        onClick={() =>
-                                                                            openModal(
-                                                                                "REVIEW_FORM",
-                                                                                {
-                                                                                    roomTypeId:
+                                                                <button
+                                                                    onClick={async () => {
+                                                                        try {
+                                                                            const response =
+                                                                                await createReviewCheck(
+                                                                                    Number(
                                                                                         item
                                                                                             .roomType
                                                                                             .id,
-                                                                                    productName:
-                                                                                        item
-                                                                                            .roomType
-                                                                                            .product
-                                                                                            .name,
-                                                                                    productImage:
-                                                                                        item
-                                                                                            .roomType
-                                                                                            .image,
-                                                                                    roomName:
-                                                                                        item
-                                                                                            .roomType
-                                                                                            .name,
-                                                                                },
-                                                                            )
+                                                                                    ),
+                                                                                );
+                                                                            if (
+                                                                                response.hasReview
+                                                                            ) {
+                                                                                alert(
+                                                                                    "리뷰가 이미 등록되었습니다.",
+                                                                                );
+                                                                            } else {
+                                                                                openModal(
+                                                                                    "REVIEW_FORM",
+                                                                                    {
+                                                                                        roomTypeId:
+                                                                                            item
+                                                                                                .roomType
+                                                                                                .id,
+                                                                                        productName:
+                                                                                            item
+                                                                                                .roomType
+                                                                                                .product
+                                                                                                .name,
+                                                                                        productImage:
+                                                                                            item
+                                                                                                .roomType
+                                                                                                .image,
+                                                                                        roomName:
+                                                                                            item
+                                                                                                .roomType
+                                                                                                .name,
+                                                                                    },
+                                                                                );
+                                                                            }
+                                                                        } catch (e) {
+                                                                            console.error(e);
                                                                         }
-                                                                        className={twMerge(
-                                                                            "border border-blue-500",
-                                                                            " text-blue-600 font-bold text-sm ",
-                                                                            " px-2 py-1 rounded-md cursor-pointer",
-                                                                            " hover:bg-blue-50",
-                                                                        )}>
-                                                                        리뷰쓰기
-                                                                    </button>
-                                                                ) : (
-                                                                    <button
-                                                                        onClick={()=>navigate("/mypage/review")}
-                                                                        className={twMerge(
-                                                                            "border border-blue-500",
-                                                                            " text-blue-600 font-bold text-sm ",
-                                                                            " px-2 py-1 rounded-md cursor-pointer",
-                                                                            " hover:bg-blue-50",
-                                                                        )}>리뷰보기</button>
-                                                                )}
+                                                                    }}
+                                                                    className={twMerge(
+                                                                        "border border-blue-500",
+                                                                        " text-blue-600 font-bold text-sm ",
+                                                                        " px-2 py-1 rounded-md cursor-pointer",
+                                                                        " hover:bg-blue-50",
+                                                                    )}>
+                                                                    리뷰쓰기
+                                                                </button>
                                                             </div>
                                                         )}
                                                 </>

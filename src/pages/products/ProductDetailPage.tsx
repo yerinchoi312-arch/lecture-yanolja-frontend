@@ -21,7 +21,7 @@ function ProductDetailPage() {
     const { isLoggedIn } = useAuthStore();
     const { setOrderItems } = useOrderStore();
     const [product, setProduct] = useState<Product | null>(null);
-    const [review, setReview] = useState<Review[]>([]);
+    const [reviews, setReviews] = useState<Review[]>([]);
     const [loading, setLoading] = useState(true);
     const [isActive, setIsActive] = useState("");
 
@@ -50,8 +50,9 @@ function ProductDetailPage() {
         const getReviews = async () => {
             setLoading(true);
             try {
-                const response = await fetchReview(Number(id));
-                setReview(response.data);
+                const params={page:1,limit:4}
+                const response = await fetchReview(Number(id),params);
+                setReviews(response.data);
             } catch (e) {
                 console.log(e);
             } finally {
@@ -59,7 +60,7 @@ function ProductDetailPage() {
             }
         };
         getReviews().then(() => {});
-    }, []);
+    }, [id]);
 
     const handleClick = (room: RoomType) => {
         if (!isLoggedIn) {
@@ -163,28 +164,33 @@ function ProductDetailPage() {
                     </div>
                     {/*리뷰*/}
                     <div className={"border border-gray-200 rounded-2xl shadow-md p-8 space-y-6"}>
-                        <div className={"flex items-center justify-between"}>
-                            <div className={"flex items-center"}>
-                                <FaStar size={20} color={"gold"} />
-                                <p className={"font-bold text-lg"}>{product.ratingAvg}</p>
-                                <p className={"text-xs"}>
-                                    ({product.reviewCount.toLocaleString()})
-                                </p>
-                            </div>
-                        </div>
-                        <div className={"bg-gray-100 rounded-2xl p-4"}>
-                            {review.length > 0 ? (
-                                <div className={"flex gap-2"}>
-                                    {review.map(review => {
-                                        const name = review.user.name
-                                        const maskedName = name.length===3
-                                        ? name[0] + "*" + name[2] :
-                                            name.length>3 ?
-                                                name[0] + "*".repeat(name.length -2) + name.slice(-1) :
-                                                name[0] + "*";
-                                        return (
+                        {reviews.map(review => {
+                            const name = review.user.name;
+                            const maskedName =
+                                name.length === 3
+                                    ? name[0] + "*" + name[2]
+                                    : name.length > 3
+                                      ? name[0] + "*".repeat(name.length - 2) + name.slice(-1)
+                                      : name[0] + "*";
+                            return (
+                                <div key={review.id}>
+                                    <div className={"flex items-center justify-between mb-2"}>
+                                        <div className={"flex items-center"}>
+                                            <FaStar size={20} color={"gold"} />
+                                            <p className={"font-bold text-lg"}>
+                                                {product.ratingAvg}
+                                            </p>
+                                            <p className={"text-xs"}>
+                                                ({product.reviewCount.toLocaleString()})
+                                            </p>
+                                        </div>
+                                        <button onClick={() => navigate(`/review/${product.id}`)}>
+                                            전체보기
+                                        </button>
+                                    </div>
+                                    <div className={"bg-gray-100 rounded-2xl p-4"}>
+                                        <div className={"flex gap-2"}>
                                             <div
-                                                key={review.id}
                                                 className={
                                                     "bg-white w-1/4 space-y-2 p-4 rounded-xl"
                                                 }>
@@ -203,21 +209,33 @@ function ProductDetailPage() {
                                                     </p>
                                                 </div>
                                                 <div>
-                                                    <p className={"text-gray-700"}>
+                                                    <p className={"text-gray-700 mb-2"}>
                                                         {review.content}
                                                     </p>
+                                                    <div
+                                                        className={
+                                                            "h-20 overflow-hidden aspect-video"
+                                                        }>
+                                                        {review.images.length > 0 && (
+                                                            <img
+                                                                src={review.images?.[0]?.url}
+                                                                alt={review.product.name}
+                                                                className={"object-cover"}
+                                                            />
+                                                        )}
+                                                    </div>
                                                 </div>
                                                 <p className={"text-xs text-right"}>
                                                     {maskedName}님
                                                 </p>
                                             </div>
-                                        );
-                                    })}
+                                        </div>
+                                    </div>
                                 </div>
-                            ) : (
-                                <div>아직 리뷰가 없습니다.</div>
-                            )}
-                        </div>
+                            );
+                        })}
+                        {reviews.length===0 &&<div>아직 리뷰가 없습니다.</div>}
+
                     </div>
                     {/*객실선택*/}
                     <nav

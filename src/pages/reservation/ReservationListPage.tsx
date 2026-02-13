@@ -6,6 +6,7 @@ import { Link } from "react-router";
 import dayjs from "dayjs";
 import "dayjs/locale/ko";
 import Pagination from "../components/Pagination.tsx";
+import TopButton from "../components/TopButton.tsx";
 dayjs.locale("ko");
 function ReservationListPage() {
     const [orderList, setOrderList] = useState<OrderItem[]>([]);
@@ -167,6 +168,7 @@ function ReservationListPage() {
                 totalPages={totalPages}
                 onPageChange={onPageChange}
             />
+            <TopButton/>
         </div>
     );
 }

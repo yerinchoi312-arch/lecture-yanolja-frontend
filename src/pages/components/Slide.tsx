@@ -8,13 +8,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from "react-router";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { useEffect, useState } from "react";
-import type { ProductListParams, ProductSummary } from "../../type/product.ts";
+import type {  ProductSummary } from "../../type/product.ts";
 import { fetchProducts } from "../../api/product.api.ts";
 
 interface SlideProps {
     slideId: string;
     categoryId?: number;
-    subCategoryId?: number;
+    subCategoryId?: number | number[];
     slidesPerView: number;
     slidesPerGroup:number;
 }
@@ -22,24 +22,18 @@ function Slide({ slideId, categoryId = 0, subCategoryId=0, slidesPerView ,slides
     const [products, setProducts] = useState<ProductSummary[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const randomArray = (array: any[]) => {
-        return [...array].sort(() => Math.random() - 0.5);
-    };
     useEffect(() => {
         const fetchProduct = async () => {
             setLoading(true);
             try {
-                const params: ProductListParams = {
-                    page: 1,
-                    limit: 40,
-                    ...(categoryId && { categoryId: Number(categoryId) }),
-                    ...(subCategoryId && { subCategoryId: Number(subCategoryId) }),
-                };
+                const ids = Array.isArray(subCategoryId) ? subCategoryId :subCategoryId ? [subCategoryId]:[]
 
-                const response = await fetchProducts(params);
-                const shuffled = randomArray(response.data);
+                const responses = ids.length > 1?
+                    await Promise.all(ids.map((id) => fetchProducts({page:1,limit:100,subCategoryId:id})))
+                : [await fetchProducts({ page: 1, limit: 100, categoryId, subCategoryId: ids[0] })];
+                const allData = responses.flatMap(response => response.data)
 
-                setProducts(shuffled);
+                setProducts(allData.sort(()=>Math.random()-0.5));
                 //setPagination(response.pagination);
             } catch (e) {
                 console.log(e);

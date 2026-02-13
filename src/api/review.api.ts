@@ -1,8 +1,8 @@
 import {httpClient} from "./axios.ts";
 import type {
-    CreateReviewCheck,
     CreateReviewResponse,
     Review,
+    ReviewCheckResponse,
     ReviewResponse,
     UpdateReviewResponse,
 } from "../type/review.ts";
@@ -16,8 +16,8 @@ export const fetchReviews = async () => {
     const response = await httpClient.get<ReviewResponse>('/reviews');
     return response.data;
 }
-export const fetchReview = async (productId:number) => {
-    const response = await httpClient.get<ReviewResponse>(`/reviews?productId=${productId}`);
+export const fetchReview = async (productId:number,params:{page:number,limit:number}) => {
+    const response = await httpClient.get<ReviewResponse>(`/reviews?productId=${productId}`,{params});
     return response.data;
 }
 
@@ -37,6 +37,8 @@ export const deleteReview = async (ReviewId:string) => {
 }
 
 export const createReviewCheck = async (roomTypeId : number)=> {
-    const response = await httpClient.get<CreateReviewCheck>(`/reviews/check?${roomTypeId}`);
+    const response = await httpClient.get<ReviewCheckResponse>(`/reviews/check`, {
+        params: { roomTypeId }
+    });
     return response.data;
 }
