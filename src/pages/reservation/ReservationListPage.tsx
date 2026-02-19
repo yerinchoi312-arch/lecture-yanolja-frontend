@@ -10,26 +10,6 @@ import TopButton from "../components/TopButton.tsx";
 
 dayjs.locale("ko");
 
-export const statusTheme = (status: string) => {
-    switch (status) {
-        case "PAID":
-            return "bg-[#4CAF50]/10 text-green-500";
-        case "PENDING":
-            return "bg-[#FFA500]/10 text-orange-500";
-        case "CANCELED":
-            return "bg-[#F44336]/10 text-red-500";
-    }
-};
-
-export const statusLabel = (status: string) => {
-    const labels: Record<string, string> = {
-        PAID: "결제 완료",
-        PENDING: "결제 대기",
-        CANCELED: "취소됨",
-    };
-    return labels[status] || status;
-};
-
 function ReservationListPage() {
     const [orderList, setOrderList] = useState<OrderItem[]>([]);
     const [loading, setLoading] = useState(false);
@@ -39,22 +19,41 @@ function ReservationListPage() {
     const [filterStatus, setFilterStatus] = useState<string>("All");
 
     const LIMIT = 10;
+    const statusTheme = (status: string) => {
+        switch (status) {
+            case "PAID":
+                return "bg-[#EDF7ED] text-green-500";
+            case "PENDING":
+                return "bg-[#FFF6E6] text-orange-500";
+            case "CANCELED":
+                return "bg-[#FEEDEB] text-red-500";
+        }
+    };
+
+    const statusLabel = (status: string) => {
+        const labels: Record<string, string> = {
+            PAID: "결제 완료",
+            PENDING: "결제 대기",
+            CANCELED: "취소됨",
+        };
+        return labels[status] || status;
+    };
 
     useEffect(() => {
         const fetchOrderList = async () => {
             setLoading(true);
             try {
                 const params = {
-                    page: 1,
-                    limit: filterStatus === "All"? LIMIT :100,
+                    page: filterStatus === "All" ? currentPage : 1,
+                    limit: filterStatus === "All" ? LIMIT : 1000,
                 };
                 const result = await fetchMyOrders(params);
                 setOrderList(result.data);
 
-                if(filterStatus==="All"){
+                if (filterStatus === "All") {
                     setTotalPages(result.pagination.totalPages);
-                }else {
-                    setTotalPages(1)
+                } else {
+                    setTotalPages(1);
                 }
 
                 setTotalCount(result.pagination.totalItems);
@@ -65,7 +64,7 @@ function ReservationListPage() {
             }
         };
         fetchOrderList().then(() => {});
-    }, [currentPage,filterStatus]);
+    }, [currentPage, filterStatus]);
 
     const onPageChange = (page: number) => {
         setCurrentPage(page);
@@ -76,6 +75,21 @@ function ReservationListPage() {
         return item.status === filterStatus;
     });
 
+    const displayCount = filterStatus === "All" ? totalCount : filteredList.length;
+
+    const displayTotalPages =
+        filterStatus === "All" ? totalPages : Math.ceil(filteredList.length / LIMIT);
+
+    const startIndex = (currentPage - 1) * LIMIT;
+
+    const pagedList =
+        filterStatus === "All" ? filteredList : filteredList.slice(startIndex, startIndex + LIMIT);
+
+    const handleFilterChange = (status:string)=>{
+        setFilterStatus(status);
+        setCurrentPage(1)
+    }
+
     if (loading) return <div>Loading...</div>;
 
     return (
@@ -85,30 +99,34 @@ function ReservationListPage() {
                     ["flex", "flex-col", "gap-10"],
                     ["max-w-[800px]", "mx-auto", "w-full"],
                 )}>
-                <h2 className={twMerge(["text-xl", "font-medium", "text-left"])}>
-                    총 예약<span className={"text-2xl font-bold text-blue-500 ml-2"}>{totalCount}</span>건
-                </h2>
-                <div>
-                    <nav className="flex gap-2 bg-white p-1 rounded-xl shadow-sm">
+                <div className={"flex justify-between items-center"}>
+                    <h2 className={twMerge(["text-xl", "font-medium", "text-left"])}>
+                        {filterStatus === "All" ? "총 예약" : `${statusLabel(filterStatus)}`}
+                        <span className={"text-2xl font-bold text-blue-500 ml-2"}>
+                            {displayCount}
+                        </span>
+                        건
+                    </h2>
+                    <nav className="flex gap-2 bg-white p-1 rounded-xl justify-start">
                         {["All", "PAID", "PENDING", "CANCELED"].map(status => (
                             <button
                                 key={status}
-                                onClick={() => setFilterStatus(status)}
+                                onClick={() => handleFilterChange(status)}
                                 className={twMerge(
                                     "px-4 py-1.5 rounded-lg text-sm font-bold transition-all cursor-pointer",
                                     filterStatus === status
                                         ? "bg-blue-500 text-white"
                                         : "text-gray-400 hover:bg-gray-50",
                                 )}>
-                                {status === "All" ? `전체 ${totalCount}` : statusLabel(status)}
+                                {status === "All" ? "전체" : statusLabel(status)}
                             </button>
                         ))}
                     </nav>
                 </div>
                 <div className={"grid grid-cols-2 gap-4"}>
-                    {filteredList.length > 0 ? (
+                    {pagedList.length > 0 ? (
                         <>
-                            {filteredList.flatMap(item =>
+                            {pagedList.flatMap(item =>
                                 item.items.map(orderItem => (
                                     <Link
                                         to={`${item.id}`}
@@ -135,20 +153,9 @@ function ReservationListPage() {
                                                             "top-2",
                                                             "right-2",
                                                         ],
-                                                        item.status === "PENDING" && [
-                                                            "bg-[#FFF6E6]",
-                                                            "text-orange-500",
-                                                        ],
-                                                        item.status === "PAID" && [
-                                                            "bg-[#EDF7ED]",
-                                                            "text-green-500",
-                                                        ],
-                                                        item.status === "CANCELED" && [
-                                                            "bg-[#FEEDEB]",
-                                                            "text-red-500",
-                                                        ],
+                                                        statusTheme(item.status),
                                                     )}>
-                                                    {item.status}
+                                                    {statusLabel(item.status)}
                                                 </div>
                                             </div>
 
@@ -212,7 +219,7 @@ function ReservationListPage() {
             </div>
             <Pagination
                 currentPage={currentPage}
-                totalPages={totalPages}
+                totalPages={displayTotalPages || 1}
                 onPageChange={onPageChange}
             />
             <TopButton />

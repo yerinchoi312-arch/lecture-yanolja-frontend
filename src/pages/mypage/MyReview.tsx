@@ -15,7 +15,7 @@ function MyReview() {
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const LIMIT = 10;
+    const LIMIT = 5;
 
     const loadReviews = async (page: number) => {
         setLoading(true);

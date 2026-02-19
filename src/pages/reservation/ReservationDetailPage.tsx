@@ -9,7 +9,6 @@ import Button from "../components/Button.tsx";
 import dayjs from "dayjs";
 import { useModalStore } from "../../store/useModalStore.ts";
 import { createReviewCheck } from "../../api/review.api.ts";
-import { statusLabel, statusTheme } from "./ReservationListPage.tsx";
 
 function ReservationDetailPage() {
     const { id } = useParams();
@@ -20,6 +19,25 @@ function ReservationDetailPage() {
     const [orderData, setOrderData] = useState<OrderItem | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
+    const statusTheme = (status: string) => {
+        switch (status) {
+            case "PAID":
+                return "bg-[#EDF7ED] text-green-500";
+            case "PENDING":
+                return "bg-[#FFF6E6] text-orange-500";
+            case "CANCELED":
+                return "bg-[#FEEDEB] text-red-500";
+        }
+    };
+
+    const statusLabel = (status: string) => {
+        const labels: Record<string, string> = {
+            PAID: "결제 완료",
+            PENDING: "결제 대기",
+            CANCELED: "취소됨",
+        };
+        return labels[status] || status;
+    };
 
     useEffect(() => {
         const fetchOrders = async () => {
