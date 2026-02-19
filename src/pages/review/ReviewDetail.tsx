@@ -8,9 +8,11 @@ import { useParams } from "react-router";
 import dayjs from "dayjs";
 import Pagination from "../components/Pagination.tsx";
 import Select from "../components/Select.tsx";
+import { useModalStore } from "../../store/useModalStore.ts";
 
 function ReviewDetail() {
     const { id } = useParams();
+    const {openModal} = useModalStore()
     const [reviews, setReviews] = useState<Review[]>([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -130,6 +132,12 @@ function ReviewDetail() {
                                                             "aspect-video h-20 overflow-hidden"
                                                         }>
                                                         <img
+                                                            onClick={() =>
+                                                                openModal("IMAGE_MODAL", {
+                                                                    imgUrl: image.url,
+                                                                    alt:review.product.name
+                                                                })
+                                                            }
                                                             src={image.url}
                                                             alt={review.product.name}
                                                             className={"object-cover h-full"}

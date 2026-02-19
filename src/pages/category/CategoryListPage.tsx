@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge";
-import { useEffect, useState } from "react";
+import { type ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import type { CategoryData } from "../../type/category.ts";
 import { getCategories } from "../../api/category.api.ts";
@@ -9,11 +9,13 @@ import type { ProductListParams, ProductSummary } from "../../type/product.ts";
 import { fetchProducts } from "../../api/product.api.ts";
 import TopButton from "../components/TopButton.tsx";
 import Button from "../components/Button.tsx";
+import Select from "../components/Select.tsx";
 
 function CategoryListPage() {
     const navigate = useNavigate();
     const { id, subId } = useParams(); //< category id
     const [category, setCategory] = useState<CategoryData | null>(null);
+    const [allCategories, setAllCategories] = useState<CategoryData[]>([]);
     const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState<ProductSummary[]>([]);
 
@@ -23,6 +25,8 @@ function CategoryListPage() {
             setLoading(true);
             try {
                 const response = await getCategories();
+                setAllCategories(response.data);
+
                 const data = response.data.find(item => item.id === Number(id));
                 if (data) {
                     setCategory(data);
@@ -35,6 +39,15 @@ function CategoryListPage() {
         };
         fetchCategory().then(() => {});
     }, [id]);
+
+    const handleCategoryChange = (e:ChangeEvent<HTMLSelectElement>) => {
+        const categoryId = Number(e.target.value);
+        const subCategoryId = allCategories.find(category => category.id === categoryId);
+        if(subCategoryId && subCategoryId.subCategories.length > 0) {
+            const subCateId = subCategoryId.subCategories[0].id;
+            navigate(`/categories/${categoryId}/${subCateId}`);
+        }
+    };
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -49,7 +62,7 @@ function CategoryListPage() {
                     subCategoryId: subId ? Number(subId) : undefined,
                 };
                 const response = await fetchProducts(params);
-                setProducts(response.data.sort(()=>Math.random() - 0.5));
+                setProducts(response.data.sort(() => Math.random() - 0.5));
             } catch (e) {
                 console.log(e);
             } finally {
@@ -64,10 +77,16 @@ function CategoryListPage() {
 
     return (
         <div className={twMerge(["space-y-30", "py-10"], ["max-w-[1280px]", "mx-auto"])}>
-            <div>
-                <h2 className={twMerge(["text-3xl", "font-bold", "mb-10", "text-center"])}>
-                    {category.name}
-                </h2>
+            <div className={"mx-auto text-center"}>
+                <Select
+                    value={category.id}
+                    className={twMerge(["text-3xl", "font-semibold", "mb-10","text-center"],["w-50","border-none"])}
+                    onChange={handleCategoryChange}
+                    options={allCategories.map(category => ({
+                        value: category.id,
+                        label: category.name,
+                    }))}
+                />
                 <div
                     className={twMerge(
                         ["flex", "flex-col", "justify-center", "items-center", "gap-10", "p-10"],
@@ -98,12 +117,12 @@ function CategoryListPage() {
                             <div className="text-center py-10">데이터 로딩 중...</div>
                         ) : products.length > 0 ? (
                             <div className="grid grid-cols-4 gap-3">
-                                {products.slice(0,4).map((product) => (
+                                {products.slice(0, 4).map(product => (
                                     <Link
                                         to={`/products/${product.id}`}
                                         key={product.id}
                                         className={twMerge(
-                                            ["flex", "flex-col"],
+                                            ["flex", "flex-col","text-left"],
                                             ["bg-white", "p-4", "border", "border-gray-200"],
                                         )}>
                                         <img
@@ -128,7 +147,10 @@ function CategoryListPage() {
                             </div>
                         )}
                     </div>
-                    <Button onClick={() => navigate("list")} variant={"secondary"} className={"px-20"}>
+                    <Button
+                        onClick={() => navigate("list")}
+                        variant={"secondary"}
+                        className={"px-20"}>
                         더보기
                     </Button>
                 </div>

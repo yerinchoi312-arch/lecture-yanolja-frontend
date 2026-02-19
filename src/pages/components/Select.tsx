@@ -34,7 +34,7 @@ function Select({ label, registration, error, options, className, ...props }: Se
                 {...registration}
                 {...props}>
                 {options.map((option, index) => (
-                    <option key={index} value={option.value}>
+                    <option className={" text-sm"} key={index} value={option.value}>
                         {option.label}
                     </option>
                 ))}

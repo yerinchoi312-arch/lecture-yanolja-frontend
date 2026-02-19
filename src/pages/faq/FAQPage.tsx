@@ -13,11 +13,10 @@ function FAQPage() {
                 <div className={"relative space-y-10"}>
                     <BackButton className={"absolute top-2 md:hidden"} />
                     <h2 className={twMerge(["text-2xl", "font-bold", "text-center"])}>FAQ</h2>
-                    <div>
+                    <div className={"bg-white rounded-2xl shadow-lg overflow-hidden p-4"}>
                         <div
                             className={twMerge(
-                                ["divide-y-1", "divide-gray-200"],
-                                ["border-2", "border-gray-100","bg-white"],
+                                ["divide-y-1", "divide-gray-200"]
                             )}>
                             <Accordion
                                 title={"숙소 이용내역 증빙자료(예약내역서)는 어떻게 받나요?"}
