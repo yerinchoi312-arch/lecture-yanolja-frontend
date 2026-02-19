@@ -38,33 +38,34 @@ function MyReview() {
         setCurrentPage(page);
         window.scrollTo(0, 0);
     };
-    const handleDelete = async (reviewId:string) => {
-        if(!window.confirm("리뷰를 삭제하시겠습니까?")) return;
+    const handleDelete = async (reviewId: string) => {
+        if (!window.confirm("리뷰를 삭제하시겠습니까?")) return;
 
-        try{
-            await deleteReview(reviewId)
-            alert("리뷰가 삭제되었습니다.")
+        try {
+            await deleteReview(reviewId);
+            alert("리뷰가 삭제되었습니다.");
             loadReviews(currentPage).then(() => {});
-        }catch(e){
+        } catch (e) {
             console.log(e);
         }
-    }
+    };
 
-    const handleEdit = (review:Review) =>{
-        openModal("REVIEW_FORM",{
-            mode:"EDIT",
-            reviewId:review.id,
-            initialRating:review.rating,
-            initialContent:review.content,
-            initialImage:review.images.map((image)=>image.url),
-            roomName:review.roomType.name,
-            productId:review.product.id,
-            productName:review.product.name,
-            onSuccess:() => {
-                loadReviews(currentPage).then(()=>{})
-            }
-        })
-    }
+    const handleEdit = (review: Review) => {
+        openModal("REVIEW_FORM", {
+            mode: "EDIT",
+            reviewId: review.id,
+            initialRating: review.rating,
+            initialContent: review.content,
+            initialImage: review.images.map(image => image.url),
+            roomName: review.roomType.name,
+            productId: review.product.id,
+            productName: review.product.name,
+            onSuccess: () => {
+                loadReviews(currentPage).then(() => {});
+            },
+        });
+    };
+
     if (loading) return <div>loading,,,</div>;
 
     return (
@@ -105,19 +106,36 @@ function MyReview() {
                                             {review.product.name}
                                         </Link>
                                         <div className={"text-gray-700"}>{review.content}</div>
+                                        <div className={"flex gap-2 py-2"}>
+                                            {review.images.map((reviewImage, index) => (
+                                                <div key={index}>
+                                                    <img
+                                                        onClick={() =>
+                                                            openModal("IMAGE_MODAL", {
+                                                                imgUrl: reviewImage.url,
+                                                                alt:review.product.name
+                                                            })
+                                                        }
+                                                        src={reviewImage.url}
+                                                        className={"h-20"}
+                                                        alt={review.product.name}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
                                         <div className={"flex justify-end gap-2"}>
                                             <button
-                                                onClick={() =>handleEdit(review)}
+                                                onClick={() => handleEdit(review)}
                                                 className={twMerge(
                                                     "border border-gray-300",
                                                     " text-sm text-gray-500 ",
                                                     "px-2 py-1  rounded-md ",
-                                                    "cursor-pointer "
+                                                    "cursor-pointer ",
                                                 )}>
                                                 리뷰 수정
                                             </button>
                                             <button
-                                                onClick={()=>handleDelete(String(review.id))}
+                                                onClick={() => handleDelete(String(review.id))}
                                                 className={twMerge(
                                                     "border border-transparent ",
                                                     " text-sm  ",

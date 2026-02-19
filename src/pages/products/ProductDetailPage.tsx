@@ -14,12 +14,14 @@ import { fetchReview } from "../../api/review.api.ts";
 import type { Review } from "../../type/review.ts";
 import dayjs from "dayjs";
 import RenderStar from "../components/RenderStar.tsx";
+import { useModalStore } from "../../store/useModalStore.ts";
 
 function ProductDetailPage() {
     const navigate = useNavigate();
     const { id } = useParams();
     const { isLoggedIn } = useAuthStore();
     const { setOrderItems } = useOrderStore();
+    const { openModal } = useModalStore();
     const [product, setProduct] = useState<Product | null>(null);
     const [reviews, setReviews] = useState<Review[]>([]);
     const [loading, setLoading] = useState(true);
@@ -50,8 +52,8 @@ function ProductDetailPage() {
         const getReviews = async () => {
             setLoading(true);
             try {
-                const params={page:1,limit:4}
-                const response = await fetchReview(Number(id),params);
+                const params = { page: 1, limit: 4 };
+                const response = await fetchReview(Number(id), params);
                 setReviews(response.data);
             } catch (e) {
                 console.log(e);
@@ -164,6 +166,20 @@ function ProductDetailPage() {
                     </div>
                     {/*리뷰*/}
                     <div className={"border border-gray-200 rounded-2xl shadow-md p-8 space-y-6"}>
+                        {reviews.length > 0 && (
+                            <div className={"flex items-center justify-between mb-2"}>
+                                <div className={"flex items-center"}>
+                                    <FaStar size={20} color={"gold"} />
+                                    <p className={"font-bold text-lg"}>{product.ratingAvg}</p>
+                                    <p className={"text-xs"}>
+                                        ({product.reviewCount.toLocaleString()})
+                                    </p>
+                                </div>
+                                <button onClick={() => navigate(`/review/${product.id}`)}>
+                                    전체보기
+                                </button>
+                            </div>
+                        )}
                         {reviews.map(review => {
                             const name = review.user.name;
                             const maskedName =
@@ -174,20 +190,6 @@ function ProductDetailPage() {
                                       : name[0] + "*";
                             return (
                                 <div key={review.id}>
-                                    <div className={"flex items-center justify-between mb-2"}>
-                                        <div className={"flex items-center"}>
-                                            <FaStar size={20} color={"gold"} />
-                                            <p className={"font-bold text-lg"}>
-                                                {product.ratingAvg}
-                                            </p>
-                                            <p className={"text-xs"}>
-                                                ({product.reviewCount.toLocaleString()})
-                                            </p>
-                                        </div>
-                                        <button onClick={() => navigate(`/review/${product.id}`)}>
-                                            전체보기
-                                        </button>
-                                    </div>
                                     <div className={"bg-gray-100 rounded-2xl p-4"}>
                                         <div className={"flex gap-2"}>
                                             <div
@@ -218,6 +220,10 @@ function ProductDetailPage() {
                                                         }>
                                                         {review.images.length > 0 && (
                                                             <img
+                                                                onClick={()=>openModal("IMAGE_MODAL",
+                                                                    { imgUrl:review.images?.[0]?.url,
+                                                                        alt:review.product.name
+                                                                    })}
                                                                 src={review.images?.[0]?.url}
                                                                 alt={review.product.name}
                                                                 className={"object-cover"}
@@ -234,8 +240,7 @@ function ProductDetailPage() {
                                 </div>
                             );
                         })}
-                        {reviews.length===0 &&<div>아직 리뷰가 없습니다.</div>}
-
+                        {reviews.length === 0 && <div>아직 리뷰가 없습니다.</div>}
                     </div>
                     {/*객실선택*/}
                     <nav
@@ -255,7 +260,9 @@ function ProductDetailPage() {
                             </button>
                         ))}
                     </nav>
-                    <div className={"space-y-4"} id={"room"}>
+                    <div
+                        className={"space-y-4 border-b border-gray-300 pb-10 scroll-mt-40"}
+                        id={"room"}>
                         <h2 className={"font-semibold text-lg"}>객실 선택</h2>
 
                         <div className={"space-y-4"}>
@@ -301,20 +308,24 @@ function ProductDetailPage() {
                             ))}
                         </div>
                     </div>
-                    <div className={"space-y-4"} id={"location"}>
+                    <div
+                        className={"space-y-4 border-b border-gray-300 pb-10 scroll-mt-40"}
+                        id={"location"}>
                         <h2 className={"font-semibold text-lg"}>위치/교통</h2>
                         <div className={"flex items-center gap-2"}>
                             <FiMapPin size={14} />
                             {product.address}
                         </div>
                     </div>
-                    <div className={"space-y-4"} id={"info"}>
+                    <div
+                        className={"space-y-4 border-b border-gray-300 pb-10 scroll-mt-40"}
+                        id={"info"}>
                         <h2 className={"font-semibold text-lg"}>숙소 소개</h2>
-                        <div>{product.description}</div>
+                        <div className={"whitespace-pre-wrap"}>{product.description}</div>
                     </div>
-                    <div className={"space-y-4"} id={"notice"}>
+                    <div className={"space-y-4 scroll-mt-40"} id={"notice"}>
                         <h2 className={"font-semibold text-lg"}>예약 공지</h2>
-                        <div>{product.notice}</div>
+                        <div className={"whitespace-pre-wrap"}>{product.notice}</div>
                     </div>
                 </div>
             </div>

@@ -41,3 +41,4 @@ export interface ReviewCheckResponse{
     hasReview: boolean;
     reviewId: number | null;
 }
+export type ReviewSort=  "latest" | "rating_desc" | "rating_asc"

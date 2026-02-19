@@ -4,6 +4,7 @@ import type {
     Review,
     ReviewCheckResponse,
     ReviewResponse,
+    ReviewSort,
     UpdateReviewResponse,
 } from "../type/review.ts";
 
@@ -16,7 +17,7 @@ export const fetchReviews = async () => {
     const response = await httpClient.get<ReviewResponse>('/reviews');
     return response.data;
 }
-export const fetchReview = async (productId:number,params:{page:number,limit:number}) => {
+export const fetchReview = async (productId:number,params:{page:number,limit:number,sort?:ReviewSort}) => {
     const response = await httpClient.get<ReviewResponse>(`/reviews?productId=${productId}`,{params});
     return response.data;
 }

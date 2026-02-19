@@ -131,7 +131,9 @@ function InquiryList() {
                         </div>
                     </>
                 ) : (
-                    <div>작성된 문의사항이 없습니다.</div>
+                    <div className={"bg-white rounded-2xl shadow p-8"}>
+                        <div>작성된 문의사항이 없습니다.</div>
+                    </div>
                 )}
                 <Pagination
                     currentPage={currentPage}

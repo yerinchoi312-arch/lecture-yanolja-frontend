@@ -40,6 +40,7 @@ import AdminOrderDetail from "../pages/(admin)/orders/AdminOrderDetailPage.tsx";
 import AdminReviewList from "../pages/(admin)/reviews/AdminReviewList.tsx";
 import AdminReviewDetail from "../pages/(admin)/reviews/AdminReviewDetail.tsx";
 import MyReview from "../pages/mypage/MyReview.tsx";
+import SubCategoryListPage from "../pages/category/SubCategoryListPage.tsx";
 
 export const guestOnlyLoader = () => {
     const isLoggedIn = useAuthStore.getState().isLoggedIn;
@@ -90,7 +91,12 @@ export const router = createBrowserRouter([
                 ],
             },
             { path: "faq", element: <FAQPage /> },
-            { path: "categories/:id/:subId", element: <CategoryListPage /> },
+            { path: "categories",
+                children:[
+                    {path:":id/:subId", element: <CategoryListPage />},
+                    {path:":id/:subId/list", element: <SubCategoryListPage />},
+                ]
+                 },
             { path: "products/:id", element: <ProductDetailPage /> },
             {
                 path: "event",

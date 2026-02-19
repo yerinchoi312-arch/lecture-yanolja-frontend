@@ -8,6 +8,7 @@ import Slide from "../components/Slide.tsx";
 import type { ProductListParams, ProductSummary } from "../../type/product.ts";
 import { fetchProducts } from "../../api/product.api.ts";
 import TopButton from "../components/TopButton.tsx";
+import Button from "../components/Button.tsx";
 
 function CategoryListPage() {
     const navigate = useNavigate();
@@ -16,22 +17,22 @@ function CategoryListPage() {
     const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState<ProductSummary[]>([]);
 
-
-    useEffect(() => {const fetchCategory = async () => {
-        if (!id) return;
-        setLoading(true);
-        try {
-            const response = await getCategories();
-            const data = response.data.find(item => item.id === Number(id));
-            if (data) {
-                setCategory(data);
+    useEffect(() => {
+        const fetchCategory = async () => {
+            if (!id) return;
+            setLoading(true);
+            try {
+                const response = await getCategories();
+                const data = response.data.find(item => item.id === Number(id));
+                if (data) {
+                    setCategory(data);
+                }
+            } catch (e) {
+                console.log("데이터 로딩 실패:", e);
+            } finally {
+                setLoading(false);
             }
-        } catch (e) {
-            console.log("데이터 로딩 실패:", e);
-        } finally {
-            setLoading(false);
-        }
-    };
+        };
         fetchCategory().then(() => {});
     }, [id]);
 
@@ -43,12 +44,12 @@ function CategoryListPage() {
             try {
                 const params: ProductListParams = {
                     page: 1,
-                    limit: 10,
+                    limit: 100,
                     categoryId: Number(parentId),
                     subCategoryId: subId ? Number(subId) : undefined,
                 };
                 const response = await fetchProducts(params);
-                setProducts(response.data);
+                setProducts(response.data.sort(()=>Math.random() - 0.5));
             } catch (e) {
                 console.log(e);
             } finally {
@@ -97,7 +98,7 @@ function CategoryListPage() {
                             <div className="text-center py-10">데이터 로딩 중...</div>
                         ) : products.length > 0 ? (
                             <div className="grid grid-cols-4 gap-3">
-                                {products.map(product => (
+                                {products.slice(0,4).map((product) => (
                                     <Link
                                         to={`/products/${product.id}`}
                                         key={product.id}
@@ -115,7 +116,7 @@ function CategoryListPage() {
                                             {product.address.split(" ").slice(0, 2).join(" ")}
                                         </p>
                                         <p className={"text-right w-full font-bold"}>
-                                            {(product.minPrice).toLocaleString()}원 ~
+                                            {product.minPrice.toLocaleString()}원 ~
                                         </p>
                                     </Link>
                                 ))}
@@ -127,6 +128,9 @@ function CategoryListPage() {
                             </div>
                         )}
                     </div>
+                    <Button onClick={() => navigate("list")} variant={"secondary"} className={"px-20"}>
+                        더보기
+                    </Button>
                 </div>
             </div>
             <EventSlide slideId={"subEvent"} />
@@ -148,14 +152,14 @@ function CategoryListPage() {
                 <Slide
                     categoryId={category.id}
                     subCategoryId={
-                        category.subCategories.find(subCate=>subCate.id === Number(subId))?.id
+                        category.subCategories.find(subCate => subCate.id === Number(subId))?.id
                     }
                     slideId={"subSlide2"}
                     slidesPerView={4}
                     slidesPerGroup={4}
                 />
             </div>
-            <TopButton/>
+            <TopButton />
         </div>
     );
 }
