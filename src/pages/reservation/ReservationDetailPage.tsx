@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { useAuthStore } from "../../store/useAuthStore.ts";
 import { useEffect, useState } from "react";
 import type { OrderItem } from "../../type/order.ts";
@@ -215,9 +215,9 @@ function ReservationDetailPage() {
                                     </div>
                                 </div>
                                 {/*숙소명*/}
-                                <h2 className={"text-xl font-bold"}>
+                                <Link to={`/products/${item.roomType.product.id}`} className={"text-xl font-bold block"}>
                                     {item.roomType.product.name}
-                                </h2>
+                                </Link>
                                 {/*숙소상세*/}
                                 <div className={"flex gap-4"}>
                                     <div className={"w-1/2"}>
@@ -228,7 +228,7 @@ function ReservationDetailPage() {
                                         />
                                     </div>
                                     <div>
-                                        <h2 className={"text-lg font-semibold"}>
+                                        <h2  className={"text-lg font-semibold block"}>
                                             {item.roomType.name}
                                         </h2>
                                         <p className={"text-base text-gray-600"}>

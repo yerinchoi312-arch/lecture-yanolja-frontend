@@ -50,6 +50,7 @@ export interface OrderItems {
         image: string;
         product: {
             name: string;
+            id:number
         };
     };
     quantity: number;

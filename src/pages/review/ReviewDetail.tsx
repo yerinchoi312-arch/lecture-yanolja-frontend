@@ -78,8 +78,8 @@ function ReviewDetail() {
                             onChange={handleSortChange}
                             options={[
                                 { value: "latest", label: "최신순" },
-                                { value: "rating_desc", label: "별점 내림차순" },
-                                { value: "rating_asc", label: "별점 올림차순" },
+                                { value: "rating_desc", label: "별점 높은순" },
+                                { value: "rating_asc", label: "별점 낮은순" },
                             ]}
                         />
                     </div>
@@ -94,8 +94,8 @@ function ReviewDetail() {
                                   ? name[0] + "*".repeat(name.length - 2) + name.slice(-1)
                                   : name[0] + "*";
                         return (
-                            <div key={index}>
-                                <div className={"bg-white p-8 rounded-2xl"}>
+                            <div key={index} >
+                                <div className={"bg-white p-8 rounded-2xl mb-4"}>
                                     <div
                                         className={twMerge(
                                             "flex flex-col",

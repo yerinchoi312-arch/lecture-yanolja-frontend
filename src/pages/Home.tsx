@@ -33,7 +33,7 @@ function Home() {
     return (
         <div
             className={twMerge(
-                ["flex", "flex-col", "gap-20", "py-10"],
+                ["flex", "flex-col", "gap-20", "pt-10", "pb-30"],
                 ["max-w-[1280px]", "mx-auto"],
             )}>
             {!isLoggedIn && (

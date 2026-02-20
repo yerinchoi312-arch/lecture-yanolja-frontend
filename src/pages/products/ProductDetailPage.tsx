@@ -180,21 +180,23 @@ function ProductDetailPage() {
                                 </button>
                             </div>
                         )}
-                        {reviews.map(review => {
-                            const name = review.user.name;
-                            const maskedName =
-                                name.length === 3
-                                    ? name[0] + "*" + name[2]
-                                    : name.length > 3
-                                      ? name[0] + "*".repeat(name.length - 2) + name.slice(-1)
-                                      : name[0] + "*";
-                            return (
-                                <div key={review.id}>
-                                    <div className={"bg-gray-100 rounded-2xl p-4"}>
-                                        <div className={"flex gap-2"}>
+                        {reviews.length > 0 ? (
+                            <div className={"bg-gray-100 rounded-2xl p-4 gap-2 flex"}>
+                                {reviews.slice(0, 4).map(review => {
+                                    const name = review.user.name;
+                                    const maskedName =
+                                        name.length === 3
+                                            ? name[0] + "*" + name[2]
+                                            : name.length > 3
+                                              ? name[0] +
+                                                "*".repeat(name.length - 2) +
+                                                name.slice(-1)
+                                              : name[0] + "*";
+                                    return (
+                                        <div className={"w-1/4 "} key={review.id}>
                                             <div
                                                 className={
-                                                    "bg-white w-1/4 space-y-2 p-4 rounded-xl"
+                                                    "bg-white w-full space-y-2 p-4 rounded-xl"
                                                 }>
                                                 <div
                                                     className={
@@ -220,10 +222,13 @@ function ProductDetailPage() {
                                                         }>
                                                         {review.images.length > 0 && (
                                                             <img
-                                                                onClick={()=>openModal("IMAGE_MODAL",
-                                                                    { imgUrl:review.images?.[0]?.url,
-                                                                        alt:review.product.name
-                                                                    })}
+                                                                onClick={() =>
+                                                                    openModal("IMAGE_MODAL", {
+                                                                        imgUrl: review.images?.[0]
+                                                                            ?.url,
+                                                                        alt: review.product.name,
+                                                                    })
+                                                                }
                                                                 src={review.images?.[0]?.url}
                                                                 alt={review.product.name}
                                                                 className={"object-cover"}
@@ -236,11 +241,12 @@ function ProductDetailPage() {
                                                 </p>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                        {reviews.length === 0 && <div>아직 리뷰가 없습니다.</div>}
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <div>아직 리뷰가 없습니다.</div>
+                        )}
                     </div>
                     {/*객실선택*/}
                     <nav
