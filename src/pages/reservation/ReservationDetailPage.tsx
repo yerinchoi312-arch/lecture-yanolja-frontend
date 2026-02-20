@@ -34,7 +34,7 @@ function ReservationDetailPage() {
         const labels: Record<string, string> = {
             PAID: "결제 완료",
             PENDING: "결제 대기",
-            CANCELED: "취소됨",
+            CANCELED: "예약 취소",
         };
         return labels[status] || status;
     };
@@ -305,7 +305,7 @@ function ReservationDetailPage() {
                                 <div className={"font-semibold text-lg"}>결제 금액</div>
                                 <div className={"flex justify-between"}>
                                     <p className={"text-gray-600 text-base"}>상품 금액</p>
-                                    <p>{item.price}</p>
+                                    <p>{(item.price).toLocaleString()}원</p>
                                 </div>
                                 <div
                                     className={
@@ -314,7 +314,7 @@ function ReservationDetailPage() {
                                     <p className={"text-gray-800 text-lg font-bold"}>
                                         총 결제 금액
                                     </p>
-                                    <p className={"font-bold text-xl"}>{orderData.totalPrice}</p>
+                                    <p className={"font-bold text-xl"}>{(orderData.totalPrice).toLocaleString()}원</p>
                                 </div>
                             </div>
                         </div>

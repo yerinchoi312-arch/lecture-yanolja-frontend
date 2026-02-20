@@ -42,16 +42,16 @@ function InquiryDetail() {
     const renderStatusBadge = (status: InquiryStatus) => {
         if (status === "ANSWERED") {
             return (
-                <span className={"px-2 py-1 text-xs font-bold text-white bg-black rounded-sm"}>
-                    답변완료
-                </span>
+                <div className={"px-2 py-1 text-xs font-bold text-white bg-black rounded-sm"}>
+                    답변 완료
+                </div>
             );
         } else {
             return (
-                <span
+                <div
                     className={"px-2 py-1 text-xs font-bold text-gray-500 bg-gray-200 rounded-sm"}>
-                    답변대기
-                </span>
+                    답변 대기
+                </div>
             );
         }
     };

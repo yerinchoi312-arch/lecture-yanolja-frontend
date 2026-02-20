@@ -12,7 +12,6 @@ export const fetchCategories = async (): Promise<CategoryData[]> => {
     return response.data.data;
 };
 
-// 2. 1차 카테고리 생성 (Multipart/form-data)
 export const createCategory = async (
     params: CreateCategoryParams,
 ): Promise<CreateCategoryResponse> => {

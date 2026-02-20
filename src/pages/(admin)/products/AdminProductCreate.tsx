@@ -15,11 +15,11 @@ interface ProductFormValues {
     address: string;
     description: string;
     notice: string;
-    images: FileList; // 상품 이미지 (다중 선택 가능)
+    images: FileList;
     roomTypes: {
         name: string;
         description: string;
-        image: FileList; // 객실 이미지 (단일 선택이지만 input type=file은 FileList 반환)
+        image: FileList;
         originPrice: number;
         price: number;
     }[];
@@ -31,7 +31,6 @@ const AdminProductCreate = () => {
     const [subCategories, setSubCategories] = useState<{ id: number; name: string }[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // React Hook Form 설정
     const {
         register,
         control,
@@ -42,18 +41,16 @@ const AdminProductCreate = () => {
     } = useForm<ProductFormValues>({
         defaultValues: {
             roomTypes: [
-                { name: "", description: "", originPrice: 0, price: 0 } // 기본 객실 1개
+                { name: "", description: "", originPrice: 0, price: 0 }
             ]
         }
     });
 
-    // 객실 배열 관리 (동적 추가/삭제)
     const { fields, append, remove } = useFieldArray({
         control,
         name: "roomTypes",
     });
 
-    // 카테고리 로드
     useEffect(() => {
         const loadCategories = async () => {
             try {
@@ -66,7 +63,6 @@ const AdminProductCreate = () => {
         loadCategories().then(() => {});
     }, []);
 
-    // 상위 카테고리 선택 시 하위 카테고리 목록 갱신
     const selectedCategoryId = watch("categoryId");
     useEffect(() => {
         if (!selectedCategoryId) {
@@ -75,11 +71,10 @@ const AdminProductCreate = () => {
         }
         const category = categories.find((c) => c.id === Number(selectedCategoryId));
         setSubCategories(category?.subCategories || []);
-        setValue("subCategoryId", ""); // 하위 카테고리 초기화
+        setValue("subCategoryId", "");
     }, [selectedCategoryId, categories, setValue]);
 
 
-    // --- [Submit Handler] ---
     const onSubmit: SubmitHandler<ProductFormValues> = async (data) => {
         if (!data.images || data.images.length === 0) {
             alert("상품 대표 이미지를 최소 1장 등록해주세요.");
@@ -89,33 +84,27 @@ const AdminProductCreate = () => {
         try {
             setIsSubmitting(true);
 
-            // 1. 상품 이미지 업로드 처리 (Promise.all로 병렬 처리)
-            // FileList는 배열이 아니므로 Array.from으로 변환 후 map 사용
             const productFiles = Array.from(data.images);
 
             const productImagePromises = productFiles.map((file) =>
-                uploadFile(file, "products") // 개별적으로 API 호출
+                uploadFile(file, "products")
             );
 
-            // 모든 이미지가 업로드되어 URL이 반환될 때까지 대기
             const productImgUrls = await Promise.all(productImagePromises);
 
 
-            // 2. 객실 이미지 업로드 처리
-            // 각 룸타입을 순회하며 이미지를 업로드하고 URL로 교체한 객체를 생성
             const roomTypesPromises = data.roomTypes.map(async (room, index) => {
                 if (!room.image || room.image.length === 0) {
                     throw new Error(`${index + 1}번 객실('${room.name}')의 이미지를 등록해주세요.`);
                 }
 
-                // 객실 이미지는 1장이지만 FileList로 들어오므로 0번째 파일 사용
                 const file = room.image[0];
                 const roomImgUrl = await uploadFile(file, "rooms");
 
                 return {
                     name: room.name,
                     description: room.description,
-                    image: roomImgUrl, // URL로 교체
+                    image: roomImgUrl,
                     originPrice: Number(room.originPrice),
                     price: Number(room.price),
                 };
@@ -124,7 +113,6 @@ const AdminProductCreate = () => {
             const processedRoomTypes = await Promise.all(roomTypesPromises);
 
 
-            // 3. 최종 API 호출
             const payload = {
                 categoryId: Number(data.categoryId),
                 subCategoryId: Number(data.subCategoryId),
@@ -132,8 +120,8 @@ const AdminProductCreate = () => {
                 address: data.address,
                 description: data.description,
                 notice: data.notice,
-                images: productImgUrls, // string[]
-                roomTypes: processedRoomTypes, // object[] with image url
+                images: productImgUrls,
+                roomTypes: processedRoomTypes,
             };
 
             await createProduct(payload);
@@ -153,7 +141,6 @@ const AdminProductCreate = () => {
 
     return (
         <div className="max-w-5xl mx-auto pb-20">
-            {/* Header */}
             <div className="flex items-center gap-4 mb-6">
                 <button
                     onClick={() => navigate("/admin/products")}
@@ -166,12 +153,10 @@ const AdminProductCreate = () => {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
 
-                {/* 1. 기본 정보 섹션 */}
                 <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-6">
                     <h2 className="text-lg font-bold border-b pb-2 mb-4">기본 정보</h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* 카테고리 */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">카테고리</label>
                             <select
@@ -186,7 +171,6 @@ const AdminProductCreate = () => {
                             {errors.categoryId && <p className="text-red-500 text-xs mt-1">{errors.categoryId.message}</p>}
                         </div>
 
-                        {/* 하위 카테고리 */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">세부 카테고리</label>
                             <select
@@ -202,7 +186,6 @@ const AdminProductCreate = () => {
                             {errors.subCategoryId && <p className="text-red-500 text-xs mt-1">{errors.subCategoryId.message}</p>}
                         </div>
 
-                        {/* 숙소 이름 */}
                         <div className="md:col-span-2">
                             <label className="block text-sm font-medium text-gray-700 mb-1">숙소 이름</label>
                             <input
@@ -214,7 +197,6 @@ const AdminProductCreate = () => {
                             {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
                         </div>
 
-                        {/* 주소 */}
                         <div className="md:col-span-2">
                             <label className="block text-sm font-medium text-gray-700 mb-1">주소</label>
                             <input
@@ -226,7 +208,6 @@ const AdminProductCreate = () => {
                             {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address.message}</p>}
                         </div>
 
-                        {/* 상세 설명 */}
                         <div className="md:col-span-2">
                             <label className="block text-sm font-medium text-gray-700 mb-1">상세 설명</label>
                             <textarea
@@ -237,7 +218,6 @@ const AdminProductCreate = () => {
                             />
                         </div>
 
-                        {/* 이용 안내 (공지사항) */}
                         <div className="md:col-span-2">
                             <label className="block text-sm font-medium text-gray-700 mb-1">이용 안내 / 공지사항</label>
                             <textarea
@@ -248,7 +228,6 @@ const AdminProductCreate = () => {
                             />
                         </div>
 
-                        {/* 상품 이미지 업로드 */}
                         <div className="md:col-span-2">
                             <label className="block text-sm font-medium text-gray-700 mb-1">숙소 대표 이미지 (여러 장 가능)</label>
                             <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition">
@@ -266,7 +245,6 @@ const AdminProductCreate = () => {
                                     <span className="text-gray-400 text-xs">JPG, PNG, WEBP (최대 10MB)</span>
                                 </label>
                             </div>
-                            {/* 선택된 파일 개수 표시 */}
                             {watch("images") && watch("images").length > 0 && (
                                 <p className="text-sm text-green-600 mt-2">
                                     {watch("images").length}개의 파일이 선택됨
@@ -276,7 +254,6 @@ const AdminProductCreate = () => {
                     </div>
                 </div>
 
-                {/* 2. 객실(RoomType) 정보 섹션 */}
                 <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-6">
                     <div className="flex justify-between items-center border-b pb-2 mb-4">
                         <h2 className="text-lg font-bold">객실 정보 관리</h2>
@@ -292,7 +269,6 @@ const AdminProductCreate = () => {
                     <div className="space-y-6">
                         {fields.map((field, index) => (
                             <div key={field.id} className="p-4 border border-gray-200 rounded-lg bg-gray-50 relative">
-                                {/* 삭제 버튼 */}
                                 {fields.length > 1 && (
                                     <button
                                         type="button"
@@ -353,7 +329,6 @@ const AdminProductCreate = () => {
                     </div>
                 </div>
 
-                {/* 하단 버튼 */}
                 <div className="flex justify-end gap-3 pt-4 border-t">
                     <button
                         type="button"

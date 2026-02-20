@@ -9,7 +9,7 @@ function AdminInquiryList() {
 
     useEffect(() => {
         const fetchList = async () => {
-            const data = await adminInquiriesList(); // 전체 목록 API
+            const data = await adminInquiriesList();
             setInquiries(data.data);
         };
         fetchList();
@@ -47,15 +47,14 @@ interface Props {
 }
 
 const InquiryStatusBadge = ({ status }: Props) => {
-    // 상태별 한글 텍스트와 스타일 매핑
     const statusConfig = {
         PENDING: {
-            label: "답변대기",
-            className: "bg-gray-200 text-gray-500", // 회색 배경
+            label: "답변 대기",
+            className: "bg-gray-200 text-gray-500",
         },
         ANSWERED: {
-            label: "답변완료",
-            className: "bg-black text-white", // 검정 배경 (이미지 디자인 참고)
+            label: "답변 완료",
+            className: "bg-black text-white",
         },
     };
 

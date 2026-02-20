@@ -7,7 +7,7 @@ import { deleteRoomType, updateRoomType } from "../../../api/admin.product.api.t
 
 interface Props {
     room: RoomType;
-    onDeleteSuccess: (roomId: number) => void; // 삭제 성공 시 부모에게 알림
+    onDeleteSuccess: (roomId: number) => void;
 }
 
 interface RoomFormValues {
@@ -15,7 +15,7 @@ interface RoomFormValues {
     description: string;
     originPrice: number;
     price: number;
-    image: FileList; // 새 이미지 파일 (선택 사항)
+    image: FileList;
 }
 
 const RoomEditItem = ({ room, onDeleteSuccess }: Props) => {
@@ -33,14 +33,12 @@ const RoomEditItem = ({ room, onDeleteSuccess }: Props) => {
     const onSubmit = async (data: RoomFormValues) => {
         try {
             setIsSubmitting(true);
-            let imageUrl = room.image; // 기본값: 기존 URL
+            let imageUrl = room.image;
 
-            // 1. 새 이미지가 있다면 업로드
             if (data.image && data.image.length > 0) {
                 imageUrl = await uploadFile(data.image[0], "rooms");
             }
 
-            // 2. 개별 객실 업데이트 API 호출
             await updateRoomType(room.id, {
                 name: data.name,
                 description: data.description,
@@ -88,7 +86,6 @@ const RoomEditItem = ({ room, onDeleteSuccess }: Props) => {
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* 왼쪽: 이미지 미리보기 및 변경 */}
                 <div>
                     <div className="aspect-video bg-gray-200 rounded-md overflow-hidden mb-2 relative group">
                         <img
@@ -108,7 +105,6 @@ const RoomEditItem = ({ room, onDeleteSuccess }: Props) => {
                     />
                 </div>
 
-                {/* 오른쪽: 정보 입력 */}
                 <div className="space-y-3">
                     <div>
                         <label className="block text-xs font-medium text-gray-500">객실명</label>

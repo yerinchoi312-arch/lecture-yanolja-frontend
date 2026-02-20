@@ -134,13 +134,13 @@ function ProductDetailPage() {
                                     className={"w-full h-full object-cover"}
                                 />
                             </div>
-                            <div className={"grid grid-cols-2 w-1/2 gap-2 aspect-video"}>
+                            <div className={"grid grid-cols-2 w-1/2 gap-2"}>
                                 {product.images.slice(1, 5).map((image, i) => (
-                                    <div key={i}>
+                                    <div key={i} className={"aspect-video overflow-hidden"}>
                                         <img
                                             src={image}
                                             alt={product.name}
-                                            className={"w-full object-cover"}
+                                            className={"w-full h-full object-cover"}
                                         />
                                     </div>
                                 ))}

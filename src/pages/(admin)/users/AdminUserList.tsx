@@ -15,14 +15,12 @@ import type { UserResponse } from "../../../type/user.ts";
 const AdminUserList = () => {
     const navigate = useNavigate();
 
-    // 데이터 상태
     const [users, setUsers] = useState<UserResponse[]>([]);
     const [pagination, setPagination] = useState<AdminUserPaginationInfo | null>(null);
     const [loading, setLoading] = useState(true);
 
-    // 검색 및 페이지 상태
     const [page, setPage] = useState(1);
-    const [limit] = useState(10); // 페이지당 10개 고정
+    const [limit] = useState(10);
     const [searchTerm, setSearchTerm] = useState("");
 
     const loadData = async (currentPage: number) => {
@@ -40,7 +38,6 @@ const AdminUserList = () => {
         }
     };
 
-    // 페이지가 변경될 때마다 데이터 로드
     useEffect(() => {
         loadData(page).then(() => {});
     }, [page]);
@@ -50,7 +47,7 @@ const AdminUserList = () => {
         try {
             await deleteUserByAdmin(id);
             alert("삭제되었습니다.");
-            loadData(page).then(() => {}); // 현재 페이지 리로딩
+            loadData(page).then(() => {});
         } catch (error) {
             alert("삭제 실패");
             console.log(error);
@@ -181,7 +178,6 @@ const AdminUserList = () => {
                 </div>
             </div>
 
-            {/* 페이지네이션 컨트롤 */}
             {pagination && (
                 <div className="flex justify-center items-center gap-4 py-4">
                     <button

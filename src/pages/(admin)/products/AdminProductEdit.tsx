@@ -17,7 +17,7 @@ interface ProductEditForm {
     address: string;
     description: string;
     notice: string;
-    newImages: FileList; // 새로 업로드할 이미지들 (선택 사항)
+    newImages: FileList;
 }
 
 const AdminProductEdit = () => {
@@ -30,7 +30,6 @@ const AdminProductEdit = () => {
     const [loading, setLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // 상품 기본 정보 폼
     const {
         register,
         handleSubmit,
@@ -38,7 +37,6 @@ const AdminProductEdit = () => {
         watch,
     } = useForm<ProductEditForm>();
 
-    // 데이터 로드
     useEffect(() => {
         if (!id) return;
 
@@ -52,7 +50,6 @@ const AdminProductEdit = () => {
                 setProduct(productData);
                 setCategories(categoryData.data);
 
-                // 폼 초기값 설정
                 setValue("categoryId", productData.categoryId);
                 setValue("subCategoryId", productData.subCategoryId);
                 setValue("name", productData.name);
@@ -71,7 +68,6 @@ const AdminProductEdit = () => {
         initData().then(() => {});
     }, [id, navigate, setValue]);
 
-    // 카테고리 연동 로직
     const selectedCategoryId = watch("categoryId");
     useEffect(() => {
         if (!selectedCategoryId) {
@@ -82,16 +78,14 @@ const AdminProductEdit = () => {
         setSubCategories(category?.subCategories || []);
     }, [selectedCategoryId, categories]);
 
-    // --- [상품 정보 수정 핸들러] ---
     const onProductSubmit = async (data: ProductEditForm) => {
         if (!product) return;
         if (!window.confirm("상품 기본 정보를 수정하시겠습니까?")) return;
 
         try {
             setIsSubmitting(true);
-            let imageUrls = undefined; // undefined면 기존 이미지 유지 (백엔드 로직에 따름)
+            let imageUrls = undefined;
 
-            // 새 이미지를 올렸다면, 기존 이미지를 모두 삭제하고 교체하는 로직
             if (data.newImages && data.newImages.length > 0) {
                 if (
                     !window.confirm(
@@ -102,7 +96,6 @@ const AdminProductEdit = () => {
                     return;
                 }
                 const files = Array.from(data.newImages);
-                // 병렬 업로드
                 imageUrls = await Promise.all(files.map(file => uploadFile(file, "products")));
             }
 
@@ -113,11 +106,10 @@ const AdminProductEdit = () => {
                 address: data.address,
                 description: data.description,
                 notice: data.notice,
-                images: imageUrls, // 있으면 교체, 없으면 undefined
+                images: imageUrls,
             });
 
             alert("상품 기본 정보가 수정되었습니다.");
-            // 최신 데이터 다시 불러오기 (이미지 등 갱신 확인)
             const updated = await fetchProductById(product.id);
             setProduct(updated);
         } catch (error) {
@@ -128,7 +120,6 @@ const AdminProductEdit = () => {
         }
     };
 
-    // 객실 삭제 후 UI 갱신 핸들러
     const handleRoomDeleteSuccess = (deletedRoomId: number) => {
         if (product) {
             setProduct({
@@ -143,7 +134,6 @@ const AdminProductEdit = () => {
 
     return (
         <div className="max-w-5xl mx-auto pb-20">
-            {/* 헤더 */}
             <div className="flex items-center gap-4 mb-6">
                 <button
                     onClick={() => navigate("/admin/products")}
@@ -155,7 +145,6 @@ const AdminProductEdit = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* 왼쪽: 상품 기본 정보 (Product) */}
                 <div className="lg:col-span-2 space-y-6">
                     <form
                         onSubmit={handleSubmit(onProductSubmit)}
@@ -232,13 +221,11 @@ const AdminProductEdit = () => {
                                 />
                             </div>
 
-                            {/* 상품 이미지 변경 섹션 */}
                             <div className="md:col-span-2 bg-blue-50 p-4 rounded-lg border border-blue-100">
                                 <label className="block text-sm font-bold text-blue-800 mb-2">
                                     이미지 관리
                                 </label>
 
-                                {/* 기존 이미지 목록 */}
                                 <div className="flex gap-2 mb-3 overflow-x-auto pb-2">
                                     {product.images.map((img, idx) => (
                                         <div
@@ -282,7 +269,6 @@ const AdminProductEdit = () => {
                     </form>
                 </div>
 
-                {/* 오른쪽: 객실 관리 (RoomTypes) */}
                 <div className="lg:col-span-1">
                     <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm sticky top-6">
                         <div className="flex justify-between items-center border-b pb-4 mb-4">
@@ -310,8 +296,6 @@ const AdminProductEdit = () => {
                             )}
                         </div>
 
-                        {/* (추가 가능) 객실 추가 버튼은 여기 아래에 구현하거나 별도 모달로... 
-                            지금은 '수정' 중심이므로 생략 */}
                     </div>
                 </div>
             </div>

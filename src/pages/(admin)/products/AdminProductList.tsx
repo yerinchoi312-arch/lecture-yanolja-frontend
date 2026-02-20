@@ -31,7 +31,6 @@ const AdminProductList = () => {
         loadCategories().then(() => {});
     }, []);
 
-    // 2. 상품 목록 로드
     const loadProducts = async () => {
         setLoading(true);
         try {
@@ -57,8 +56,6 @@ const AdminProductList = () => {
     useEffect(() => {
         loadProducts().then(() => {});
     }, [page, selectedCategory]);
-
-    // --- [Handlers] ---
 
     const handleSearch = (e: FormEvent) => {
         e.preventDefault();
@@ -92,7 +89,6 @@ const AdminProductList = () => {
 
     return (
         <div className="space-y-6">
-            {/* 1. 헤더 (타이틀 + 등록 버튼) */}
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-b pb-4">
                 <div>
                     <h1 className="text-2xl font-bold text-slate-800">상품 관리</h1>
@@ -107,9 +103,7 @@ const AdminProductList = () => {
                 </button>
             </div>
 
-            {/* 2. 필터 및 검색 바 */}
             <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
-                {/* 카테고리 필터 */}
                 <div className="w-full md:w-48">
                     <select
                         value={selectedCategory}
@@ -127,7 +121,6 @@ const AdminProductList = () => {
                     </select>
                 </div>
 
-                {/* 검색창 */}
                 <form onSubmit={handleSearch} className="w-full md:flex-1 relative">
                     <input
                         type="text"
@@ -145,7 +138,6 @@ const AdminProductList = () => {
                 </form>
             </div>
 
-            {/* 3. 상품 목록 테이블 */}
             <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm text-gray-600">
@@ -232,7 +224,6 @@ const AdminProductList = () => {
                 </div>
             </div>
 
-            {/* 4. 페이지네이션 */}
             {pagination.totalPages > 1 && (
                 <div className="flex justify-center gap-2 py-4">
                     <button

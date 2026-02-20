@@ -9,8 +9,6 @@ function AdminReviewList() {
     const navigate = useNavigate();
     const [reviews, setReviews] = useState<Review[]>([]);
     const [loading, setLoading] = useState(false);
-
-    // 필터 및 페이징 상태
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [search, setSearch] = useState("");
@@ -38,14 +36,13 @@ function AdminReviewList() {
 
     useEffect(() => {
         fetchReviews();
-    }, [currentPage, ratingFilter]); // 페이지나 평점 필터 변경 시 자동 호출
-
+    }, [currentPage, ratingFilter]);
     const handleDelete = async (id: number) => {
         if (!window.confirm("정말 이 리뷰를 삭제하시겠습니까?")) return;
         try {
             await adminDeleteReview(String(id));
             alert("삭제되었습니다.");
-            fetchReviews(); // 목록 새로고침
+            fetchReviews();
         } catch (error) {
             console.log(error);
             alert("삭제에 실패했습니다.");
@@ -58,7 +55,6 @@ function AdminReviewList() {
             <div className="max-w-7xl mx-auto">
                 <h1 className="text-2xl font-bold mb-8">리뷰 관리 모드</h1>
 
-                {/* 필터 섹션 */}
                 <div className="flex gap-4 mb-6 bg-white p-4 rounded-lg shadow-sm">
                     <input
                         type="text"
@@ -86,7 +82,6 @@ function AdminReviewList() {
                     </button>
                 </div>
 
-                {/* 테이블 섹션 */}
                 <div className="bg-white rounded-lg shadow overflow-hidden">
                     <table className="w-full text-left border-collapse">
                         <thead className="bg-gray-100 text-gray-700 text-sm">
@@ -141,7 +136,6 @@ function AdminReviewList() {
                     </table>
                 </div>
 
-                {/* 페이지네이션 */}
                 <div className="mt-8">
                     <Pagination
                         currentPage={currentPage}

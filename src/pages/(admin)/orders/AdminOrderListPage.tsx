@@ -11,7 +11,6 @@ function AdminOrderListPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
 
-    // 1. 데이터 호출 함수
     const fetchOrders = async (page: number) => {
         setIsLoading(true);
         try {
@@ -25,12 +24,10 @@ function AdminOrderListPage() {
         }
     };
 
-    // 2. 페이지 변경 시마다 호출
     useEffect(() => {
         fetchOrders(currentPage);
     }, [currentPage]);
 
-    // 3. 상태 변경 핸들러 (셀렉트 박스 전용)
     const handleStatusChange = async (e: React.ChangeEvent<HTMLSelectElement>, orderId: string) => {
         const newState = e.target.value as OrderState;
 
@@ -114,7 +111,6 @@ function AdminOrderListPage() {
                                             </span>
                                     </td>
                                     <td className="p-4">
-                                        {/* 클릭 전파 방지: select 조작 시 상세페이지 이동 차단 */}
                                         <div className="flex justify-center gap-1" onClick={(e) => e.stopPropagation()}>
                                             <select
                                                 className="border rounded px-2 py-1 text-xs outline-none focus:border-black bg-white"
@@ -133,7 +129,6 @@ function AdminOrderListPage() {
                         </tbody>
                     </table>
 
-                    {/* 하단 페이지네이션 UI */}
                     {pagination && pagination.totalPages > 1 && (
                         <div className="flex items-center justify-center gap-2 py-6 bg-white border-t">
                             <button

@@ -142,7 +142,7 @@ function MyReview() {
                                                     "px-2 py-1  rounded-md ",
                                                     "cursor-pointer bg-gray-500 text-white",
                                                 )}>
-                                                리뷰삭제
+                                                리뷰 삭제
                                             </button>
                                         </div>
                                     </div>

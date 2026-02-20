@@ -10,7 +10,6 @@ const AdminUserEdit = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 
-    // 폼 설정
     const {
         register,
         handleSubmit,
@@ -18,7 +17,6 @@ const AdminUserEdit = () => {
         formState: { errors, isSubmitting },
     } = useForm<AdminUpdateUserParams>();
 
-    // 데이터 로드
     useEffect(() => {
         if (!id) return;
 
@@ -45,7 +43,6 @@ const AdminUserEdit = () => {
         loadUser();
     }, [id, navigate, setValue]);
 
-    // 수정 제출 핸들러
     const onSubmit = async (data: AdminUpdateUserParams) => {
         if (!id) return;
 
@@ -69,7 +66,6 @@ const AdminUserEdit = () => {
 
     return (
         <div className="max-w-3xl mx-auto">
-            {/* 상단 네비게이션 */}
             <button
                 onClick={() => navigate("/admin/users")}
                 className="flex items-center gap-2 text-gray-500 hover:text-gray-800 mb-6 transition">
@@ -77,7 +73,6 @@ const AdminUserEdit = () => {
             </button>
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                {/* 헤더 */}
                 <div className="bg-slate-800 p-6 text-white flex justify-between items-center">
                     <div>
                         <h1 className="text-xl font-bold flex items-center gap-2">
@@ -91,7 +86,6 @@ const AdminUserEdit = () => {
                 </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-8">
-                    {/* 섹션 1: 계정 및 권한 설정 */}
                     <section>
                         <h2 className="text-lg font-bold text-gray-800 border-b pb-2 mb-4 flex items-center gap-2">
                             <FaLock className="text-blue-500" size={16} /> 계정 및 권한

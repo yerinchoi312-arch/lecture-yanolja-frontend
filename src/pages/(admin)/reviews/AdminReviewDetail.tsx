@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router";
 import type { Review } from "../../../type/review.ts";
 
 function AdminReviewDetail() {
-    const { id } = useParams(); // URL에서 ID 추출
+    const { id } = useParams();
     const navigate = useNavigate();
 
     const [review, setReview] = useState<Review | null>(null);
@@ -15,17 +15,14 @@ function AdminReviewDetail() {
         const getDetail = async () => {
             setLoading(true);
             try {
-                // 1. 우선 리스트를 크게 가져옵니다 (limit을 늘려서 해당 ID가 포함되게 함)
                 const result = await adminFetchReviews({
                     page: 1,
-                    limit: 100 // 일단 넉넉히 가져와서 찾기
+                    limit: 100
                 });
 
-                console.log("전체 데이터:", result.data); // 데이터가 어떻게 오는지 확인
+                console.log("전체 데이터:", result.data);
                 console.log("찾으려는 ID:", id);
 
-                // 2. 가져온 배열에서 URL의 reviewId와 일치하는 항목 찾기
-                // review.id가 숫자형일 수 있으므로 타입 체크 주의!
                 const target = result.data.find((r: Review) => String(r.id) === String(id));
 
                 if (target) {
@@ -50,7 +47,7 @@ function AdminReviewDetail() {
         try {
             await adminDeleteReview(id);
             alert("리뷰가 삭제되었습니다.");
-            navigate("/admin/reviews"); // 삭제 후 목록으로 이동
+            navigate("/admin/reviews");
         } catch (error) {
             console.error(error);
             alert("삭제 처리 중 오류가 발생했습니다.");
@@ -63,7 +60,6 @@ function AdminReviewDetail() {
     return (
         <div className="p-8 bg-gray-50 min-h-screen">
             <div className="max-w-4xl mx-auto">
-                {/* 상단 네비게이션 */}
                 <div className="flex justify-between items-center mb-6">
                     <button
                         onClick={() => navigate(-1)}
@@ -80,7 +76,6 @@ function AdminReviewDetail() {
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
-                    {/* 섹션 1: 작성자 및 상품 정보 */}
                     <div className="p-8 border-b grid grid-cols-2 gap-8">
                         <div>
                             <h3 className="text-sm font-bold text-gray-400 uppercase mb-2">작성자 정보</h3>
@@ -94,7 +89,6 @@ function AdminReviewDetail() {
                         </div>
                     </div>
 
-                    {/* 섹션 2: 평점 및 내용 */}
                     <div className="p-8 border-b">
                         <div className="flex items-center gap-2 mb-4">
                             <span className="text-2xl text-yellow-500">{"★".repeat(review.rating)}</span>
@@ -105,7 +99,6 @@ function AdminReviewDetail() {
                         </div>
                     </div>
 
-                    {/* 섹션 3: 첨부 이미지 */}
                     {review.images && review.images.length > 0 && (
                         <div className="p-8">
                             <h3 className="text-sm font-bold text-gray-400 uppercase mb-4">첨부된 사진 ({review.images.length})</h3>

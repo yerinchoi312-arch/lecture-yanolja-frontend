@@ -34,7 +34,7 @@ function ReservationListPage() {
         const labels: Record<string, string> = {
             PAID: "결제 완료",
             PENDING: "결제 대기",
-            CANCELED: "취소됨",
+            CANCELED: "예약 취소",
         };
         return labels[status] || status;
     };

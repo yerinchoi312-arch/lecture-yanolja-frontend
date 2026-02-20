@@ -29,6 +29,7 @@ function Home() {
     const JEJU_ARRAY = categories.flatMap(category =>
         category.subCategories.filter(sub => sub.name === "제주").map(sub => sub.id),
     );
+
     return (
         <div
             className={twMerge(
@@ -91,7 +92,13 @@ function Home() {
                 <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>
                     지금 떠나는 부산 여행!
                 </h2>
-                <Slide slidesPerView={4} slidesPerGroup={4} slideId={"busan_slide"} categoryId={0} subCategoryId={BUSAN_ARRAY} />
+                <Slide
+                    slidesPerView={4}
+                    slidesPerGroup={4}
+                    categoryId={0}
+                    subCategoryId={BUSAN_ARRAY}
+                    slideId={"busan_slide"}
+                />
             </div>
             <div>
                 <h2 className={twMerge(["text-2xl", "font-bold", "mb-4"])}>

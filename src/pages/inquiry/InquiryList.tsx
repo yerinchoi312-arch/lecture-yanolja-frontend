@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Pagination from "../components/Pagination.tsx";
 import { fetchMyInquiries } from "../../api/inquiry.api.ts";
 import type { Inquiry, InquiryStatus, InquiryType } from "../../type/inquiry.ts";
+import dayjs from "dayjs";
 
 function InquiryList() {
     const navigate = useNavigate();
@@ -45,16 +46,16 @@ function InquiryList() {
     const renderStatusBadge = (status: InquiryStatus) => {
         if (status === "ANSWERED") {
             return (
-                <span className={"px-2 py-1 text-xs font-bold text-white bg-black rounded-sm"}>
-                    답변완료
-                </span>
+                <div className={"px-2 py-1 text-xs font-bold text-white bg-black rounded-sm inline-block"}>
+                    답변 완료
+                </div>
             );
         } else {
             return (
-                <span
-                    className={"px-2 py-1 text-xs font-bold text-gray-500 bg-gray-200 rounded-sm"}>
-                    답변대기
-                </span>
+                <div
+                    className={"px-2 py-1 text-xs font-bold text-gray-500 bg-gray-200 rounded-sm inline-block"}>
+                    답변 대기
+                </div>
             );
         }
     };
@@ -87,29 +88,30 @@ function InquiryList() {
                         <div className={"bg-white rounded-2xl shadow p-8"}>
                             <div
                                 className={twMerge(
-                                    ["flex items-center justify-between"],
+                                    ["flex items-center"],
                                     [" pb-4 px-2 w-full"],
                                     ["border-b-2 border-gray-500"],
                                 )}>
-                                <div className={"flex gap-2 items-center"}>
+                                <div className={"flex gap-2 items-center w-2/3"}>
                                     <div className={"text-sm font-bold text-gray-700 w-24"}>
                                         문의 유형
                                     </div>
-                                    <h2 className={"text-sm font-bold text-gray-700"}>문의 제목</h2>
+                                    <h2 className={"text-sm font-bold text-gray-700 flex-1"}>문의 제목</h2>
                                 </div>
-                                <div className={"text-sm font-bold text-gray-700"}>문의 상태</div>
+                                <div className={"text-sm font-bold text-gray-700 w-1/6 text-center"}>문의 상태</div>
+                                <div className={"text-sm font-bold text-gray-700 w-1/6 text-center"}>작성일</div>
                             </div>
                             {inquiries.map((inquiry, index) => (
                                 <Link
                                     to={`/inquiry/${inquiry.id}`}
                                     key={index}
                                     className={twMerge(
-                                        ["flex items-center justify-between"],
+                                        ["flex items-center"],
                                         ["w-full p-4 px-2"],
                                         ["border-b border-gray-300"],
                                         ["hover:bg-blue-50"],
                                     )}>
-                                    <div className={"flex items-center gap-2"}>
+                                    <div className={"flex items-center gap-2 w-2/3"}>
                                         <div className={"w-24"}>
                                             <p
                                                 className={twMerge(
@@ -125,7 +127,8 @@ function InquiryList() {
                                             {inquiry.title}
                                         </h2>
                                     </div>
-                                    <div>{renderStatusBadge(inquiry.status)}</div>
+                                    <div className={"w-1/6 text-center"}>{renderStatusBadge(inquiry.status)}</div>
+                                    <div className={"w-1/6 text-center"}>{dayjs(inquiry.createdAt).format("YYYY.MM.DD")}</div>
                                 </Link>
                             ))}
                         </div>
