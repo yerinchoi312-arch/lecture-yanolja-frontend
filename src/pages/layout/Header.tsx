@@ -126,7 +126,7 @@ function Header() {
                             )}
                             onClick={() => navigate("/FAQ")}>
                             <AiOutlineNotification   className={"w-7 h-7"} />
-                            공지사항
+                            FAQ
                         </button>
                     </div>
                 )}
