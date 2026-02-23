@@ -89,6 +89,7 @@ function ProductDetailPage() {
                         image: room.image,
                         product: {
                             name: product.name,
+                            id:product.id
                         },
                     },
                     quantity: 1,

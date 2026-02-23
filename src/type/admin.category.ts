@@ -1,4 +1,4 @@
-import type { Category, SubCategory } from "./category.ts";
+import type { CategoryData, SubCategoryData } from "./category.ts";
 
 export interface CreateCategoryParams {
     name: string;
@@ -16,5 +16,5 @@ export interface AdminResponse<T> {
     data: T;
 }
 
-export type CreateCategoryResponse = AdminResponse<Category>;
-export type CreateSubCategoryResponse = AdminResponse<SubCategory>;
+export type CreateCategoryResponse = AdminResponse<CategoryData>;
+export type CreateSubCategoryResponse = AdminResponse<SubCategoryData>;

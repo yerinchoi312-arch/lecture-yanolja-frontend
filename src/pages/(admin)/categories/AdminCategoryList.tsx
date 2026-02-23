@@ -6,10 +6,10 @@ import {
     deleteSubCategory,
     fetchCategories,
 } from "../../../api/admin.category.api";
-import type { Category } from "../../../type/category";
+import type { CategoryData } from "../../../type/category.ts";
 
 const AdminCategoryList = () => {
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [categories, setCategories] = useState<CategoryData[]>([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
